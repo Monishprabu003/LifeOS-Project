@@ -16,7 +16,11 @@ import {
   Mail,
   Lock,
   LogOut,
-  Search
+  Search,
+  Settings,
+  Bell,
+  Compass,
+  ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { authAPI, kernelAPI, habitsAPI, goalsAPI, aiAPI } from './api';
@@ -27,6 +31,7 @@ import { GoalsModule } from './components/GoalsModule';
 import { SocialModule } from './components/SocialModule';
 import { HabitsModule } from './components/HabitsModule';
 import { UnifiedLogModal } from './components/UnifiedLogModal';
+import { DashboardModule } from './components/DashboardModule';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -236,62 +241,93 @@ function App() {
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard, color: 'text-primary' },
     { id: 'health', name: 'Health', icon: Heart, color: 'text-health' },
     { id: 'wealth', name: 'Wealth', icon: Wallet, color: 'text-wealth' },
+    { id: 'relationships', name: 'Relationships', icon: Users, color: 'text-relationships' },
     { id: 'habits', name: 'Habits', icon: Zap, color: 'text-habits' },
-    { id: 'goals', name: 'Goals', icon: Target, color: 'text-goals' },
-    { id: 'relationships', name: 'Social', icon: Users, color: 'text-relationships' },
-    { id: 'ai', name: 'AI Copilot', icon: MessageSquare, color: 'text-accent' },
+    { id: 'goals', name: 'Purpose', icon: Compass, color: 'text-goals' },
+    { id: 'ai-insights', name: 'AI Insights', icon: MessageSquare, color: 'text-accent' },
+  ];
+
+  const accountItems = [
+    { id: 'settings', name: 'Settings', icon: Settings },
+    { id: 'profile', name: 'Profile', icon: User },
   ];
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden text-main">
+    <div className="flex h-screen bg-[#f8fafc] dark:bg-background overflow-hidden text-main">
       {/* Sidebar */}
-      <aside className="w-64 glass border-r border-border/50 flex flex-col">
-        <div className="p-6">
+      <aside className="w-72 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col shadow-sm z-20">
+        <div className="p-8">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#3b82f6] flex items-center justify-center shadow-lg shadow-blue-100 dark:shadow-none">
               <span className="font-display font-bold text-white text-xl">L</span>
             </div>
-            <h1 className="font-display text-2xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              LifeOS
-            </h1>
+            <div>
+              <h1 className="font-display text-xl font-bold tracking-tight text-[#0f172a] dark:text-white leading-none">
+                LifeOS
+              </h1>
+              <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest leading-none">Life Management</p>
+            </div>
           </div>
         </div>
 
-        <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto">
-          {modules.map((module) => {
-            const Icon = module.icon;
-            return (
-              <button
-                key={module.id}
-                onClick={() => setActiveTab(module.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group ${activeTab === module.id
-                  ? 'bg-primary/20 text-primary shadow-[0_0_20px_rgba(99,102,241,0.2)]'
-                  : 'hover:bg-surface/50 text-muted hover:text-main'
-                  }`}
-              >
-                <Icon size={20} className={activeTab === module.id ? module.color : 'group-hover:' + module.color} />
-                <span className="font-medium">{module.name}</span>
-                {activeTab === module.id && (
-                  <motion.div
-                    layoutId="active-pill"
-                    className="ml-auto w-1.5 h-1.5 rounded-full bg-primary"
-                  />
-                )}
-              </button>
-            )
-          })}
-        </nav>
+        <div className="flex-1 px-4 overflow-y-auto custom-scrollbar">
+          {/* Modules Section */}
+          <div className="mb-8">
+            <p className="px-4 mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Modules</p>
+            <div className="space-y-1">
+              {modules.map((module) => {
+                const Icon = module.icon;
+                return (
+                  <button
+                    key={module.id}
+                    onClick={() => setActiveTab(module.id === 'ai-insights' ? 'dashboard' : module.id)}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 group ${activeTab === (module.id === 'ai-insights' ? 'dashboard' : module.id)
+                      ? 'bg-[#ecfdf5] text-[#10b981]'
+                      : 'hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-700'
+                      }`}
+                  >
+                    <Icon size={20} className={activeTab === module.id ? 'text-[#10b981]' : ''} />
+                    <span className="font-bold text-sm">{module.name}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
 
-        <div className="p-4 mt-auto border-t border-border/50">
-          <div className="flex items-center space-x-3 p-3 rounded-xl hover:bg-surface/50 transition-colors group">
-            <div className="w-10 h-10 rounded-full bg-surface border border-border/50 overflow-hidden">
-              <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'Felix'}`} alt="User" />
+          {/* Account Section */}
+          <div>
+            <p className="px-4 mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Account</p>
+            <div className="space-y-1">
+              {accountItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 group ${activeTab === item.id
+                      ? 'bg-[#ecfdf5] text-[#10b981]'
+                      : 'hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-700'
+                      }`}
+                  >
+                    <Icon size={20} />
+                    <span className="font-bold text-sm">{item.name}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 mt-auto border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center space-x-3 p-3">
+            <div className="w-10 h-10 rounded-full bg-[#10b981] flex items-center justify-center text-white font-bold text-xs ring-4 ring-green-50">
+              MO
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate">{user?.name || 'Authorized'}</p>
-              <p className="text-xs text-muted truncate">{user?.email || 'V1.0.0'}</p>
+              <p className="text-sm font-bold truncate text-[#0f172a] dark:text-white">{user?.name || 'Monish Prabu'}</p>
+              <p className="text-[10px] font-medium text-slate-400 truncate tracking-tight">{user?.email || 'macz3377moni@gm...'}</p>
             </div>
-            <button onClick={handleLogout} className="opacity-0 group-hover:opacity-100 transition-opacity p-2 text-muted hover:text-relationships">
+            <button onClick={handleLogout} className="p-2 text-slate-300 hover:text-slate-500 transition-colors">
               <LogOut size={16} />
             </button>
           </div>
@@ -299,35 +335,38 @@ function App() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 relative overflow-y-auto">
+      <main className="flex-1 relative overflow-y-auto custom-scrollbar">
         {/* Header */}
-        <header className="sticky top-0 z-10 glass border-b border-border/50 px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center bg-surface/50 rounded-2xl px-4 py-2.5 border border-border/50 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all w-[32rem] group">
-            <Search size={18} className="text-muted group-focus-within:text-primary transition-colors" />
-            <input
-              type="text"
-              placeholder="Search life events, goals, or AI help..."
-              className="bg-transparent border-none focus:ring-0 ml-3 text-sm w-full outline-none text-main placeholder:text-muted/50"
-            />
+        <header className="sticky top-0 z-10 bg-[#f8fafc]/80 dark:bg-background/80 backdrop-blur-md px-10 py-6 flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Welcome back,</p>
+            <h2 className="text-xl font-bold text-[#0f172a] dark:text-white">{user?.name || 'John Doe'}</h2>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl bg-surface/50 border border-border/50 hover:bg-surface transition-all text-muted hover:text-primary shadow-sm active:scale-95"
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            <button
-              onClick={syncScores}
-              className="p-2.5 rounded-xl bg-surface/50 border border-border/50 hover:bg-surface transition-all text-muted hover:text-primary shadow-sm active:scale-95"
-            >
-              <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
-            </button>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={toggleTheme}
+                className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-400 hover:text-primary shadow-sm"
+              >
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button
+                onClick={syncScores}
+                className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-400 hover:text-primary shadow-sm"
+              >
+                <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
+              </button>
+              <button
+                className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-400 hover:text-primary shadow-sm relative"
+              >
+                <Bell size={20} />
+                <div className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900" />
+              </button>
+            </div>
             <button
               onClick={() => setIsLogModalOpen(true)}
-              className="flex items-center space-x-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]"
+              className="flex items-center space-x-2 bg-[#10b981] hover:bg-[#0da271] text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-green-100"
             >
               <Plus size={18} />
               <span>Log Event</span>
@@ -335,8 +374,9 @@ function App() {
           </div>
         </header>
 
+
         {/* Dashboard Content */}
-        <div className="p-8">
+        <div className="p-10 max-w-[1600px] mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -345,7 +385,7 @@ function App() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
             >
-              {activeTab === 'dashboard' && <Dashboard user={user} habits={habits} goals={goals} insight={insight} fetchAppData={fetchAppData} setActiveTab={setActiveTab} />}
+              {activeTab === 'dashboard' && <DashboardModule user={user} habits={habits} goals={goals} insight={insight} fetchAppData={fetchAppData} setActiveTab={setActiveTab} />}
               {activeTab === 'health' && <HealthModule onUpdate={fetchAppData} />}
               {activeTab === 'wealth' && <WealthModule onUpdate={fetchAppData} />}
               {activeTab === 'habits' && <HabitsModule onUpdate={fetchAppData} />}
@@ -379,164 +419,6 @@ function App() {
   );
 }
 
-function Dashboard({ user, habits, goals, insight, fetchAppData, setActiveTab }: any) {
-  const completeHabit = async (id: string) => {
-    try {
-      await habitsAPI.completeHabit(id);
-      fetchAppData();
-    } catch (err) {
-      console.error('Failed to complete habit', err);
-    }
-  };
 
-  return (
-    <div className="space-y-8">
-      {/* Hero Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="md:col-span-2 glass rounded-3xl p-8 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-20 -mt-20 blur-3xl group-hover:bg-primary/20 transition-all"></div>
-          <div className="relative z-10">
-            <h3 className="text-muted font-medium flex items-center">
-              Global Life Score
-              <Zap size={16} className="ml-2 text-wealth" />
-            </h3>
-            <div className="mt-4 flex items-end space-x-4">
-              <span className="text-7xl font-display font-bold text-main tracking-tighter">
-                {user?.lifeScore || 0} <span className="text-2xl text-muted">/ 100</span>
-              </span>
-              <div className="mb-2 flex items-center text-health text-sm font-semibold bg-health/10 px-2 py-1 rounded-lg">
-                +5.2% <Plus size={12} className="ml-1" />
-              </div>
-            </div>
-            <p className="mt-4 text-muted max-w-xs leading-relaxed">
-              System Health: <span className="text-health">Optimal</span>. Performance index is rising.
-            </p>
-          </div>
-        </div>
-
-        <div className="glass rounded-3xl p-8 flex flex-col justify-between group cursor-pointer hover:border-health/50 transition-colors">
-          <div>
-            <div className="w-12 h-12 rounded-2xl bg-health/10 flex items-center justify-center mb-4 transition-transform group-hover:rotate-12">
-              <Heart className="text-health" />
-            </div>
-            <h3 className="text-muted font-medium">Health Score</h3>
-          </div>
-          <div className="mt-4">
-            <span className="text-3xl font-bold">{user?.healthScore || 0}%</span>
-            <div className="w-full h-1.5 bg-border/20 rounded-full mt-2 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${user?.healthScore || 0}%` }}
-                className="h-full bg-health shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="glass rounded-3xl p-8 flex flex-col justify-between group cursor-pointer hover:border-wealth/50 transition-colors">
-          <div>
-            <div className="w-12 h-12 rounded-2xl bg-wealth/10 flex items-center justify-center mb-4 transition-transform group-hover:rotate-12">
-              <Wallet className="text-wealth" />
-            </div>
-            <h3 className="text-muted font-medium">Wealth Score</h3>
-          </div>
-          <div className="mt-4">
-            <span className="text-3xl font-bold">{user?.wealthScore || 0}%</span>
-            <div className="w-full h-1.5 bg-border/20 rounded-full mt-2 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${user?.wealthScore || 0}%` }}
-                className="h-full bg-wealth shadow-[0_0_10px_rgba(245,158,11,0.5)]"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
-          <section>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">Active Habits</h2>
-              <button onClick={() => setActiveTab('habits')} className="text-primary text-sm font-medium hover:underline">View All</button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {habits.map((habit: any) => (
-                <div
-                  key={habit._id}
-                  onClick={() => completeHabit(habit._id)}
-                  className="glass p-5 rounded-2xl flex items-center space-x-4 card-hover cursor-pointer group"
-                >
-                  <div className={`bg-surface w-12 h-12 rounded-xl flex items-center justify-center transition-colors group-hover:bg-primary/20 border border-border/50`}>
-                    <Zap className="text-primary" size={20} />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-main">{habit.name}</h4>
-                    <p className="text-xs text-muted">{habit.streak} day streak</p>
-                  </div>
-                  <div className="flex -space-x-1">
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <div key={i} className={`w-2 h-2 rounded-full ${i <= (habit.streak % 5 || 5) ? 'bg-primary' : 'bg-border/20'}`}></div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="glass rounded-3xl p-8 h-80 flex flex-col justify-center items-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
-            <div className="relative z-10 flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mb-4">
-                <LayoutDashboard size={32} className="text-slate-600" />
-              </div>
-              <p className="text-slate-500 font-medium">Life Timeline initializing...</p>
-            </div>
-          </section>
-        </div>
-
-        <div className="space-y-8">
-          <section className="glass rounded-3xl p-8">
-            <h2 className="text-xl font-bold mb-6 italic tracking-tight uppercase text-muted text-xs">Mission Alignment</h2>
-            <div className="space-y-6">
-              {goals.length > 0 ? goals.map((goal: any) => (
-                <div key={goal._id} className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted">{goal.title}</span>
-                    <span className="font-semibold text-main">{goal.progress}%</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-border/20 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${goal.progress}%` }}
-                      className="h-full bg-primary"
-                    />
-                  </div>
-                </div>
-              )) : (
-                <p className="text-muted text-sm italic">No active missions detected.</p>
-              )}
-            </div>
-            <button onClick={() => setActiveTab('goals')} className="w-full mt-8 py-3 rounded-xl border border-border/50 hover:bg-surface transition-colors text-sm font-semibold text-main">
-              Refine Life Purpose
-            </button>
-          </section>
-
-          <section className="bg-gradient-to-br from-accent/20 to-primary/20 border border-accent/20 rounded-3xl p-8 relative overflow-hidden group min-h-[160px]">
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-accent/20 blur-2xl group-hover:bg-accent/40 transition-all rounded-full"></div>
-            <h3 className="font-display font-bold text-lg mb-2 flex items-center">
-              AI Insight
-              <MessageSquare size={16} className="ml-2 text-accent" />
-            </h3>
-            <p className="text-main/80 text-sm italic leading-relaxed">
-              "{insight || "Initializing system analysis..."}"
-            </p>
-          </section>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default App;
