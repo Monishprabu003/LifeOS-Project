@@ -1,15 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-    Target,
-    Flag,
-    CheckCircle2,
-    Circle,
     Plus,
     Calendar,
     AlertCircle,
     Trophy,
-    ArrowUpRight,
     Zap
 } from 'lucide-react';
 import { goalsAPI } from '../api';

@@ -18,6 +18,8 @@ import { authAPI, kernelAPI, habitsAPI, goalsAPI, aiAPI } from './api';
 import { AICopilot } from './components/AICopilot';
 import { HealthModule } from './components/HealthModule';
 import { WealthModule } from './components/WealthModule';
+import { GoalsModule } from './components/GoalsModule';
+import { SocialModule } from './components/SocialModule';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -249,6 +251,8 @@ function App() {
               {activeTab === 'dashboard' && <Dashboard user={user} habits={habits} goals={goals} insight={insight} fetchAppData={fetchAppData} />}
               {activeTab === 'health' && <HealthModule />}
               {activeTab === 'wealth' && <WealthModule />}
+              {activeTab === 'goals' && <GoalsModule />}
+              {activeTab === 'relationships' && <SocialModule />}
             </motion.div>
           </AnimatePresence>
         </div>

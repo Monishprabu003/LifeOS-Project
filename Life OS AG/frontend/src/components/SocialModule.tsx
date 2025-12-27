@@ -4,13 +4,11 @@ import {
     Users,
     MessageSquare,
     Clock,
-    Plus,
     UserPlus,
     Heart,
     Star,
     Activity,
     Phone,
-    Video,
     Coffee
 } from 'lucide-react';
 import { socialAPI } from '../api';
