@@ -20,6 +20,8 @@ import { HealthModule } from './components/HealthModule';
 import { WealthModule } from './components/WealthModule';
 import { GoalsModule } from './components/GoalsModule';
 import { SocialModule } from './components/SocialModule';
+import { HabitsModule } from './components/HabitsModule';
+import { UnifiedLogModal } from './components/UnifiedLogModal';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -29,7 +31,8 @@ function App() {
   const [insight, setInsight] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem('lifeos_token'));
+  const [isLogModalOpen, setIsLogModalOpen] = useState(false);
+  const [token, setToken] = useState<string | null>(localStorage.getItem('lifeos_token'));
 
   // Auth Flow State
   const [email, setEmail] = useState('demo@lifeos.com');
@@ -231,7 +234,10 @@ function App() {
             >
               <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
             </button>
-            <button className="flex items-center space-x-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]">
+            <button
+              onClick={() => setIsLogModalOpen(true)}
+              className="flex items-center space-x-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]"
+            >
               <Plus size={18} />
               <span>Log Event</span>
             </button>
@@ -248,11 +254,12 @@ function App() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
             >
-              {activeTab === 'dashboard' && <Dashboard user={user} habits={habits} goals={goals} insight={insight} fetchAppData={fetchAppData} />}
-              {activeTab === 'health' && <HealthModule />}
-              {activeTab === 'wealth' && <WealthModule />}
-              {activeTab === 'goals' && <GoalsModule />}
-              {activeTab === 'relationships' && <SocialModule />}
+              {activeTab === 'dashboard' && <Dashboard user={user} habits={habits} goals={goals} insight={insight} fetchAppData={fetchAppData} setActiveTab={setActiveTab} />}
+              {activeTab === 'health' && <HealthModule onUpdate={fetchAppData} />}
+              {activeTab === 'wealth' && <WealthModule onUpdate={fetchAppData} />}
+              {activeTab === 'habits' && <HabitsModule onUpdate={fetchAppData} />}
+              {activeTab === 'goals' && <GoalsModule onUpdate={fetchAppData} />}
+              {activeTab === 'relationships' && <SocialModule onUpdate={fetchAppData} />}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -270,11 +277,18 @@ function App() {
 
       {/* AI Chat Modal */}
       <AICopilot isOpen={isAIChatOpen} onClose={() => setIsAIChatOpen(false)} />
+
+      {/* Unified Log Modal */}
+      <UnifiedLogModal
+        isOpen={isLogModalOpen}
+        onClose={() => setIsLogModalOpen(false)}
+        onSuccess={fetchAppData}
+      />
     </div>
   );
 }
 
-function Dashboard({ user, habits, goals, insight, fetchAppData }: any) {
+function Dashboard({ user, habits, goals, insight, fetchAppData, setActiveTab }: any) {
   const completeHabit = async (id: string) => {
     try {
       await habitsAPI.completeHabit(id);
@@ -354,7 +368,7 @@ function Dashboard({ user, habits, goals, insight, fetchAppData }: any) {
           <section>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold">Active Habits</h2>
-              <button className="text-primary text-sm font-medium hover:underline">View All</button>
+              <button onClick={() => setActiveTab('habits')} className="text-primary text-sm font-medium hover:underline">View All</button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {habits.map((habit: any) => (
@@ -413,7 +427,7 @@ function Dashboard({ user, habits, goals, insight, fetchAppData }: any) {
                 <p className="text-slate-500 text-sm italic">No active missions detected.</p>
               )}
             </div>
-            <button className="w-full mt-8 py-3 rounded-xl border border-slate-700 hover:bg-slate-800 transition-colors text-sm font-semibold">
+            <button onClick={() => setActiveTab('goals')} className="w-full mt-8 py-3 rounded-xl border border-slate-700 hover:bg-slate-800 transition-colors text-sm font-semibold">
               Refine Life Purpose
             </button>
           </section>

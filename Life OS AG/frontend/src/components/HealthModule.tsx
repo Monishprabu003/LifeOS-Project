@@ -12,7 +12,7 @@ import {
     ResponsiveContainer
 } from 'recharts';
 
-export function HealthModule() {
+export function HealthModule({ onUpdate }: { onUpdate?: () => void }) {
     const [logs, setLogs] = useState<any[]>([]);
     const [showForm, setShowForm] = useState(false);
 
@@ -42,6 +42,7 @@ export function HealthModule() {
             setShowForm(false);
             setNotes('');
             fetchLogs();
+            if (onUpdate) onUpdate();
         } catch (err) {
             alert('Failed to log health data');
         }

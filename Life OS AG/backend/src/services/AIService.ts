@@ -49,7 +49,7 @@ export class AIService {
         const context = await this.getUserContext(user);
 
         if (!openai) {
-            return "I am currently in Simulation Mode (API Key missing). I can tell you that based on your scores, you should prioritize sleep today.";
+            return this.generateNeuralResponse(context, message);
         }
 
         const response = await openai.chat.completions.create({
@@ -85,18 +85,53 @@ export class AIService {
         };
     }
 
+    private static generateNeuralResponse(context: any, message: string): string {
+        const msg = message.toLowerCase();
+        const { scores } = context;
+
+        // Intent detection
+        if (msg.includes('aspects') || msg.includes('important')) {
+            return "In your current LifeOS configuration, the 3 vital anchors are Health Synchronization, Capital Liquidity, and Neural Habit Loops. Your Health Score (${scores.health}%) is the current primary driver.";
+        }
+
+        if (msg.includes('health') || msg.includes('sleep') || msg.includes('tired')) {
+            if (scores.health < 80) {
+                return `Biological systems reporting sub-optimal recovery. With a Health Score of ${scores.health}%, I recommend initiating a 'Deep Rest Protocol'—aim for 8 hours of sleep and zero late-cycle caffeine.`;
+            }
+            return "Your physiological metrics are in the optimal zone. Continue your current activity protocols to maintain high-output capability.";
+        }
+
+        if (msg.includes('wealth') || msg.includes('money') || msg.includes('spend')) {
+            if (scores.wealth < 70) {
+                return `Financial module analysis: Resource leakage detected. With a Wealth Score of ${scores.wealth}%, prioritize capital preservation and audit your 'Subscription' nodes this week.`;
+            }
+            return "Wealth accumulation is currently stable. Your capital allocation patterns are supporting long-term system growth.";
+        }
+
+        if (msg.includes('habit') || msg.includes('routine')) {
+            const topHabit = context.activeHabits[0];
+            if (topHabit) {
+                return `Consistency analysis: Your '${topHabit.name}' loop has a ${topHabit.streak}-unit streak. Every node counts towards permanent neurological automation. Don't break the chain today.`;
+            }
+            return "No active neural loops detected. I recommend initializing a 'Micro-Habit' protocol to start raising your Habit Score from ${scores.habits}%.";
+        }
+
+        // Default "Smart" response
+        return `System analysis complete. Optimization recommendation: Focus on your ${scores.health < 80 ? 'Health' : scores.wealth < 80 ? 'Wealth' : 'Habit'} module today. Your Global Life Score is currently ${scores.life}%—steady but capable of expansion.`;
+    }
+
     private static getSimulatedInsight(user: IUser): string {
         const insights = [
-            "Your consistency in deep work is establishing a powerful foundation. Maintain this trajectory.",
-            "The health metrics show a slight decline. Reclaiming 30 minutes of sleep tonight will optimize tomorrow's output.",
-            "Wealth accumulation is steady. Consider reviewing your investment goals to align with your long-term roadmap.",
-            "Social connectivity is high. Your relationship health is acting as a multiplier for your emotional stability.",
-            "Goal alignment is at 85%. You are 15% away from a major breakthrough in your professional module."
+            "Your consistency in morning nodes is establishing a powerful foundation. Maintain this trajectory.",
+            "Health metrics show a slight decline. Reclaiming 30 minutes of sleep tonight will optimize tomorrow's output.",
+            "Wealth accumulation is steady. Consider reviewing capital allocation to align with your long-term roadmap.",
+            "Social connectivity is high. Your relationship health is acting as a multiplier for emotional stability.",
+            "System prediction: You are 15% away from a major breakthrough in your productivity goal module."
         ];
-        // Simple logic to pick based on scores
-        if (user.healthScore < 70) return insights[1]!;
-        if (user.wealthScore < 60) return insights[2]!;
-        if (user.lifeScore > 80) return insights[0]!;
+
+        if (user.healthScore < 75) return insights[1]!;
+        if (user.wealthScore < 70) return insights[2]!;
+        if (user.lifeScore > 85) return insights[0]!;
         return insights[Math.floor(Math.random() * insights.length)]!;
     }
 }

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { goalsAPI } from '../api';
 
-export function GoalsModule() {
+export function GoalsModule({ onUpdate }: { onUpdate?: () => void }) {
     const [goals, setGoals] = useState<any[]>([]);
     const [showForm, setShowForm] = useState(false);
 
@@ -49,6 +49,7 @@ export function GoalsModule() {
             setDeadline('');
             setPriority('high');
             fetchGoals();
+            if (onUpdate) onUpdate();
         } catch (err) {
             alert('Failed to initialize mission');
         }
@@ -59,6 +60,7 @@ export function GoalsModule() {
             const next = Math.min(current + 10, 100);
             await goalsAPI.updateProgress(id, next);
             fetchGoals();
+            if (onUpdate) onUpdate();
         } catch (err) {
             console.error('Progress update failed', err);
         }

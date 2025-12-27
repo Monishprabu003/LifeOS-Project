@@ -22,7 +22,7 @@ import {
     ResponsiveContainer
 } from 'recharts';
 
-export function WealthModule() {
+export function WealthModule({ onUpdate }: { onUpdate?: () => void }) {
     const [transactions, setTransactions] = useState<any[]>([]);
     const [showForm, setShowForm] = useState(false);
 
@@ -62,6 +62,7 @@ export function WealthModule() {
             setCategory('');
             setDescription('');
             fetchTransactions();
+            if (onUpdate) onUpdate();
         } catch (err) {
             alert('Failed to log transaction');
         }

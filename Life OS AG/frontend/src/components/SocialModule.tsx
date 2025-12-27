@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { socialAPI } from '../api';
 
-export function SocialModule() {
+export function SocialModule({ onUpdate }: { onUpdate?: () => void }) {
     const [relationships, setRelationships] = useState<any[]>([]);
     const [showForm, setShowForm] = useState(false);
 
@@ -46,7 +46,10 @@ export function SocialModule() {
             });
             setShowForm(false);
             setName('');
+            setType('Friend'); // Reset type
+            setFrequency('weekly'); // Reset frequency
             fetchRelationships();
+            if (onUpdate) onUpdate();
         } catch (err) {
             alert('Failed to connect new human node.');
         }
@@ -54,8 +57,9 @@ export function SocialModule() {
 
     const logInteraction = async (id: string, type: string) => {
         try {
-            await socialAPI.logInteraction(id, { type, description: `Logged ${type} interaction.` });
+            await socialAPI.logInteraction(id, { type, description: `Logged via system dashboard.` });
             fetchRelationships();
+            if (onUpdate) onUpdate();
         } catch (err) {
             console.error('Log failed', err);
         }

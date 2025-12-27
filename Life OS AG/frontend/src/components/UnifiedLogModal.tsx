@@ -5,14 +5,11 @@ import {
     Heart,
     Wallet,
     Zap,
-    Target,
-    Users,
     Activity,
     DollarSign,
-    CheckCircle2,
-    Calendar
+    CheckCircle2
 } from 'lucide-react';
-import { healthAPI, financeAPI, habitsAPI, goalsAPI, kernelAPI, socialAPI } from '../api';
+import { healthAPI, financeAPI, kernelAPI } from '../api';
 
 interface UnifiedLogModalProps {
     isOpen: boolean;
