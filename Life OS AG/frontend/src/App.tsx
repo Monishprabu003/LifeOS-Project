@@ -17,6 +17,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { authAPI, kernelAPI, habitsAPI, goalsAPI, aiAPI } from './api';
 import { AICopilot } from './components/AICopilot';
 import { HealthModule } from './components/HealthModule';
+import { WealthModule } from './components/WealthModule';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -247,6 +248,7 @@ function App() {
             >
               {activeTab === 'dashboard' && <Dashboard user={user} habits={habits} goals={goals} insight={insight} fetchAppData={fetchAppData} />}
               {activeTab === 'health' && <HealthModule />}
+              {activeTab === 'wealth' && <WealthModule />}
             </motion.div>
           </AnimatePresence>
         </div>
