@@ -60,5 +60,10 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const getUserId = async (req: any, res: Response) => {
-    res.json(req.user);
+    try {
+        const user = await User.findById(req.user._id).select('-password');
+        res.json(user);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
 };

@@ -215,12 +215,12 @@ function App() {
       <main className="flex-1 relative overflow-y-auto">
         {/* Header */}
         <header className="sticky top-0 z-10 glass border-b border-slate-800/50 px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center bg-slate-900/50 rounded-full px-4 py-2 border border-slate-800 focus-within:border-primary/50 transition-colors w-96">
-            <Search size={18} className="text-slate-500" />
+          <div className="flex items-center bg-slate-900/80 rounded-2xl px-4 py-2.5 border border-slate-700/50 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all w-[32rem] group">
+            <Search size={18} className="text-slate-400 group-focus-within:text-primary transition-colors" />
             <input
               type="text"
               placeholder="Search life events, goals, or AI help..."
-              className="bg-transparent border-none focus:ring-0 ml-2 text-sm w-full outline-none"
+              className="bg-transparent border-none focus:ring-0 ml-3 text-sm w-full outline-none text-slate-200 placeholder:text-slate-500"
             />
           </div>
 

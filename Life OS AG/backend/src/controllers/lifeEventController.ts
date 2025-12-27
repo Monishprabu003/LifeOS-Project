@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { Kernel } from '../services/Kernel';
 import { AuthRequest } from '../middleware/authMiddleware';
 import LifeEvent from '../models/LifeEvent';
+import User from '../models/User';
 
 export const createEvent = async (req: AuthRequest, res: Response) => {
     try {
@@ -27,13 +28,16 @@ export const getEvents = async (req: AuthRequest, res: Response) => {
 export const getLifeStatus = async (req: AuthRequest, res: Response) => {
     try {
         await Kernel.updateLifeScores(req.user._id);
+        const updatedUser = await User.findById(req.user._id).select('-password');
+        if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+
         res.json({
-            lifeScore: req.user.lifeScore,
-            healthScore: req.user.healthScore,
-            wealthScore: req.user.wealthScore,
-            habitScore: req.user.habitScore,
-            goalScore: req.user.goalScore,
-            relationshipScore: req.user.relationshipScore,
+            lifeScore: updatedUser.lifeScore,
+            healthScore: updatedUser.healthScore,
+            wealthScore: updatedUser.wealthScore,
+            habitScore: updatedUser.habitScore,
+            goalScore: updatedUser.goalScore,
+            relationshipScore: updatedUser.relationshipScore,
         });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
