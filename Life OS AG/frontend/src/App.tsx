@@ -7,13 +7,16 @@ import {
   Target,
   Users,
   MessageSquare,
-  Search,
   Plus,
-  ArrowRight,
-  LogOut,
   RefreshCw,
   Sun,
-  Moon
+  Moon,
+  Activity,
+  User,
+  Mail,
+  Lock,
+  LogOut,
+  Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { authAPI, kernelAPI, habitsAPI, goalsAPI, aiAPI } from './api';
@@ -51,8 +54,10 @@ function App() {
   };
 
   // Auth Flow State
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('demo@lifeos.com');
   const [password, setPassword] = useState('password123');
+  const [name, setName] = useState('');
 
   useEffect(() => {
     if (token) {
@@ -85,15 +90,22 @@ function App() {
     }
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await authAPI.login({ email, password });
-      const newToken = res.data.token;
-      localStorage.setItem('lifeos_token', newToken);
-      setToken(newToken);
-    } catch (err) {
-      alert('Login failed. Did you run "npm run seed" in the backend?');
+      if (authMode === 'signin') {
+        const res = await authAPI.login({ email, password });
+        const newToken = res.data.token;
+        localStorage.setItem('lifeos_token', newToken);
+        setToken(newToken);
+      } else {
+        const res = await authAPI.register({ name, email, password });
+        const newToken = res.data.token;
+        localStorage.setItem('lifeos_token', newToken);
+        setToken(newToken);
+      }
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Authentication failed. Please check your credentials.');
     }
   };
 
@@ -111,47 +123,103 @@ function App() {
 
   if (!token) {
     return (
-      <div className="h-screen w-full bg-background flex items-center justify-center p-4">
+      <div className="h-screen w-full bg-[#f8fafc] flex flex-col items-center justify-center p-6 text-[#1e293b]">
+        {/* Logo Section */}
+        <div className="flex items-center space-x-3 mb-12">
+          <div className="w-12 h-12 rounded-xl bg-[#10b981] flex items-center justify-center shadow-lg shadow-green-200">
+            <Activity className="text-white" size={28} />
+          </div>
+          <span className="text-3xl font-display font-bold tracking-tight text-[#0f172a]">LifeOS</span>
+        </div>
+
+        {/* Login Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md glass p-10 rounded-[2.5rem] relative overflow-hidden"
+          className="w-full max-w-[440px] bg-white rounded-[2rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100"
         >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-
-          <div className="relative z-10 flex flex-col items-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 shadow-2xl">
-              <span className="font-display font-bold text-white text-3xl">L</span>
-            </div>
-            <h1 className="text-3xl font-display font-bold text-main mb-2">Initialize LifeOS</h1>
-            <p className="text-muted text-center mb-8">System standby. Authentication required.</p>
-
-            <form onSubmit={handleLogin} className="w-full space-y-4">
-              <input
-                type="email"
-                placeholder="Terminal Email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full bg-surface/50 border border-border/50 rounded-2xl p-4 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-muted/50 text-main"
-              />
-              <input
-                type="password"
-                placeholder="Access Key"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="w-full bg-surface/50 border border-border/50 rounded-2xl p-4 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-muted/50 text-main"
-              />
-              <button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-2xl flex items-center justify-center space-x-2 shadow-lg shadow-primary/20 transition-all hover:shadow-primary/40 active:scale-[0.98]"
-              >
-                <span>Authorize Access</span>
-                <ArrowRight size={20} />
-              </button>
-            </form>
-            <p className="mt-8 text-xs text-muted uppercase tracking-widest font-bold">Encrypted Connection Secure</p>
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-display font-bold text-[#0f172a] mb-3">Welcome</h1>
+            <p className="text-slate-500 text-sm">Sign in to your account or create a new one to get started</p>
           </div>
+
+          {/* Tab Switcher */}
+          <div className="flex p-1.5 bg-slate-100/80 rounded-2xl mb-8">
+            <button
+              onClick={() => setAuthMode('signin')}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${authMode === 'signin' ? 'bg-white text-[#0f172a] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => setAuthMode('signup')}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${authMode === 'signup' ? 'bg-white text-[#0f172a] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Sign Up
+            </button>
+          </div>
+
+          <form onSubmit={handleAuth} className="space-y-6">
+            {authMode === 'signup' && (
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-[#1e293b] ml-1">Full Name</label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input
+                    type="text"
+                    placeholder="Enter your name"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    required
+                    className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 text-sm focus:ring-2 focus:ring-[#10b981]/20 outline-none transition-all placeholder:text-slate-400"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-[#1e293b] ml-1">Email</label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 text-sm focus:ring-2 focus:ring-[#10b981]/20 outline-none transition-all placeholder:text-slate-400"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-[#1e293b] ml-1">Password</label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 text-sm focus:ring-2 focus:ring-[#10b981]/20 outline-none transition-all placeholder:text-slate-400"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-[#10b981] hover:bg-[#0da271] text-white font-bold py-4 rounded-2xl shadow-lg shadow-green-100 transition-all hover:translate-y-[-1px] active:translate-y-[0px] active:scale-[0.99]"
+            >
+              {authMode === 'signin' ? 'Sign In' : 'Sign Up'}
+            </button>
+          </form>
         </motion.div>
+
+        {/* Footer Text */}
+        <p className="mt-12 text-center text-slate-500 text-sm max-w-[400px] leading-relaxed">
+          Your personal Life Operating System for tracking health, wealth, relationships, and more.
+        </p>
       </div>
     )
   }
