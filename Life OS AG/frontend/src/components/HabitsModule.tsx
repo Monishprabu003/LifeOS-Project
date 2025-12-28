@@ -192,7 +192,7 @@ export function HabitsModule({ onUpdate }: { onUpdate?: () => void }) {
                 </div>
             </div>
 
-            {/* Habit Form Modal (simplified version linked to the New Habit button) */}
+            {/* Habit Form Modal */}
             {showForm && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
                     <motion.div
@@ -200,7 +200,7 @@ export function HabitsModule({ onUpdate }: { onUpdate?: () => void }) {
                         animate={{ opacity: 1, scale: 1 }}
                         className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative"
                     >
-                        <h2 className="text-2xl font-bold mb-8">Initialize New Habit</h2>
+                        <h2 className="text-2xl font-bold mb-8 text-[#0f172a] dark:text-white">Initialize New Habit</h2>
                         <form onSubmit={handleCreateHabit} className="space-y-6">
                             <input
                                 placeholder="Habit Name (e.g. Morning Meditation)"
@@ -240,41 +240,71 @@ export function HabitsModule({ onUpdate }: { onUpdate?: () => void }) {
                 </div>
             )}
 
-            {/* Active Rituals List */}
-            <div className="space-y-6 pt-10 border-t border-slate-100 dark:border-slate-800">
-                <h3 className="text-2xl font-display font-bold text-[#0f172a] dark:text-white">Active Rituals</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {habits.map(habit => (
-                        <div key={habit._id} className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group">
-                            <div className="flex justify-between items-start">
-                                <div className="p-3 bg-orange-50 dark:bg-orange-500/10 rounded-xl">
-                                    <ClipboardList className="text-[#f59e0b]" size={20} />
-                                </div>
-                                <div className="flex items-center space-x-1 bg-[#fffbeb] dark:bg-orange-500/10 px-3 py-1 rounded-full">
-                                    <Flame size={14} className="text-[#f59e0b]" />
-                                    <span className="text-xs font-bold text-[#f59e0b]">{habit.streak} day streak</span>
-                                </div>
-                            </div>
-                            <div className="mt-6">
-                                <h4 className="font-bold text-lg text-[#0f172a] dark:text-white">{habit.name}</h4>
-                                <p className="text-xs text-slate-400 mt-1 uppercase font-bold tracking-wider">{habit.frequency}</p>
-                            </div>
-                            <button
-                                onClick={() => completeHabit(habit._id)}
-                                disabled={habit.completedToday}
-                                className={`w-full mt-8 py-4 rounded-2xl text-sm font-bold transition-all flex items-center justify-center space-x-2 ${habit.completedToday
-                                        ? 'bg-[#ecfdf5] text-[#10b981] cursor-default'
-                                        : 'bg-[#f59e0b] hover:bg-[#d97706] text-white shadow-lg shadow-orange-100 active:scale-95'
+            {/* Your Habits Section */}
+            <div className="pt-10 border-t border-slate-100 dark:border-slate-800">
+                <h3 className="text-xl font-bold text-[#0f172a] dark:text-white mb-8">Your Habits</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {habits.map(habit => {
+                        const totalGoal = 30; // Mocked goal
+                        const progress = (habit.streak / totalGoal) * 100;
+
+                        return (
+                            <div
+                                key={habit._id}
+                                className={`p-6 rounded-[1.5rem] border transition-all cursor-pointer relative group ${habit.completedToday
+                                        ? 'bg-[#fffbeb] border-[#f59e0b] shadow-sm'
+                                        : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-slate-700'
                                     }`}
+                                onClick={() => !habit.completedToday && completeHabit(habit._id)}
                             >
-                                <CheckCircle2 size={18} />
-                                <span>{habit.completedToday ? 'Ritual Sync Completed' : 'Mark as Completed'}</span>
-                            </button>
-                        </div>
-                    ))}
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="flex items-center space-x-3">
+                                        <span className="text-2xl">
+                                            {habit.name.toLowerCase().includes('meditation') ? '🧘' :
+                                                habit.name.toLowerCase().includes('read') ? '📚' :
+                                                    habit.name.toLowerCase().includes('water') ? '💧' :
+                                                        habit.name.toLowerCase().includes('journal') ? '📝' :
+                                                            habit.name.toLowerCase().includes('expense') ? '💰' : '✨'}
+                                        </span>
+                                        <div>
+                                            <h4 className="font-bold text-[#0f172a] dark:text-white">{habit.name}</h4>
+                                            <div className="flex items-center space-x-2 mt-1">
+                                                <div className="flex items-center space-x-1 text-slate-400">
+                                                    <Flame size={14} className="text-[#f59e0b]" />
+                                                    <span className="text-xs font-bold">{habit.streak} day streak</span>
+                                                </div>
+                                                <div className={`w-2 h-2 rounded-full ${habit.completedToday ? 'bg-[#10b981]' : 'bg-slate-300'
+                                                    }`} />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center transition-all ${habit.completedToday
+                                            ? 'bg-[#f59e0b] border-[#f59e0b] text-white shadow-sm'
+                                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 group-hover:border-orange-200'
+                                        }`}>
+                                        {habit.completedToday && <CheckCircle2 size={16} strokeWidth={3} />}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="flex justify-between items-end">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Progress to goal</span>
+                                        <span className="text-[10px] font-bold text-slate-500 pr-1">{habit.streak}/{totalGoal} days</span>
+                                    </div>
+                                    <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${Math.min(progress, 100)}%` }}
+                                            className="h-full bg-[#10b981] rounded-full shadow-sm"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>
     );
 }
-
