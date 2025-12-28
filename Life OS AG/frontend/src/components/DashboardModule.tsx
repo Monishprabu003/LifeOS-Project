@@ -223,7 +223,7 @@ export function DashboardModule({ user }: any) {
                 </div>
 
                 {/* Today's Tasks */}
-                <div className="lg:col-span-7 bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 shadow-sm border border-slate-100 dark:border-slate-800">
+                <div className="lg:col-span-12 bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 shadow-sm border border-slate-100 dark:border-slate-800">
                     <div className="flex items-center justify-between mb-8">
                         <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Today's Tasks</h3>
                         <span className="text-xs font-bold text-slate-400">2/5 completed</span>
@@ -242,28 +242,6 @@ export function DashboardModule({ user }: any) {
                                 </div>
                             </div>
                         ))}
-                    </div>
-                </div>
-
-                {/* AI Insights Panel */}
-                <div className="lg:col-span-5 bg-[#eff6ff]/30 dark:bg-[#eff6ff]/5 rounded-[2.5rem] p-10 border border-[#eff6ff] dark:border-blue-900/30">
-                    <div className="flex items-center space-x-2 mb-8">
-                        <Zap size={20} className="text-[#3b82f6]" />
-                        <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">AI Insights</h3>
-                    </div>
-                    <div className="space-y-6">
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] shadow-sm border border-slate-50 dark:border-slate-800">
-                            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Weekly Observation</h4>
-                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                Your sleep quality improved by 15% when you meditated in the morning. Consider making morning meditation a daily habit.
-                            </p>
-                        </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] shadow-sm border border-slate-50 dark:border-slate-800">
-                            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Correlation Found</h4>
-                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                Higher water intake days correlate with 23% better focus scores. Aim for 2.5L daily.
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>

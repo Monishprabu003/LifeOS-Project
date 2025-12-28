@@ -22,7 +22,7 @@ import {
   PanelLeftOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { authAPI, kernelAPI, habitsAPI, goalsAPI, aiAPI } from './api';
+import { authAPI, kernelAPI, habitsAPI, goalsAPI } from './api';
 import { AICopilot } from './components/AICopilot';
 import { HealthModule } from './components/HealthModule';
 import { WealthModule } from './components/WealthModule';
@@ -39,7 +39,6 @@ function App() {
   const [user, setUser] = useState<any>(null); // TODO: Define User interface
   const [habits, setHabits] = useState<any[]>([]);
   const [goals, setGoals] = useState<any[]>([]);
-  const [insight, setInsight] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
@@ -69,16 +68,14 @@ function App() {
   const fetchAppData = useCallback(async () => {
     try {
       setLoading(true);
-      const [userRes, habitsRes, goalsRes, aiRes] = await Promise.all([
+      const [userRes, habitsRes, goalsRes] = await Promise.all([
         authAPI.getMe(),
         habitsAPI.getHabits(),
-        goalsAPI.getGoals(),
-        aiAPI.getInsight()
+        goalsAPI.getGoals()
       ]);
       setUser(userRes.data);
       setHabits(habitsRes.data);
       setGoals(goalsRes.data);
-      setInsight(aiRes.data.insight);
     } catch (err) {
       console.error('Failed to fetch data', err);
       if ((err as any).response?.status === 401) {
@@ -245,8 +242,7 @@ function App() {
     { id: 'wealth', name: 'Wealth', icon: Wallet, color: 'text-wealth' },
     { id: 'relationships', name: 'Relationships', icon: Users, color: 'text-relationships' },
     { id: 'habits', name: 'Habits', icon: Zap, color: 'text-habits' },
-    { id: 'goals', name: 'Purpose', icon: Compass, color: 'text-goals' },
-    { id: 'ai-insights', name: 'AI Insights', icon: MessageSquare, color: 'text-accent' },
+    { id: 'goals', name: 'Purpose', icon: Compass, color: 'text-goals' }
   ];
 
   const accountItems = [
@@ -300,8 +296,8 @@ function App() {
                 return (
                   <button
                     key={module.id}
-                    onClick={() => setActiveTab(module.id === 'ai-insights' ? 'dashboard' : module.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 group ${activeTab === (module.id === 'ai-insights' ? 'dashboard' : module.id)
+                    onClick={() => setActiveTab(module.id)}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 group ${activeTab === module.id
                       ? 'bg-[#ecfdf5] text-[#10b981]'
                       : 'hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-700'
                       }`}
@@ -418,7 +414,7 @@ function App() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
             >
-              {activeTab === 'dashboard' && <DashboardModule user={user} habits={habits} goals={goals} insight={insight} fetchAppData={fetchAppData} setActiveTab={setActiveTab} />}
+              {activeTab === 'dashboard' && <DashboardModule user={user} habits={habits} goals={goals} fetchAppData={fetchAppData} setActiveTab={setActiveTab} />}
               {activeTab === 'health' && <HealthModule onUpdate={fetchAppData} />}
               {activeTab === 'wealth' && <WealthModule onUpdate={fetchAppData} />}
               {activeTab === 'habits' && <HabitsModule onUpdate={fetchAppData} />}
