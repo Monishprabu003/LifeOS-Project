@@ -48,7 +48,7 @@ class LifeKernelEngine {
         let wealthScore = 0; // Starting at 0 for no data
         if (income > 0) {
             const savingsRate = (income - expense) / income;
-            wealthScore = Math.max(0, Math.min(100, 50 + (savingsRate * 50)));
+            wealthScore = Math.max(0, Math.min(100, Math.round(savingsRate * 100)));
         } else if (expense > 0) {
             wealthScore = 10; // Low score if only expenses exist
         }

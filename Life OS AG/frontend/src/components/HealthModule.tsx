@@ -114,7 +114,7 @@ export function HealthModule({ onUpdate }: { onUpdate?: () => void }) {
 
     // Daily score calculation (simple average for now)
     const dailyScore = latestLog
-        ? Math.round(((latestLog.mood * 10) + (latestLog.sleepHours * 10) + (100 - (latestLog.stress * 10)) + (latestLog.waterIntake * 20)) / 4)
+        ? Math.round(((latestLog.mood * 10) + (latestLog.sleepHours * 10) + (100 - (latestLog.stress * 10)) + (Math.min(latestLog.waterIntake, 2.5) * 40)) / 4)
         : 0;
 
     return (
