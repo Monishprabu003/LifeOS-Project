@@ -9,22 +9,19 @@ import {
   MessageSquare,
   Plus,
   RefreshCw,
-  Sun,
-  Moon,
   Activity,
   User,
   Mail,
   Lock,
   LogOut,
   Settings,
-  Bell,
   Compass,
   PanelLeftClose,
   PanelLeftOpen,
   Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { authAPI, kernelAPI, habitsAPI, goalsAPI } from './api';
+import { authAPI, habitsAPI, goalsAPI } from './api';
 import { AICopilot } from './components/AICopilot';
 import { HealthModule } from './components/HealthModule';
 import { WealthModule } from './components/WealthModule';
@@ -45,7 +42,7 @@ function App() {
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [token, setToken] = useState<string | null>(localStorage.getItem('lifeos_token'));
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [theme] = useState(localStorage.getItem('theme') || 'dark');
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -56,9 +53,6 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
 
   // Auth Flow State
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
@@ -121,11 +115,6 @@ function App() {
     setUser(null);
   };
 
-  const syncScores = async () => {
-    await kernelAPI.getStatus();
-    const userRes = await authAPI.getMe();
-    setUser(userRes.data);
-  };
 
   if (!token) {
     return (
@@ -377,18 +366,11 @@ function App() {
 
           <div className="flex items-center space-x-4">
             <button
-              className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-400 hover:text-primary shadow-sm relative"
-            >
-              <Bell size={20} />
-              <div className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900" />
-            </button>
-            <button
               onClick={fetchAppData}
               disabled={loading}
-              className={`p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-400 hover:text-primary shadow-sm ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
-              title="Refresh Dashboard"
+              className={`flex items-center space-x-2 bg-[#3b82f6] hover:bg-[#2563eb] text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-blue-100 ${loading ? 'cursor-not-allowed opacity-70' : ''}`}
             >
-              <RefreshCw size={20} className={loading ? 'animate-spin' : 'hover:rotate-180 transition-transform duration-500'} />
+              <span>{loading ? 'Refreshing...' : 'Refresh'}</span>
             </button>
             <button
               onClick={() => setIsLogModalOpen(true)}

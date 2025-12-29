@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     Sparkles,
     TrendingUp,
     ArrowRight,
     Brain,
-    Moon,
     Zap,
     Users,
     Activity,
-    RefreshCw,
-    Lightbulb,
-    AlertCircle,
-    CheckCircle2
+    RefreshCw
 } from 'lucide-react';
 import {
     Radar,
@@ -29,7 +25,6 @@ import {
     Tooltip,
     Legend
 } from 'recharts';
-import { aiAPI } from '../api';
 
 export function AIInsightsModule({ user }: { user: any }) {
     const [loading, setLoading] = useState(false);
