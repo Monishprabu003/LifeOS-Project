@@ -74,7 +74,7 @@ export function DashboardModule({ user, habits, goals, setActiveTab, onUpdate }:
 
     useEffect(() => {
         fetchEvents();
-    }, []);
+    }, [user]);
 
     const handleDeleteEvent = async (id: string) => {
         if (!confirm('Delete this event log?')) return;

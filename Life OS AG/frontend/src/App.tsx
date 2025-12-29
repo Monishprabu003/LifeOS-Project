@@ -375,15 +375,21 @@ function App() {
             <h2 className="text-xl font-bold text-[#0f172a] dark:text-white">{user?.name || 'John Doe'}</h2>
           </div>
 
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2">
-              <button
-                className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-400 hover:text-primary shadow-sm relative"
-              >
-                <Bell size={20} />
-                <div className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900" />
-              </button>
-            </div>
+          <div className="flex items-center space-x-4">
+            <button
+              className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-400 hover:text-primary shadow-sm relative"
+            >
+              <Bell size={20} />
+              <div className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900" />
+            </button>
+            <button
+              onClick={fetchAppData}
+              disabled={loading}
+              className={`p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-400 hover:text-primary shadow-sm ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
+              title="Refresh Dashboard"
+            >
+              <RefreshCw size={20} className={loading ? 'animate-spin' : 'hover:rotate-180 transition-transform duration-500'} />
+            </button>
             <button
               onClick={() => setIsLogModalOpen(true)}
               className="flex items-center space-x-2 bg-[#10b981] hover:bg-[#0da271] text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-green-100"
