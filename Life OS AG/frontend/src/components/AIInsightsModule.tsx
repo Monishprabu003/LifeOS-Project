@@ -189,115 +189,141 @@ export function AIInsightsModule({ user }: { user: any }) {
                     <h2 className="text-2xl font-bold text-[#0f172a] dark:text-white">Personalized Insights</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Sleep Insight */}
-                    <div className="bg-[#ecfdf5] dark:bg-green-500/5 rounded-[2rem] p-8 border border-green-100 dark:border-green-900/20">
-                        <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#10b981] shadow-sm">
-                                <Activity size={20} />
+                {hasData ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Sleep Insight */}
+                        <div className="bg-[#ecfdf5] dark:bg-green-500/5 rounded-[2rem] p-8 border border-green-100 dark:border-green-900/20">
+                            <div className="flex items-center space-x-3 mb-4">
+                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#10b981] shadow-sm">
+                                    <Activity size={20} />
+                                </div>
+                                <h4 className="font-bold text-[#0f172a] dark:text-white">Sleep & Productivity Connection</h4>
                             </div>
-                            <h4 className="font-bold text-[#0f172a] dark:text-white">Sleep & Productivity Connection</h4>
-                        </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                            When you sleep 7+ hours, your habit completion rate increases by <span className="text-[#10b981] font-bold">23%</span>. Last week, your best days aligned with quality sleep.
-                        </p>
-                        <div className="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl flex items-center space-x-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-                            <ArrowRight size={18} className="text-[#10b981]" />
-                            <span>Try to maintain 7-8 hours of sleep consistently.</span>
-                        </div>
-                    </div>
-
-                    {/* Finance Insight */}
-                    <div className="bg-[#fffbeb] dark:bg-amber-500/5 rounded-[2rem] p-8 border border-amber-100 dark:border-amber-900/20">
-                        <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#f59e0b] shadow-sm">
-                                <TrendingUp size={20} />
+                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                                When you sleep 7+ hours, your habit completion rate increases by <span className="text-[#10b981] font-bold">23%</span>. Last week, your best days aligned with quality sleep.
+                            </p>
+                            <div className="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl flex items-center space-x-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+                                <ArrowRight size={18} className="text-[#10b981]" />
+                                <span>Try to maintain 7-8 hours of sleep consistently.</span>
                             </div>
-                            <h4 className="font-bold text-[#0f172a] dark:text-white">Weekend Spending Spike</h4>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                            Your expenses tend to increase by <span className="text-[#f59e0b] font-bold">40%</span> on weekends, mainly in entertainment and dining categories.
-                        </p>
-                        <div className="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl flex items-center space-x-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-                            <ArrowRight size={18} className="text-[#f59e0b]" />
-                            <span>Consider setting a weekend budget limit.</span>
-                        </div>
-                    </div>
 
-                    {/* Habits Insight */}
-                    <div className="bg-[#ecfdf5] dark:bg-green-500/5 rounded-[2rem] p-8 border border-green-100 dark:border-green-900/20">
-                        <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#10b981] shadow-sm">
-                                <Zap size={20} />
+                        {/* Finance Insight */}
+                        <div className="bg-[#fffbeb] dark:bg-amber-500/5 rounded-[2rem] p-8 border border-amber-100 dark:border-amber-900/20">
+                            <div className="flex items-center space-x-3 mb-4">
+                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#f59e0b] shadow-sm">
+                                    <TrendingUp size={20} />
+                                </div>
+                                <h4 className="font-bold text-[#0f172a] dark:text-white">Weekend Spending Spike</h4>
                             </div>
-                            <h4 className="font-bold text-[#0f172a] dark:text-white">Habit Streaks Are Strong</h4>
-                        </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                            You've maintained 3 habits for over 10 days. This consistency is building positive momentum across all areas.
-                        </p>
-                        <div className="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl flex items-center space-x-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-                            <ArrowRight size={18} className="text-[#10b981]" />
-                            <span>Keep it up! Consider adding one more habit.</span>
-                        </div>
-                    </div>
-
-                    {/* Social Insight */}
-                    <div className="bg-[#eff6ff] dark:bg-blue-500/5 rounded-[2rem] p-8 border border-blue-100 dark:border-blue-900/20">
-                        <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#3b82f6] shadow-sm">
-                                <Users size={20} />
+                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                                Your expenses tend to increase by <span className="text-[#f59e0b] font-bold">40%</span> on weekends, mainly in entertainment and dining categories.
+                            </p>
+                            <div className="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl flex items-center space-x-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+                                <ArrowRight size={18} className="text-[#f59e0b]" />
+                                <span>Consider setting a weekend budget limit.</span>
                             </div>
-                            <h4 className="font-bold text-[#0f172a] dark:text-white">Social Connection Gap</h4>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                            You haven't connected with family members in the past week. Regular family contact correlates with higher mood scores.
+
+                        {/* Habits Insight */}
+                        <div className="bg-[#ecfdf5] dark:bg-green-500/5 rounded-[2rem] p-8 border border-green-100 dark:border-green-900/20">
+                            <div className="flex items-center space-x-3 mb-4">
+                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#10b981] shadow-sm">
+                                    <Zap size={20} />
+                                </div>
+                                <h4 className="font-bold text-[#0f172a] dark:text-white">Habit Streaks Are Strong</h4>
+                            </div>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                                You've maintained 3 habits for over 10 days. This consistency is building positive momentum across all areas.
+                            </p>
+                            <div className="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl flex items-center space-x-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+                                <ArrowRight size={18} className="text-[#10b981]" />
+                                <span>Keep it up! Consider adding one more habit.</span>
+                            </div>
+                        </div>
+
+                        {/* Social Insight */}
+                        <div className="bg-[#eff6ff] dark:bg-blue-500/5 rounded-[2rem] p-8 border border-blue-100 dark:border-blue-900/20">
+                            <div className="flex items-center space-x-3 mb-4">
+                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#3b82f6] shadow-sm">
+                                    <Users size={20} />
+                                </div>
+                                <h4 className="font-bold text-[#0f172a] dark:text-white">Social Connection Gap</h4>
+                            </div>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                                You haven't connected with family members in the past week. Regular family contact correlates with higher mood scores.
+                            </p>
+                            <div className="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl flex items-center space-x-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+                                <ArrowRight size={18} className="text-[#3b82f6]" />
+                                <span>Schedule a call with a family member today.</span>
+                            </div>
+                        </div>
+
+                        {/* Strengths Card */}
+                        <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
+                            <div className="flex items-center space-x-3 mb-8">
+                                <TrendingUp className="text-[#10b981]" size={20} />
+                                <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Strengths This Week</h3>
+                            </div>
+                            <ul className="space-y-4">
+                                {[
+                                    "Highest habit completion rate this month (91%)",
+                                    "Relationship score improved by 10 points",
+                                    "Morning routine consistency at 100%"
+                                ].map((strength, i) => (
+                                    <li key={i} className="flex items-center space-x-3 text-sm font-medium text-slate-600 dark:text-slate-400">
+                                        <div className="w-2 h-2 rounded-full bg-[#10b981]" />
+                                        <span>{strength}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Areas for Improvement Card */}
+                        <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
+                            <div className="flex items-center space-x-3 mb-8">
+                                <TrendingUp className="text-[#f59e0b] rotate-180" size={20} />
+                                <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Areas for Improvement</h3>
+                            </div>
+                            <ul className="space-y-4">
+                                {[
+                                    "Stress levels peaked mid-week",
+                                    "Water intake below target on 3 days",
+                                    "Learning path progress slowed"
+                                ].map((improvement, i) => (
+                                    <li key={i} className="flex items-center space-x-3 text-sm font-medium text-slate-600 dark:text-slate-400">
+                                        <div className="w-2 h-2 rounded-full bg-[#f59e0b]" />
+                                        <span>{improvement}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-20 border border-slate-100 dark:border-slate-800 shadow-sm text-center">
+                        <div className="w-20 h-20 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mx-auto mb-6 text-blue-500">
+                            <Brain size={40} className="animate-pulse" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-[#0f172a] dark:text-white mb-4">Aggregating Life Intelligence</h3>
+                        <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+                            Our AI is precisely analyzing your logs to find meaningful patterns.
+                            Start logging your habits, health, and finances to unlock personalized insights and hidden trends.
                         </p>
-                        <div className="p-4 bg-white/60 dark:bg-slate-800/60 rounded-xl flex items-center space-x-3 text-sm font-medium text-slate-700 dark:text-slate-200">
-                            <ArrowRight size={18} className="text-[#3b82f6]" />
-                            <span>Schedule a call with a family member today.</span>
+                        <div className="mt-10 flex items-center justify-center space-x-4">
+                            <div className="px-5 py-2 rounded-full bg-slate-50 dark:bg-slate-800 text-slate-400 text-xs font-bold uppercase tracking-widest">
+                                0% Data Ready
+                            </div>
+                            <div className="w-32 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <motion.div
+                                    className="h-full bg-blue-500"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: "5%" }}
+                                    transition={{ duration: 2 }}
+                                />
+                            </div>
                         </div>
                     </div>
-
-                    {/* Strengths Card */}
-                    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
-                        <div className="flex items-center space-x-3 mb-8">
-                            <TrendingUp className="text-[#10b981]" size={20} />
-                            <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Strengths This Week</h3>
-                        </div>
-                        <ul className="space-y-4">
-                            {[
-                                "Highest habit completion rate this month (91%)",
-                                "Relationship score improved by 10 points",
-                                "Morning routine consistency at 100%"
-                            ].map((strength, i) => (
-                                <li key={i} className="flex items-center space-x-3 text-sm font-medium text-slate-600 dark:text-slate-400">
-                                    <div className="w-2 h-2 rounded-full bg-[#10b981]" />
-                                    <span>{strength}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Areas for Improvement Card */}
-                    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
-                        <div className="flex items-center space-x-3 mb-8">
-                            <TrendingUp className="text-[#f59e0b] rotate-180" size={20} />
-                            <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Areas for Improvement</h3>
-                        </div>
-                        <ul className="space-y-4">
-                            {[
-                                "Stress levels peaked mid-week",
-                                "Water intake below target on 3 days",
-                                "Learning path progress slowed"
-                            ].map((improvement, i) => (
-                                <li key={i} className="flex items-center space-x-3 text-sm font-medium text-slate-600 dark:text-slate-400">
-                                    <div className="w-2 h-2 rounded-full bg-[#f59e0b]" />
-                                    <span>{improvement}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
+                )}
             </div>
         </div>
     );

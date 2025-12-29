@@ -164,15 +164,41 @@ export function DashboardModule({ user, setActiveTab, onUpdate }: any) {
 
     const trendData = getTrendData();
 
+    // Calculate Trend
+    const calculateTrend = () => {
+        if (events.length < 5) return { value: 0, label: 'Awaiting data', status: 'neutral' };
+
+        const sortedEvents = [...events].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+        const oldestEventDate = new Date(sortedEvents[0].timestamp);
+        const daysSinceStart = Math.ceil((new Date().getTime() - oldestEventDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (daysSinceStart < 2) return { value: 0, label: 'Starting journey', status: 'neutral' };
+
+        // Simple trend: net impact of last 48h vs total
+        const recentEvents = events.filter(e => {
+            const date = new Date(e.timestamp);
+            const now = new Date();
+            return (now.getTime() - date.getTime()) < (48 * 60 * 60 * 1000);
+        });
+
+        const recentImpact = recentEvents.reduce((acc, e) => acc + (e.impact === 'positive' ? 1 : -1), 0);
+
+        if (recentImpact > 0) return { value: Math.abs(recentImpact), label: `+${recentImpact}% momentum`, status: 'positive' };
+        if (recentImpact < 0) return { value: Math.abs(recentImpact), label: `${recentImpact}% dip`, status: 'negative' };
+        return { value: 0, label: 'Stably performing', status: 'neutral' };
+    };
+
+    const trend = calculateTrend();
+
     return (
         <div className="space-y-8 pb-12">
             {/* Page Header */}
             <div className="flex items-end justify-between">
                 <div>
-                    <h2 className="text-4xl font-display font-bold text-[#0f172a] ">Life Dashboard</h2>
-                    <p className="text-slate-500 mt-2 font-medium">Your unified life performance overview</p>
+                    <h2 className="text-4xl font-display font-bold text-[#0f172a] dark:text-white">Life Dashboard</h2>
+                    <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Your unified life performance overview</p>
                 </div>
-                <div className="flex items-center space-x-2 text-slate-400 font-semibold text-sm">
+                <div className="flex items-center space-x-2 text-slate-400 dark:text-slate-500 font-semibold text-sm">
                     <span>{today}</span>
                 </div>
             </div>
@@ -184,9 +210,9 @@ export function DashboardModule({ user, setActiveTab, onUpdate }: any) {
                     <CircularProgress value={user?.lifeScore || 0} color="#10b981" size={180} strokeWidth={14} />
                     <div className="mt-8 text-center">
                         <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Your overall life performance</p>
-                        <div className="flex items-center justify-center space-x-1 mt-2 text-slate-400 dark:text-[#10b981] font-bold text-sm">
-                            <TrendingUp size={16} />
-                            <span>+5% from last week</span>
+                        <div className={`flex items-center justify-center space-x-1 mt-2 font-bold text-sm ${trend.status === 'positive' ? 'text-green-500' : trend.status === 'negative' ? 'text-rose-500' : 'text-slate-400'}`}>
+                            {trend.status !== 'neutral' && <TrendingUp size={16} className={trend.status === 'negative' ? 'rotate-180' : ''} />}
+                            <span>{trend.label}</span>
                         </div>
                     </div>
                 </div>
@@ -222,21 +248,21 @@ export function DashboardModule({ user, setActiveTab, onUpdate }: any) {
                                             <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-slate-100 dark:text-slate-800/50" />
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-slate-100 dark:text-white/10" />
                                     <XAxis
                                         dataKey="name"
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fill: 'currentColor', fontSize: 10, fontWeight: 700 }}
-                                        className="text-slate-400 dark:text-slate-600"
+                                        tick={{ fill: 'rgba(148, 163, 184, 0.8)', fontSize: 10, fontWeight: 700 }}
                                         dy={10}
+                                        className="recharts-cartesian-axis-tick-text"
                                     />
                                     <YAxis
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fill: 'currentColor', fontSize: 10, fontWeight: 700 }}
-                                        className="text-slate-400 dark:text-slate-600"
+                                        tick={{ fill: 'rgba(148, 163, 184, 0.8)', fontSize: 10, fontWeight: 700 }}
                                         domain={[0, 100]}
+                                        className="recharts-cartesian-axis-tick-text"
                                     />
                                     <Tooltip
                                         contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }}
