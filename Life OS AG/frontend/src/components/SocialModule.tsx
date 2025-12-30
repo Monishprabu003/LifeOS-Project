@@ -57,7 +57,7 @@ const CircularProgress = ({ value, label }: { value: number; label: string }) =>
     );
 };
 
-export function SocialModule({ onUpdate }: { onUpdate?: () => void }) {
+export function SocialModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [gratitudeText, setGratitudeText] = useState('');
     const [connections, setConnections] = useState<any[]>([]);
@@ -90,7 +90,7 @@ export function SocialModule({ onUpdate }: { onUpdate?: () => void }) {
     useEffect(() => {
         fetchConnections();
         fetchGratitude();
-    }, []);
+    }, [user]);
 
     const handleGratitudeSubmit = async () => {
         if (!gratitudeText.trim()) return;

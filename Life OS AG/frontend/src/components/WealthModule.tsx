@@ -66,7 +66,7 @@ const CircularProgress = ({ value, label }: { value: number; label: string }) =>
     );
 };
 
-export function WealthModule({ onUpdate }: { onUpdate?: () => void }) {
+export function WealthModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [transactions, setTransactions] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -96,7 +96,7 @@ export function WealthModule({ onUpdate }: { onUpdate?: () => void }) {
 
     useEffect(() => {
         fetchTransactions();
-    }, []);
+    }, [user]);
 
     // Derived stats
     const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);

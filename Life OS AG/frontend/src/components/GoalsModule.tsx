@@ -29,7 +29,7 @@ interface Goal {
     tasks: Task[];
 }
 
-export function GoalsModule({ onUpdate }: { onUpdate?: () => void }) {
+export function GoalsModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
     const [goals, setGoals] = useState<Goal[]>([]);
     const [showForm, setShowForm] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState<{ [key: string]: string }>({});
@@ -51,7 +51,7 @@ export function GoalsModule({ onUpdate }: { onUpdate?: () => void }) {
 
     useEffect(() => {
         fetchGoals();
-    }, []);
+    }, [user]);
 
     const handleCreateGoal = async (e: React.FormEvent) => {
         e.preventDefault();

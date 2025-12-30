@@ -21,7 +21,7 @@ interface Habit {
     completedToday?: boolean;
 }
 
-export function HabitsModule({ onUpdate }: { onUpdate?: () => void }) {
+export function HabitsModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
     const [habits, setHabits] = useState<Habit[]>([]);
     const [showForm, setShowForm] = useState(false);
 
@@ -41,7 +41,7 @@ export function HabitsModule({ onUpdate }: { onUpdate?: () => void }) {
 
     useEffect(() => {
         fetchHabits();
-    }, []);
+    }, [user]);
 
     const handleCreateHabit = async (e: React.FormEvent) => {
         e.preventDefault();
