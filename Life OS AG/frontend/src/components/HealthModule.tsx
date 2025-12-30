@@ -65,7 +65,7 @@ const CircularProgress = ({ value, color, size = 120, strokeWidth = 10, label }:
     );
 };
 
-export function HealthModule({ onUpdate }: { onUpdate?: () => void }) {
+export function HealthModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
     const [isLogModalOpen, setIsLogModalOpen] = useState(false);
     const [logs, setLogs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -95,7 +95,7 @@ export function HealthModule({ onUpdate }: { onUpdate?: () => void }) {
 
     useEffect(() => {
         fetchLogs();
-    }, []);
+    }, [user]);
 
     // Get latest log for cards
     const latestLog = logs[0] || null;
