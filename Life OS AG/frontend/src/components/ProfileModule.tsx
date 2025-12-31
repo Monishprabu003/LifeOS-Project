@@ -70,86 +70,163 @@ export function ProfileModule({ user }: { user: any }) {
                 </div>
             </div>
 
-            {/* Profile Information Card */}
+            {/* Profile Information Card - Redesigned for Premium Look */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] border border-slate-100 dark:border-[#222436] shadow-sm overflow-hidden"
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="relative bg-white dark:bg-[#11121d] rounded-[3rem] border border-slate-100 dark:border-white/[0.05] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden group"
             >
-                {/* Advanced Animated Banner */}
-                <div className="h-40 relative overflow-hidden">
+                {/* 1. Ultra-Premium Animated Banner */}
+                <div className="h-48 relative overflow-hidden">
+                    {/* Primary Mesh Gradient */}
                     <motion.div
                         animate={{
-                            backgroundPosition: ['0% 0%', '100% 100%'],
+                            scale: [1, 1.2, 1],
+                            rotate: [0, 5, 0],
                         }}
                         transition={{
-                            duration: 20,
+                            duration: 15,
                             repeat: Infinity,
-                            repeatType: "reverse"
+                            ease: "easeInOut"
                         }}
-                        className="absolute inset-0 bg-gradient-to-br from-[#10b981] via-[#3b82f6] to-[#8b5cf6] bg-[length:400%_400%]"
+                        className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,#10b981_0%,transparent_50%),radial-gradient(circle_at_80%_70%,#3b82f6_0%,transparent_50%),radial-gradient(circle_at_50%_50%,#8b5cf6_0%,transparent_70%)] opacity-80"
                     />
-                    {/* Animated Mesh Overlay */}
-                    <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay">
-                        <filter id="noise">
-                            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-                        </filter>
-                        <rect width="100%" height="100%" filter="url(#noise)" />
-                    </svg>
+
+                    {/* Glassmorphic Overlay Layer */}
+                    <div className="absolute inset-0 backdrop-blur-[100px] bg-white/10 dark:bg-black/20" />
+
+                    {/* Animated Particles/Orbs */}
+                    <motion.div
+                        animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
+                        transition={{ duration: 6, repeat: Infinity }}
+                        className="absolute top-10 left-1/4 w-24 h-24 bg-white/20 rounded-full blur-2xl"
+                    />
+                    <motion.div
+                        animate={{ y: [10, -10, 10], x: [5, -5, 5] }}
+                        transition={{ duration: 8, repeat: Infinity, delay: 1 }}
+                        className="absolute bottom-10 right-1/4 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl"
+                    />
                 </div>
 
-                <div className="px-10 pb-10">
-                    <div className="flex flex-col md:flex-row items-start md:items-end -mt-16 mb-8 gap-6 relative z-10">
-                        {/* Avatar */}
-                        <div className="relative">
+                {/* 2. Floating Avatar Section */}
+                <div className="relative px-12 pb-12">
+                    <div className="flex flex-col items-center -mt-24 text-center">
+                        <div className="relative group/avatar">
+                            {/* Outer Glow Ring */}
                             <motion.div
-                                whileHover={{ scale: 1.05 }}
-                                className="w-32 h-32 rounded-full bg-white dark:bg-slate-800 border-4 border-white dark:border-[#1a1c2e] flex items-center justify-center text-4xl font-display font-black text-[#0f172a] dark:text-white shadow-xl"
+                                animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+                                transition={{ duration: 3, repeat: Infinity }}
+                                className="absolute -inset-4 bg-gradient-to-tr from-[#10b981] via-[#3b82f6] to-[#8b5cf6] rounded-full blur-xl opacity-50 transition-opacity group-hover/avatar:opacity-100"
+                            />
+
+                            {/* Avatar Container */}
+                            <motion.div
+                                whileHover={{ scale: 1.05, rotate: 2 }}
+                                className="relative w-40 h-40 rounded-full bg-slate-50 dark:bg-[#1a1c2e] border-[6px] border-white dark:border-[#11121d] flex items-center justify-center text-5xl font-display font-black text-[#0f172a] dark:text-white shadow-2xl z-20 overflow-hidden"
                             >
-                                {user?.name?.split(' ').map((n: string) => n[0]).join('') || 'JD'}
+                                {/* Initials with subtle gradient */}
+                                <span className="bg-clip-text text-transparent bg-gradient-to-br from-slate-800 to-slate-500 dark:from-white dark:to-slate-400">
+                                    {user?.name?.split(' ').map((n: string) => n[0]).join('') || 'JD'}
+                                </span>
+
+                                {/* Shimmer Effect */}
+                                <motion.div
+                                    animate={{ left: ['-100%', '200%'] }}
+                                    transition={{ duration: 3, repeat: Infinity, delay: 2 }}
+                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+                                />
                             </motion.div>
+
+                            {/* Camera Action Button */}
                             <motion.button
-                                whileHover={{ scale: 1.1 }}
+                                whileHover={{ scale: 1.1, rotate: 15 }}
                                 whileTap={{ scale: 0.9 }}
-                                className="absolute bottom-1 right-1 p-2.5 bg-[#10b981] text-white rounded-xl shadow-lg border-4 border-white dark:border-[#1a1c2e]"
+                                className="absolute bottom-2 right-2 p-3 bg-white dark:bg-slate-800 text-[#10b981] rounded-2xl shadow-xl border-2 border-slate-50 dark:border-slate-700 z-30 transition-colors hover:text-[#3b82f6]"
                             >
-                                <Camera size={16} />
+                                <Camera size={20} />
                             </motion.button>
                         </div>
 
-                        {/* User Metadata */}
-                        <div className="flex-1 min-w-0">
-                            <h2 className="text-3xl font-display font-bold text-[#0f172a] dark:text-white mb-1 truncate">{user?.name || 'John Doe'}</h2>
-                            <p className="text-slate-500 dark:text-slate-400 font-medium mb-4">{user?.email || 'john.doe@example.com'}</p>
+                        {/* 3. User Identity */}
+                        <div className="mt-8 space-y-2">
+                            <motion.h2
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="text-4xl font-display font-bold text-[#0f172a] dark:text-white tracking-tight"
+                            >
+                                {user?.name || 'Human 001'}
+                            </motion.h2>
+                            <div className="flex items-center justify-center space-x-2 text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-white/[0.03] px-4 py-1.5 rounded-full">
+                                <Mail size={14} />
+                                <span className="text-sm italic">{user?.email || 'demo@lifeos.com'}</span>
+                            </div>
+                        </div>
 
-                            <div className="flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest">
-                                <div className="flex items-center space-x-2 bg-amber-50 dark:bg-amber-500/10 text-amber-600 px-3 py-1.5 rounded-full border border-amber-100 dark:border-amber-900/30">
-                                    <Star size={14} className="fill-current" />
-                                    <span>Level 12</span>
+                        {/* 4. Glass Stats Grid */}
+                        <div className="grid grid-cols-3 gap-6 w-full max-w-2xl mt-12 bg-slate-50/50 dark:bg-white/[0.02] p-2 rounded-[2.5rem] border border-slate-100 dark:border-white/[0.05]">
+                            {[
+                                { label: 'Level', value: '12', icon: Star, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+                                { label: 'Rank', value: 'A+', icon: Award, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                                { label: 'Joined', value: 'Dec 2024', icon: Calendar, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+                            ].map((stat, i) => (
+                                <motion.div
+                                    key={stat.label}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 + (i * 0.1) }}
+                                    whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.05)' }}
+                                    className="flex flex-col items-center justify-center p-6 rounded-[2rem] transition-all bg-white dark:bg-white/[0.03]"
+                                >
+                                    <div className={`p-3 rounded-2xl ${stat.bg} ${stat.color} mb-3 shadow-inner`}>
+                                        <stat.icon size={20} />
+                                    </div>
+                                    <span className="text-2xl font-bold dark:text-white">{stat.value}</span>
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1">{stat.label}</span>
+                                </motion.div>
+                            ))}
+                        </div>
+
+                        {/* 5. High-Fidelity Experience Track */}
+                        <div className="w-full max-w-2xl mt-12 bg-white dark:bg-[#1a1c2e] p-10 rounded-[2.5rem] border border-slate-100 dark:border-white/[0.05] shadow-lg shadow-slate-100 dark:shadow-none">
+                            <div className="flex justify-between items-end mb-6">
+                                <div className="space-y-1">
+                                    <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#10b981]">Core Experience</h4>
+                                    <p className="text-2xl font-display font-bold dark:text-white">Path to Greatness</p>
                                 </div>
-                                <div className="flex items-center space-x-2 bg-slate-50 dark:bg-slate-800 text-slate-500 px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-700">
-                                    <Calendar size={14} />
-                                    <span>Joined Dec 2024</span>
+                                <div className="text-right">
+                                    <span className="text-3xl font-black text-[#0f172a] dark:text-white leading-none">{xp}</span>
+                                    <span className="text-sm font-bold text-slate-400 ml-1">/ {maxXP} XP</span>
+                                </div>
+                            </div>
+
+                            <div className="relative h-4 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                                {/* Glowing Progress Fill */}
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${progress}%` }}
+                                    transition={{ duration: 2, ease: "circOut" }}
+                                    className="relative h-full bg-gradient-to-r from-[#10b981] via-[#3b82f6] to-[#8b5cf6] rounded-full"
+                                >
+                                    {/* Animated Glow overlay */}
+                                    <motion.div
+                                        animate={{ x: ['-200%', '200%'] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full"
+                                    />
+                                </motion.div>
+                            </div>
+
+                            <div className="flex justify-between mt-6">
+                                <div className="flex items-center space-x-2 px-4 py-2 bg-slate-50 dark:bg-white/[0.03] rounded-2xl border border-slate-100 dark:border-white/[0.05]">
+                                    <Trophy size={14} className="text-amber-500" />
+                                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{maxXP - xp} XP to Level 13</span>
+                                </div>
+                                <div className="text-xs font-black uppercase tracking-widest text-slate-300 dark:text-slate-600 self-center">
+                                    Efficiency: 98.4%
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* XP Progress Bar */}
-                    <div className="bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] p-8 mt-6">
-                        <div className="flex justify-between items-center mb-4">
-                            <span className="text-sm font-bold text-[#0f172a] dark:text-white uppercase tracking-wider">Experience Points</span>
-                            <span className="text-sm font-bold text-slate-500">{xp} / {maxXP} XP</span>
-                        </div>
-                        <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mb-3">
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${progress}%` }}
-                                transition={{ duration: 1.5, ease: "easeOut" }}
-                                className="h-full bg-gradient-to-r from-[#10b981] to-[#3b82f6]"
-                            />
-                        </div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{maxXP - xp} XP to Level 13</p>
                     </div>
                 </div>
             </motion.div>
