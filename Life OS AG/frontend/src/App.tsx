@@ -419,14 +419,6 @@ function App() {
 
             <div className="flex items-center space-x-3">
               <button
-                onClick={fetchAppData}
-                disabled={loading}
-                className={`flex items-center space-x-2 bg-[#3b82f6] hover:bg-[#2563eb] text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-blue-100 dark:shadow-none ${loading ? 'cursor-not-allowed opacity-70' : ''}`}
-              >
-                <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
-                <span>{loading ? '...' : 'Refresh'}</span>
-              </button>
-              <button
                 onClick={() => setIsLogModalOpen(true)}
                 className="flex items-center space-x-2 bg-[#10b981] hover:bg-[#0da271] text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-green-100 dark:shadow-none"
               >
@@ -456,12 +448,12 @@ function App() {
               transition={{ duration: 0.2 }}
             >
               {activeTab === 'dashboard' && <DashboardModule user={user} habits={habits} goals={goals} onUpdate={fetchAppData} setActiveTab={setActiveTab} />}
-              {activeTab === 'health' && <HealthModule onUpdate={fetchAppData} />}
-              {activeTab === 'wealth' && <WealthModule onUpdate={fetchAppData} />}
-              {activeTab === 'habits' && <HabitsModule onUpdate={fetchAppData} />}
-              {activeTab === 'goals' && <GoalsModule onUpdate={fetchAppData} />}
+              {activeTab === 'health' && <HealthModule onUpdate={fetchAppData} user={user} />}
+              {activeTab === 'wealth' && <WealthModule onUpdate={fetchAppData} user={user} />}
+              {activeTab === 'habits' && <HabitsModule onUpdate={fetchAppData} user={user} />}
+              {activeTab === 'goals' && <GoalsModule onUpdate={fetchAppData} user={user} />}
               {activeTab === 'ai-insights' && <AIInsightsModule user={user} />}
-              {activeTab === 'relationships' && <SocialModule onUpdate={fetchAppData} />}
+              {activeTab === 'relationships' && <SocialModule onUpdate={fetchAppData} user={user} />}
               {activeTab === 'profile' && <ProfileModule user={user} />}
               {activeTab === 'settings' && <SettingsModule />}
             </motion.div>
