@@ -22,7 +22,7 @@ import {
   Bell
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { authAPI, habitsAPI, goalsAPI } from './api';
+import { authAPI, habitsAPI, goalsAPI, kernelAPI } from './api';
 import { HealthModule } from './components/HealthModule';
 import { WealthModule } from './components/WealthModule';
 import { GoalsModule } from './components/GoalsModule';
@@ -32,6 +32,7 @@ import { UnifiedLogModal } from './components/UnifiedLogModal';
 import { DashboardModule } from './components/DashboardModule';
 import { ProfileModule } from './components/ProfileModule';
 import { SettingsModule } from './components/SettingsModule';
+import { NotificationPanel } from './components/NotificationPanel';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -42,6 +43,8 @@ function App() {
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [token, setToken] = useState<string | null>(localStorage.getItem('lifeos_token'));
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'system');
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -79,14 +82,16 @@ function App() {
   const fetchAppData = useCallback(async () => {
     try {
       setLoading(true);
-      const [userRes, habitsRes, goalsRes] = await Promise.all([
+      const [userRes, habitsRes, goalsRes, eventsRes] = await Promise.all([
         authAPI.getMe(),
         habitsAPI.getHabits(),
-        goalsAPI.getGoals()
+        goalsAPI.getGoals(),
+        kernelAPI.getEvents()
       ]);
       setUser(userRes.data);
       setHabits(habitsRes.data);
       setGoals(goalsRes.data);
+      setNotifications(eventsRes.data.slice(0, 10)); // Top 10 recent events as notifications
     } catch (err) {
       console.error('Failed to fetch data', err);
       if ((err as any).response?.status === 401) {
@@ -423,9 +428,14 @@ function App() {
 
             <div className="h-8 w-[1px] bg-slate-200 dark:bg-slate-700" />
 
-            <button className="relative p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
+            <button
+              onClick={() => setIsNotificationOpen(true)}
+              className="relative p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
+            >
               <Bell size={24} />
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white dark:border-[#0f111a] rounded-full" />
+              {notifications.length > 0 && (
+                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white dark:border-[#0f111a] rounded-full" />
+              )}
             </button>
           </div>
         </header>
@@ -459,6 +469,12 @@ function App() {
         isOpen={isLogModalOpen}
         onClose={() => setIsLogModalOpen(false)}
         onSuccess={fetchAppData}
+      />
+
+      <NotificationPanel
+        isOpen={isNotificationOpen}
+        onClose={() => setIsNotificationOpen(false)}
+        notifications={notifications}
       />
     </div >
   );
