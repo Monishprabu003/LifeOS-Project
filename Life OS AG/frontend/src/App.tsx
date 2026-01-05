@@ -45,6 +45,7 @@ function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'system');
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [totalEvents, setTotalEvents] = useState(0);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -92,6 +93,7 @@ function App() {
       setHabits(habitsRes.data);
       setGoals(goalsRes.data);
       setNotifications(eventsRes.data.slice(0, 10)); // Top 10 recent events as notifications
+      setTotalEvents(eventsRes.data.length);
     } catch (err) {
       console.error('Failed to fetch data', err);
       if ((err as any).response?.status === 401) {
@@ -457,7 +459,7 @@ function App() {
               {activeTab === 'habits' && <HabitsModule onUpdate={fetchAppData} user={user} />}
               {activeTab === 'goals' && <GoalsModule onUpdate={fetchAppData} user={user} />}
               {activeTab === 'relationships' && <SocialModule onUpdate={fetchAppData} user={user} />}
-              {activeTab === 'profile' && <ProfileModule user={user} />}
+              {activeTab === 'profile' && <ProfileModule user={user} totalEvents={totalEvents} habits={habits} goals={goals} />}
               {activeTab === 'settings' && <SettingsModule />}
             </motion.div>
           </AnimatePresence>

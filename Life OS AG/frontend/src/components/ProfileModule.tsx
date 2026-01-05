@@ -1,59 +1,75 @@
-import { useState } from 'react';
 import {
     User,
     Mail,
     Camera,
     Award,
     Award as Trophy,
-    Tent,
-    PiggyBank,
-    Dumbbell,
     Calendar,
-    Star
+    Star,
+    Zap,
+    CheckCircle2,
+    Rocket
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export function ProfileModule({ user }: { user: any }) {
-    const [xp] = useState(2450);
-    const maxXP = 3000;
-    const progress = (xp / maxXP) * 100;
+export function ProfileModule({ user, totalEvents = 0, habits = [], goals = [] }: { user: any, totalEvents?: number, habits?: any[], goals?: any[] }) {
+    // Real Data Calculations
+    const baseXP = (totalEvents * 100) + (Math.round(user?.lifeScore || 0) * 10);
+    const xp = baseXP;
+    const level = Math.floor(xp / 1000) + 1;
+    const progress = ((xp % 1000) / 1000) * 100;
 
+    const getRank = (score: number) => {
+        if (score >= 90) return 'S';
+        if (score >= 80) return 'A+';
+        if (score >= 70) return 'A';
+        if (score >= 50) return 'B';
+        if (score >= 30) return 'C';
+        return 'D';
+    };
+
+    const rank = getRank(user?.lifeScore || 0);
+    const joinedDate = user?.createdAt
+        ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+        : 'Jan 2026';
+
+    // Achievement Logic
     const achievements = [
         {
             id: 1,
-            name: 'Early Bird',
-            desc: 'Complete morning routine 7 days in a row',
-            icon: Tent,
-            color: 'text-orange-500',
-            bg: 'bg-orange-50 dark:bg-orange-500/10',
-            active: true
+            name: 'Pioneer',
+            desc: 'Reach Level 2 by logging activity',
+            icon: Rocket,
+            color: 'text-blue-500',
+            bg: 'bg-blue-50 dark:bg-blue-500/10',
+            active: level >= 2
         },
         {
             id: 2,
-            name: 'Money Saver',
-            desc: 'Save 20% of income for 3 months',
-            icon: PiggyBank,
-            color: 'text-emerald-500',
-            bg: 'bg-emerald-50 dark:bg-emerald-500/10',
-            active: true
+            name: 'Consistency King',
+            desc: 'Maintain a habit streak of 3 or more',
+            icon: Zap,
+            color: 'text-amber-500',
+            bg: 'bg-amber-50 dark:bg-amber-500/10',
+            active: habits.some(h => h.streak >= 3)
         },
         {
             id: 3,
-            name: 'Habit Master',
-            desc: 'Maintain 5 habits for 30 days',
-            icon: Trophy,
-            color: 'text-slate-400',
-            bg: 'bg-slate-50 dark:bg-slate-800',
-            active: false
+            name: 'Elite Status',
+            desc: 'Achieve an A+ Rank or higher',
+            icon: Star,
+            color: 'text-purple-500',
+            bg: 'bg-purple-50 dark:bg-purple-500/10',
+            active: user?.lifeScore >= 80
         },
         {
             id: 4,
-            name: 'Wellness Warrior',
-            desc: 'Achieve 90+ health score for a week',
-            icon: Dumbbell,
-            color: 'text-slate-400',
-            bg: 'bg-slate-50 dark:bg-slate-800',
-            active: false
+            name: 'Mission Clear',
+            desc: 'Successfully complete a major goal',
+            icon: CheckCircle2,
+            color: 'text-emerald-500',
+            bg: 'bg-emerald-50 dark:bg-emerald-500/10',
+            active: goals.some(g => g.progress === 100)
         }
     ];
 
@@ -166,9 +182,9 @@ export function ProfileModule({ user }: { user: any }) {
                         {/* 4. Glass Stats Grid */}
                         <div className="grid grid-cols-3 gap-6 w-full max-w-2xl mt-12 bg-slate-50/50 dark:bg-white/[0.02] p-2 rounded-[2.5rem] border border-slate-100 dark:border-white/[0.05]">
                             {[
-                                { label: 'Level', value: '12', icon: Star, color: 'text-amber-500', bg: 'bg-amber-500/10' },
-                                { label: 'Rank', value: 'A+', icon: Award, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-                                { label: 'Joined', value: 'Dec 2024', icon: Calendar, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+                                { label: 'Level', value: level.toString(), icon: Star, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+                                { label: 'Rank', value: rank, icon: Award, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                                { label: 'Joined', value: joinedDate, icon: Calendar, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
                             ].map((stat, i) => (
                                 <motion.div
                                     key={stat.label}
@@ -195,8 +211,8 @@ export function ProfileModule({ user }: { user: any }) {
                                     <p className="text-2xl font-display font-bold dark:text-white">Path to Greatness</p>
                                 </div>
                                 <div className="text-right">
-                                    <span className="text-3xl font-black text-[#0f172a] dark:text-white leading-none">{xp}</span>
-                                    <span className="text-sm font-bold text-slate-400 ml-1">/ {maxXP} XP</span>
+                                    <span className="text-3xl font-black text-[#0f172a] dark:text-white leading-none">{xp % 1000}</span>
+                                    <span className="text-sm font-bold text-slate-400 ml-1">/ 1000 XP</span>
                                 </div>
                             </div>
 
@@ -220,10 +236,10 @@ export function ProfileModule({ user }: { user: any }) {
                             <div className="flex justify-between mt-6">
                                 <div className="flex items-center space-x-2 px-4 py-2 bg-slate-50 dark:bg-white/[0.03] rounded-2xl border border-slate-100 dark:border-white/[0.05]">
                                     <Trophy size={14} className="text-amber-500" />
-                                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{maxXP - xp} XP to Level 13</span>
+                                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{1000 - (xp % 1000)} XP to Level {level + 1}</span>
                                 </div>
                                 <div className="text-xs font-black uppercase tracking-widest text-slate-300 dark:text-slate-600 self-center">
-                                    Efficiency: 98.4%
+                                    Efficiency: {user?.lifeScore?.toFixed(1) || '0.0'}%
                                 </div>
                             </div>
                         </div>
