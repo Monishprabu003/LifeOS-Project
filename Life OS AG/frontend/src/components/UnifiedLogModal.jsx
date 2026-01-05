@@ -17,20 +17,15 @@ import {
 } from 'lucide-react';
 import { healthAPI, financeAPI, habitsAPI, goalsAPI, socialAPI, tasksAPI } from '../api';
 
-interface UnifiedLogModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSuccess: () => void;
-}
 
-export function UnifiedLogModal({ isOpen, onClose, onSuccess }: UnifiedLogModalProps) {
+export function UnifiedLogModal({ isOpen, onClose, onSuccess }) {
     const [activeTab, setActiveTab] = useState('health');
     const [loading, setLoading] = useState(false);
 
     // Data lists for selection
-    const [habitList, setHabitList] = useState<any[]>([]);
-    const [goalList, setGoalList] = useState<any[]>([]);
-    const [relationshipList, setRelationshipList] = useState<any[]>([]);
+    const [habitList, setHabitList] = useState([]);
+    const [goalList, setGoalList] = useState([]);
+    const [relationshipList, setRelationshipList] = useState([]);
 
     // Health States
     const [sleepDuration, setSleepDuration] = useState(7.5);

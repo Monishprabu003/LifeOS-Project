@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware.js';
 import Goal from '../models/Goal.js';
-import { Kernel } from '../services/Kernel.js';
+import { Kernel } from '../services/Kernel';
 import { EventType } from '../models/LifeEvent.js';
 
 export const createGoal = async (req: AuthRequest, res: Response) => {

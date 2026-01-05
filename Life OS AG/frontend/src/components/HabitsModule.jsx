@@ -12,17 +12,9 @@ import {
 } from 'lucide-react';
 import api, { habitsAPI } from '../api';
 
-interface Habit {
-    _id: string;
-    name: string;
-    frequency: string;
-    description: string;
-    streak: number;
-    completedToday?: boolean;
-}
 
-export function HabitsModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
-    const [habits, setHabits] = useState<Habit[]>([]);
+export function HabitsModule({ onUpdate, user }) {
+    const [habits, setHabits] = useState([]);
     const [showForm, setShowForm] = useState(false);
 
     // Form State
@@ -36,7 +28,7 @@ export function HabitsModule({ onUpdate, user }: { onUpdate?: () => void, user?:
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            const habitsWithCompletion = res.data.map((h: any) => ({
+            const habitsWithCompletion = res.data.map((h) => ({
                 ...h,
                 completedToday: h.lastCompleted && new Date(h.lastCompleted) >= today
             }));
@@ -47,12 +39,12 @@ export function HabitsModule({ onUpdate, user }: { onUpdate?: () => void, user?:
         }
     };
 
-    const [recentActivity, setRecentActivity] = useState<any[]>([]);
+    const [recentActivity, setRecentActivity] = useState([]);
     const fetchRecentActivity = async () => {
         try {
             const res = await api.get('/kernel/events');
             // Filter only habit events
-            const habitEvents = res.data.filter((e: any) => e.type === 'habit').slice(0, 10);
+            const habitEvents = res.data.filter((e) => e.type === 'habit').slice(0, 10);
             setRecentActivity(habitEvents);
         } catch (err) {
             console.error('Failed to fetch habit activity', err);
@@ -64,7 +56,7 @@ export function HabitsModule({ onUpdate, user }: { onUpdate?: () => void, user?:
         fetchRecentActivity();
     }, [user]);
 
-    const handleCreateHabit = async (e: React.FormEvent) => {
+    const handleCreateHabit = async (e) => {
         e.preventDefault();
         try {
             await habitsAPI.createHabit({ name, frequency, description });
@@ -80,7 +72,7 @@ export function HabitsModule({ onUpdate, user }: { onUpdate?: () => void, user?:
         }
     };
 
-    const handleDeleteHabit = async (id: string, e: React.MouseEvent) => {
+    const handleDeleteHabit = async (id, e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -96,7 +88,7 @@ export function HabitsModule({ onUpdate, user }: { onUpdate?: () => void, user?:
         }
     };
 
-    const handleDeleteActivity = async (id: string) => {
+    const handleDeleteActivity = async (id) => {
         if (!confirm('Delete this completion log?')) return;
         try {
             await api.delete(`/kernel/events/${id}`);
@@ -108,7 +100,7 @@ export function HabitsModule({ onUpdate, user }: { onUpdate?: () => void, user?:
         }
     };
 
-    const completeHabit = async (id: string) => {
+    const completeHabit = async (id) => {
         try {
             await habitsAPI.completeHabit(id);
             fetchHabits();

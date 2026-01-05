@@ -1,6 +1,6 @@
-import { Kernel } from '../services/Kernel.js.js';
-import LifeEvent from '../models/LifeEvent.js.js';
-import User from '../models/User.js.js';
+import { Kernel } from '../services/Kernel';
+import LifeEvent from '../models/LifeEvent.js';
+import User from '../models/User.js';
 
 export const createEvent = async (req, res) => {
     try {
