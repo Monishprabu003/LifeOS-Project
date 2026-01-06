@@ -1,19 +1,16 @@
-import { Response } from 'express';
-import { AuthRequest } from '../middleware/authMiddleware.js';
 import Finance from '../models/Finance.js';
-import { Kernel } from '../services/Kernel';
-import { EventType } from '../models/LifeEvent.js';
+import { Kernel } from '../services/Kernel.js';
 
-export const createTransaction = async (req: AuthRequest, res: Response) => {
+export const createTransaction = async (req, res) => {
     try {
-        const transaction: any = await Finance.create({
+        const transaction = await Finance.create({
             userId: req.user._id,
             ...req.body,
         });
 
         // Log a life event
         await Kernel.processEvent(req.user._id, {
-            type: EventType.FINANCIAL,
+            type: 'financial',
             title: `${transaction.type === 'income' ? 'Income' : 'Expense'}: ${transaction.category}`,
             impact: transaction.type === 'income' ? 'positive' : 'negative',
             value: transaction.amount,
@@ -21,21 +18,21 @@ export const createTransaction = async (req: AuthRequest, res: Response) => {
         });
 
         res.status(201).json(transaction);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const getTransactions = async (req: AuthRequest, res: Response) => {
+export const getTransactions = async (req, res) => {
     try {
         const transactions = await Finance.find({ userId: req.user._id }).sort({ date: -1 });
         res.json(transactions);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const deleteTransaction = async (req: AuthRequest, res: Response) => {
+export const deleteTransaction = async (req, res) => {
     try {
         const transaction = await Finance.findById(req.params.id);
         if (!transaction || transaction.userId.toString() !== req.user._id.toString()) {
@@ -45,10 +42,10 @@ export const deleteTransaction = async (req: AuthRequest, res: Response) => {
         await Finance.findByIdAndDelete(req.params.id);
 
         // Recalculate scores
-        await Kernel.updateLifeScores(req.user._id as string);
+        await Kernel.updateLifeScores(req.user._id);
 
         res.json({ message: 'Transaction deleted successfully' });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };

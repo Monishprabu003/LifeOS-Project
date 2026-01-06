@@ -1,14 +1,11 @@
-import { Response } from 'express';
-import { AuthRequest } from '../middleware/authMiddleware.js';
 import HealthLog from '../models/HealthLog.js';
-import { Kernel } from '../services/Kernel';
-import { EventType } from '../models/LifeEvent.js';
+import { Kernel } from '../services/Kernel.js';
 
-export const createHealthLog = async (req: AuthRequest, res: Response) => {
+export const createHealthLog = async (req, res) => {
     try {
         const { sleepDuration, sleepQuality, waterIntake, stressLevel, mood, notes } = req.body;
 
-        const log: any = await HealthLog.create({
+        const log = await HealthLog.create({
             userId: req.user._id,
             sleepHours: sleepDuration,
             sleepQuality,
@@ -23,7 +20,7 @@ export const createHealthLog = async (req: AuthRequest, res: Response) => {
         const weightedValue = Math.round(((mood * 10) + (sleepDuration * 10) + (100 - (stressLevel * 10)) + (waterIntake * 20)) / 4);
 
         await Kernel.processEvent(req.user._id, {
-            type: EventType.HEALTH,
+            type: 'health',
             title: `Daily Health Sync`,
             impact: weightedValue > 50 ? 'positive' : 'neutral',
             value: weightedValue,
@@ -31,22 +28,22 @@ export const createHealthLog = async (req: AuthRequest, res: Response) => {
         });
 
         res.status(201).json(log);
-    } catch (error: any) {
+    } catch (error) {
         console.error('Create Health Log Error:', error);
         res.status(500).json({ message: error.message });
     }
 };
 
-export const getHealthLogs = async (req: AuthRequest, res: Response) => {
+export const getHealthLogs = async (req, res) => {
     try {
         const logs = await HealthLog.find({ userId: req.user._id }).sort({ timestamp: -1 });
         res.json(logs);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const deleteHealthLog = async (req: AuthRequest, res: Response) => {
+export const deleteHealthLog = async (req, res) => {
     try {
         const log = await HealthLog.findById(req.params.id);
         if (!log || log.userId.toString() !== req.user._id.toString()) {
@@ -56,10 +53,10 @@ export const deleteHealthLog = async (req: AuthRequest, res: Response) => {
         await HealthLog.findByIdAndDelete(req.params.id);
 
         // Recalculate scores after deletion
-        await Kernel.updateLifeScores(req.user._id as string);
+        await Kernel.updateLifeScores(req.user._id);
 
         res.json({ message: 'Log deleted successfully' });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };

@@ -32,7 +32,7 @@ export const registerUser = async (req, res) => {
         } else {
             res.status(400).json({ message: 'Invalid user data' });
         }
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
@@ -53,7 +53,7 @@ export const loginUser = async (req, res) => {
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
         }
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
@@ -62,7 +62,7 @@ export const getUserId = async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select('-password');
         res.json(user);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };

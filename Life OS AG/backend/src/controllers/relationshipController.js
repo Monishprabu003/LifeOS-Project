@@ -1,19 +1,16 @@
-import { Response } from 'express';
-import { AuthRequest } from '../middleware/authMiddleware.js';
 import Relationship from '../models/Relationship.js';
-import { Kernel } from '../services/Kernel';
-import { EventType } from '../models/LifeEvent.js';
+import { Kernel } from '../services/Kernel.js';
 
-export const createRelationship = async (req: AuthRequest, res: Response) => {
+export const createRelationship = async (req, res) => {
     try {
-        const relationship: any = await Relationship.create({
+        const relationship = await Relationship.create({
             userId: req.user._id,
             ...req.body,
         });
 
         // Trigger life event for score update
         await Kernel.processEvent(req.user._id, {
-            type: EventType.SOCIAL,
+            type: 'social',
             title: `Added relationship: ${relationship.name}`,
             impact: 'positive',
             value: 5, // Significant impact for adding a connection
@@ -21,21 +18,21 @@ export const createRelationship = async (req: AuthRequest, res: Response) => {
         });
 
         res.status(201).json(relationship);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const getRelationships = async (req: AuthRequest, res: Response) => {
+export const getRelationships = async (req, res) => {
     try {
         const relationships = await Relationship.find({ userId: req.user._id });
         res.json(relationships);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const logInteraction = async (req: AuthRequest, res: Response) => {
+export const logInteraction = async (req, res) => {
     try {
         const { type, description } = req.body;
         const relationship = await Relationship.findById(req.params.id);
@@ -55,7 +52,7 @@ export const logInteraction = async (req: AuthRequest, res: Response) => {
 
         // Log life event
         await Kernel.processEvent(req.user._id, {
-            type: EventType.SOCIAL,
+            type: 'social',
             title: `Interaction with ${relationship.name}`,
             impact: 'positive',
             value: 1,
@@ -63,12 +60,12 @@ export const logInteraction = async (req: AuthRequest, res: Response) => {
         });
 
         res.json(relationship);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const deleteRelationship = async (req: AuthRequest, res: Response) => {
+export const deleteRelationship = async (req, res) => {
     try {
         const relationship = await Relationship.findById(req.params.id);
         if (!relationship || relationship.userId.toString() !== req.user._id.toString()) {
@@ -78,10 +75,10 @@ export const deleteRelationship = async (req: AuthRequest, res: Response) => {
         await Relationship.findByIdAndDelete(req.params.id);
 
         // Recalculate scores
-        await Kernel.updateLifeScores(req.user._id as string);
+        await Kernel.updateLifeScores(req.user._id);
 
         res.json({ message: 'Relationship deleted successfully' });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };

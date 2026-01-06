@@ -1,10 +1,8 @@
-import { Response } from 'express';
-import { AuthRequest } from '../middleware/authMiddleware.js';
 import Task from '../models/Task.js';
 import Goal from '../models/Goal.js';
-import { Kernel } from '../services/Kernel';
+import { Kernel } from '../services/Kernel.js';
 
-export const createTask = async (req: AuthRequest, res: Response) => {
+export const createTask = async (req, res) => {
     try {
         const { title, goalId, priority, dueDate } = req.body;
         const task = await Task.create({
@@ -20,12 +18,12 @@ export const createTask = async (req: AuthRequest, res: Response) => {
         }
 
         res.status(201).json(task);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const toggleTask = async (req: AuthRequest, res: Response) => {
+export const toggleTask = async (req, res) => {
     try {
         const task = await Task.findById(req.params.id);
         if (!task || task.userId.toString() !== req.user._id.toString()) {
@@ -37,29 +35,29 @@ export const toggleTask = async (req: AuthRequest, res: Response) => {
 
         // If part of a goal, update goal progress
         if (task.goalId) {
-            const goal: any = await Goal.findById(task.goalId).populate('tasks');
+            const goal = await Goal.findById(task.goalId).populate('tasks');
             if (goal) {
                 const total = goal.tasks.length;
-                const completed = goal.tasks.filter((t: any) => t.status === 'done').length;
+                const completed = goal.tasks.filter((t) => t.status === 'done').length;
                 goal.progress = total > 0 ? Math.round((completed / total) * 100) : 0;
                 await goal.save();
 
                 // Trigger score update
-                await Kernel.updateLifeScores(req.user._id as string);
+                await Kernel.updateLifeScores(req.user._id);
             }
         }
 
         res.json(task);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const getTasks = async (req: AuthRequest, res: Response) => {
+export const getTasks = async (req, res) => {
     try {
         const tasks = await Task.find({ userId: req.user._id });
         res.json(tasks);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };

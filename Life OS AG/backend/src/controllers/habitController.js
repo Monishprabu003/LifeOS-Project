@@ -1,10 +1,7 @@
-import { Response } from 'express';
-import { AuthRequest } from '../middleware/authMiddleware.js';
 import Habit from '../models/Habit.js';
-import { Kernel } from '../services/Kernel';
-import { EventType } from '../models/LifeEvent.js';
+import { Kernel } from '../services/Kernel.js';
 
-export const createHabit = async (req: AuthRequest, res: Response) => {
+export const createHabit = async (req, res) => {
     try {
         const habit = await Habit.create({
             userId: req.user._id,
@@ -12,24 +9,24 @@ export const createHabit = async (req: AuthRequest, res: Response) => {
         });
 
         // Recalculate scores for instant dashboard reflection
-        await Kernel.updateLifeScores(req.user._id as string);
+        await Kernel.updateLifeScores(req.user._id);
 
         res.status(201).json(habit);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const getHabits = async (req: AuthRequest, res: Response) => {
+export const getHabits = async (req, res) => {
     try {
         const habits = await Habit.find({ userId: req.user._id });
         res.json(habits);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const completeHabit = async (req: AuthRequest, res: Response) => {
+export const completeHabit = async (req, res) => {
     try {
         const habit = await Habit.findById(req.params.id);
         if (!habit || habit.userId.toString() !== req.user._id.toString()) {
@@ -45,7 +42,7 @@ export const completeHabit = async (req: AuthRequest, res: Response) => {
 
         // Log a life event
         await Kernel.processEvent(req.user._id, {
-            type: EventType.HABIT,
+            type: 'habit',
             title: `Completed habit: ${habit.name}`,
             impact: 'positive',
             value: 1,
@@ -53,12 +50,12 @@ export const completeHabit = async (req: AuthRequest, res: Response) => {
         });
 
         res.json(habit);
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const deleteHabit = async (req: AuthRequest, res: Response) => {
+export const deleteHabit = async (req, res) => {
     try {
         const habit = await Habit.findById(req.params.id);
         if (!habit || habit.userId.toString() !== req.user._id.toString()) {
@@ -68,10 +65,10 @@ export const deleteHabit = async (req: AuthRequest, res: Response) => {
         await Habit.findByIdAndDelete(req.params.id);
 
         // Recalculate scores
-        await Kernel.updateLifeScores(req.user._id as string);
+        await Kernel.updateLifeScores(req.user._id);
 
         res.json({ message: 'Habit deleted successfully' });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };

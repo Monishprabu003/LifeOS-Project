@@ -1,7 +1,6 @@
-import { Response } from 'express';
 import User from '../models/User.js';
 
-export const updateProfile = async (req: any, res: Response) => {
+export const updateProfile = async (req, res) => {
     try {
         const { name, bio, avatar } = req.body;
         const user = await User.findById(req.user._id);
@@ -16,12 +15,12 @@ export const updateProfile = async (req: any, res: Response) => {
         } else {
             res.status(404).json({ message: 'User not found' });
         }
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const updateSettings = async (req: any, res: Response) => {
+export const updateSettings = async (req, res) => {
     try {
         const { theme, notifications } = req.body;
         const user = await User.findById(req.user._id);
@@ -37,7 +36,7 @@ export const updateSettings = async (req: any, res: Response) => {
         } else {
             res.status(404).json({ message: 'User not found' });
         }
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
