@@ -1,4 +1,4 @@
-import { Kernel } from '../services/Kernel';
+import { Kernel } from '../services/Kernel.js';
 import LifeEvent from '../models/LifeEvent.js';
 import User from '../models/User.js';
 

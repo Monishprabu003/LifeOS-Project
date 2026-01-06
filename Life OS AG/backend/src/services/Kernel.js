@@ -1,16 +1,16 @@
-import User from '../models/User';
-import LifeEvent, { EventType } from '../models/LifeEvent';
-import HealthLog from '../models/HealthLog';
-import Habit from '../models/Habit';
-import Goal from '../models/Goal';
-import Relationship from '../models/Relationship';
-import Finance from '../models/Finance';
+import User from '../models/User.js';
+import LifeEvent, { EventType } from '../models/LifeEvent.js';
+import HealthLog from '../models/HealthLog.js';
+import Habit from '../models/Habit.js';
+import Goal from '../models/Goal.js';
+import Relationship from '../models/Relationship.js';
+import Finance from '../models/Finance.js';
 
 class LifeKernelEngine {
     /**
      * Orchestrates event ingestion and updates the global life state.
      */
-    async processEvent(userId: string, eventData: any) {
+    async processEvent(userId, eventData) {
         // 1. Log the event
         const event = await LifeEvent.create({
             userId,
@@ -26,7 +26,7 @@ class LifeKernelEngine {
     /**
      * Recalculates all life scores for a user based on their actual data across all modules.
      */
-    async updateLifeScores(userId: string) {
+    async updateLifeScores(userId) {
         const user = await User.findById(userId);
         if (!user) return;
 

@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
 export const EventType = {
-    HEALTH: 'health_event',
-    FINANCIAL: 'financial_event',
-    HABIT: 'habit_event',
-    EMOTIONAL: 'emotional_event',
-    PRODUCTIVITY: 'productivity_event',
-    SOCIAL: 'social_event',
-    SYSTEM: 'system_event',
+    HEALTH: 'health',
+    FINANCIAL: 'financial',
+    HABIT: 'habit',
+    EMOTIONAL: 'emotional',
+    PRODUCTIVITY: 'productivity',
+    SOCIAL: 'social',
+    SYSTEM: 'system',
 };
 
 const LifeEventSchema = new mongoose.Schema(
