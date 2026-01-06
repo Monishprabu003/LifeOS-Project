@@ -14,7 +14,7 @@ import {
 import { AddConnectionModal } from './AddConnectionModal';
 import { socialAPI, kernelAPI } from '../api';
 
-const CircularProgress = ({ value, label }) => {
+const CircularProgress = ({ value, label }: { value: number; label: string }) => {
     const size = 160;
     const strokeWidth = 12;
     const radius = (size - strokeWidth) / 2;
@@ -57,11 +57,11 @@ const CircularProgress = ({ value, label }) => {
     );
 };
 
-export function SocialModule({ onUpdate, user }) {
+export function SocialModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [gratitudeText, setGratitudeText] = useState('');
-    const [connections, setConnections] = useState([]);
-    const [gratitudeEntries, setGratitudeEntries] = useState([]);
+    const [connections, setConnections] = useState<any[]>([]);
+    const [gratitudeEntries, setGratitudeEntries] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchConnections = async () => {
@@ -80,7 +80,7 @@ export function SocialModule({ onUpdate, user }) {
         try {
             const res = await kernelAPI.getEvents();
             // Filter for gratitude/emotional events
-            const entries = res.data.filter((e) => e.type === 'emotional_event' || e.title.includes('Gratitude'));
+            const entries = res.data.filter((e: any) => e.type === 'emotional_event' || e.title.includes('Gratitude'));
             setGratitudeEntries(entries);
         } catch (err) {
             console.error('Failed to fetch gratitude', err);
@@ -110,7 +110,7 @@ export function SocialModule({ onUpdate, user }) {
         }
     };
 
-    const handleDeleteGratitude = async (id) => {
+    const handleDeleteGratitude = async (id: string) => {
         if (!confirm('Are you sure you want to delete this gratitude entry?')) return;
         try {
             await kernelAPI.deleteEvent(id);
@@ -121,7 +121,7 @@ export function SocialModule({ onUpdate, user }) {
         }
     };
 
-    const handleDeleteRelationship = async (id) => {
+    const handleDeleteRelationship = async (id: string) => {
         if (!confirm('Are you sure you want to delete this connection?')) return;
         try {
             await socialAPI.deleteRelationship(id);
@@ -132,7 +132,7 @@ export function SocialModule({ onUpdate, user }) {
         }
     };
 
-    const handleInteraction = async (id, name, type) => {
+    const handleInteraction = async (id: string, name: string, type: 'call' | 'message') => {
         try {
             await socialAPI.logInteraction(id, {
                 type,
@@ -146,7 +146,7 @@ export function SocialModule({ onUpdate, user }) {
     };
 
     const socialScore = connections.length > 0 ? Math.min(connections.length * 10, 100) : 0;
-    const tasks = [];
+    const tasks: any[] = [];
 
     return (
         <div className="space-y-10 pb-20">

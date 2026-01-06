@@ -2,8 +2,13 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 
+interface AddConnectionModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSave: (data: any) => void;
+}
 
-export function AddConnectionModal({ isOpen, onClose, onSave }) {
+export function AddConnectionModal({ isOpen, onClose, onSave }: AddConnectionModalProps) {
     const [name, setName] = useState('');
     const [relationship, setRelationship] = useState('');
     const [frequency, setFrequency] = useState('');

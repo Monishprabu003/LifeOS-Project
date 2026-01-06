@@ -1,13 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bell, Activity, CheckCircle2, ShoppingCart } from 'lucide-react';
 
-interface NotificationPanelProps {
-    isOpen: boolean;
-    onClose: () => void;
-    notifications: any[];
-}
 
-export function NotificationPanel({ isOpen, onClose, notifications }: NotificationPanelProps) {
+export function NotificationPanel({ isOpen, onClose, notifications }) {
     return (
         <AnimatePresence>
             {isOpen && (

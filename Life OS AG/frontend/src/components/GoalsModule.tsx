@@ -12,11 +12,27 @@ import {
 } from 'lucide-react';
 import { goalsAPI, tasksAPI } from '../api';
 
+interface Task {
+    _id: string;
+    title: string;
+    status: 'todo' | 'in_progress' | 'done';
+}
 
-export function GoalsModule({ onUpdate, user }) {
-    const [goals, setGoals] = useState([]);
+interface Goal {
+    _id: string;
+    title: string;
+    category: string;
+    deadline: string;
+    priority: string;
+    status: string;
+    progress: number;
+    tasks: Task[];
+}
+
+export function GoalsModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
+    const [goals, setGoals] = useState<Goal[]>([]);
     const [showForm, setShowForm] = useState(false);
-    const [newTaskTitle, setNewTaskTitle] = useState({});
+    const [newTaskTitle, setNewTaskTitle] = useState<{ [key: string]: string }>({});
 
     // Form State
     const [title, setTitle] = useState('');
@@ -37,7 +53,7 @@ export function GoalsModule({ onUpdate, user }) {
         fetchGoals();
     }, [user]);
 
-    const handleCreateGoal = async (e) => {
+    const handleCreateGoal = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             await goalsAPI.createGoal({
@@ -60,7 +76,7 @@ export function GoalsModule({ onUpdate, user }) {
         }
     };
 
-    const handleDeleteGoal = async (id) => {
+    const handleDeleteGoal = async (id: string) => {
         if (!confirm('Are you sure you want to delete this mission?')) return;
         try {
             await goalsAPI.deleteGoal(id);
@@ -71,7 +87,7 @@ export function GoalsModule({ onUpdate, user }) {
         }
     };
 
-    const handleToggleTask = async (taskId) => {
+    const handleToggleTask = async (taskId: string) => {
         try {
             await tasksAPI.toggleTask(taskId);
             fetchGoals();
@@ -81,7 +97,7 @@ export function GoalsModule({ onUpdate, user }) {
         }
     };
 
-    const handleAddTask = async (goalId) => {
+    const handleAddTask = async (goalId: string) => {
         const taskTitle = newTaskTitle[goalId];
         if (!taskTitle?.trim()) return;
 
@@ -238,36 +254,15 @@ export function GoalsModule({ onUpdate, user }) {
                     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative">
                         <h2 className="text-2xl font-bold mb-8 text-[#0f172a] dark:text-white">Initialize Mission</h2>
                         <form onSubmit={handleCreateGoal} className="space-y-6">
-                            <input
-                                placeholder="Goal Title"
-                                value={title}
-                                onChange={e => setTitle(e.target.value)}
-                                className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm outline-none text-[#0f172a] dark:text-slate-200"
-                                required
-                            />
+                            <input placeholder="Goal Title" value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm outline-none" required />
                             <div className="grid grid-cols-2 gap-4">
-                                <select
-                                    value={category}
-                                    onChange={e => setCategory(e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm outline-none text-[#0f172a] dark:text-slate-200"
-                                >
-                                    {categories.map(c => <option key={c} value={c} className="dark:bg-slate-800">{c}</option>)}
+                                <select value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm outline-none">
+                                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
                                 </select>
-                                <input
-                                    type="date"
-                                    value={deadline}
-                                    onChange={e => setDeadline(e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm outline-none text-[#0f172a] dark:text-slate-200"
-                                />
+                                <input type="date" value={deadline} onChange={e => setDeadline(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm outline-none" />
                             </div>
                             <div className="flex space-x-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowForm(false)}
-                                    className="flex-1 py-4 font-bold text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-                                >
-                                    Cancel
-                                </button>
+                                <button type="button" onClick={() => setShowForm(false)} className="flex-1 py-4 font-bold text-slate-500">Cancel</button>
                                 <button className="flex-1 bg-[#8b5cf6] text-white py-4 rounded-2xl font-bold">Start Mission</button>
                             </div>
                         </form>

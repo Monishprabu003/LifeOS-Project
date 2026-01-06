@@ -22,7 +22,7 @@ export function SettingsModule() {
         new: ''
     });
 
-    const toggleNotification = (key) => {
+    const toggleNotification = (key: keyof typeof notifications) => {
         setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
@@ -59,11 +59,11 @@ export function SettingsModule() {
                                     <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">{item.desc}</p>
                                 </div>
                                 <button
-                                    onClick={() => toggleNotification(item.id)}
-                                    className={`w-14 h-8 rounded-full relative p-1 transition-all duration-300 ${notifications[item.id] ? 'bg-[#10b981]' : 'bg-slate-200 dark:bg-slate-700'}`}
+                                    onClick={() => toggleNotification(item.id as keyof typeof notifications)}
+                                    className={`w-14 h-8 rounded-full relative p-1 transition-all duration-300 ${notifications[item.id as keyof typeof notifications] ? 'bg-[#10b981]' : 'bg-slate-200 dark:bg-slate-700'}`}
                                 >
                                     <motion.div
-                                        animate={{ x: notifications[item.id] ? 24 : 0 }}
+                                        animate={{ x: notifications[item.id as keyof typeof notifications] ? 24 : 0 }}
                                         className="w-6 h-6 bg-white rounded-full shadow-sm"
                                     />
                                 </button>

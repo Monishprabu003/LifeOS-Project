@@ -2,8 +2,13 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, ChevronDown } from 'lucide-react';
 
+interface AddTransactionModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSave: (data: any) => void;
+}
 
-export function AddTransactionModal({ isOpen, onClose, onSave }) {
+export function AddTransactionModal({ isOpen, onClose, onSave }: AddTransactionModalProps) {
     const [type, setType] = useState('expense');
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState('');

@@ -2,8 +2,19 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Smile, Frown, Meh, Laugh } from 'lucide-react';
 
+interface HealthLogModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSave: (data: {
+        sleepDuration: number;
+        sleepQuality: number;
+        waterIntake: number;
+        stressLevel: number;
+        mood: number;
+    }) => void;
+}
 
-export function HealthLogModal({ isOpen, onClose, onSave }) {
+export function HealthLogModal({ isOpen, onClose, onSave }: HealthLogModalProps) {
     const [sleepDuration, setSleepDuration] = useState(7.5);
     const [sleepQuality, setSleepQuality] = useState(8);
     const [waterIntake, setWaterIntake] = useState(2.1);

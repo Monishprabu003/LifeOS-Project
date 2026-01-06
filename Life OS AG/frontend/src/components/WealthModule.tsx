@@ -23,7 +23,7 @@ import {
 import { AddTransactionModal } from './AddTransactionModal';
 import { financeAPI } from '../api';
 
-const CircularProgress = ({ value, label }) => {
+const CircularProgress = ({ value, label }: { value: number; label: string }) => {
     const size = 160;
     const strokeWidth = 12;
     const radius = (size - strokeWidth) / 2;
@@ -66,9 +66,9 @@ const CircularProgress = ({ value, label }) => {
     );
 };
 
-export function WealthModule({ onUpdate, user }) {
+export function WealthModule({ onUpdate, user }: { onUpdate?: () => void, user?: any }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [transactions, setTransactions] = useState([]);
+    const [transactions, setTransactions] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchTransactions = async () => {
@@ -83,7 +83,7 @@ export function WealthModule({ onUpdate, user }) {
         }
     };
 
-    const handleDeleteTransaction = async (id) => {
+    const handleDeleteTransaction = async (id: string) => {
         if (!confirm('Are you sure you want to delete this transaction?')) return;
         try {
             await financeAPI.deleteTransaction(id);
@@ -105,7 +105,7 @@ export function WealthModule({ onUpdate, user }) {
     const savingsRate = totalIncome > 0 ? Math.round((savings / totalIncome) * 100) : 0;
 
     // Chart data (mock logic for grouping by category)
-    const categoryTotals = transactions.reduce((acc, t) => {
+    const categoryTotals = transactions.reduce((acc: any, t) => {
         if (t.type === 'expense') {
             acc[t.category] = (acc[t.category] || 0) + t.amount;
         }
@@ -222,7 +222,7 @@ export function WealthModule({ onUpdate, user }) {
                                         verticalAlign="bottom"
                                         align="center"
                                         iconType="circle"
-                                        formatter={(value) => <span className="text-[10px] font-bold text-slate-500 uppercase ml-1">{value}</span>}
+                                        formatter={(value: string) => <span className="text-[10px] font-bold text-slate-500 uppercase ml-1">{value}</span>}
                                     />
                                 </PieChart>
                             </ResponsiveContainer>
