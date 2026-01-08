@@ -259,8 +259,8 @@ export function WealthModule({ onUpdate, user }) {
                                             </h4>
                                         </div>
                                         <button
-                                            onClick={() => handleDeleteTransaction(tx._id)}
-                                            className="p-2 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-700"
+                                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteTransaction(tx._id); }}
+                                            className="p-2 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-700 cursor-pointer relative z-20"
                                             title="Delete Transaction"
                                         >
                                             <Trash2 size={16} />

@@ -190,8 +190,8 @@ export function GoalsModule({ onUpdate, user }) {
                                 <div className="flex items-center space-x-4">
                                     <span className="text-2xl font-display font-bold text-[#8b5cf6]">{goal.progress}%</span>
                                     <button
-                                        onClick={() => handleDeleteGoal(goal._id)}
-                                        className="p-2 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-800"
+                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteGoal(goal._id); }}
+                                        className="p-2 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer relative z-20"
                                         title="Delete Goal"
                                     >
                                         <Trash2 size={18} />

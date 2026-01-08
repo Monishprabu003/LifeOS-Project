@@ -482,8 +482,8 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
                                         </div>
                                     </div>
                                     <button
-                                        onClick={() => handleDeleteEvent(event._id)}
-                                        className="p-2 bg-white dark:bg-[#0f111a] text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-800"
+                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteEvent(event._id); }}
+                                        className="p-2 bg-white dark:bg-[#0f111a] text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer relative z-20"
                                         title="Delete Activity"
                                     >
                                         <Trash2 size={18} />

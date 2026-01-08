@@ -384,8 +384,8 @@ export function HabitsModule({ onUpdate, user }) {
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => handleDeleteActivity(activity._id)}
-                                    className="p-2.5 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-700"
+                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteActivity(activity._id); }}
+                                    className="p-2.5 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-700 cursor-pointer relative z-20"
                                     title="Delete Activity Log"
                                 >
                                     <Trash2 size={18} />
