@@ -66,4 +66,10 @@ export const tasksAPI = {
     toggleTask: (id) => api.post(`/tasks/${id}/toggle`),
 };
 
+export const userAPI = {
+    updateProfile: (data) => api.put('/users/profile', data),
+    updateSettings: (data) => api.put('/users/settings', data),
+    changePassword: (data) => api.put('/users/password', data),
+};
+
 export default api;

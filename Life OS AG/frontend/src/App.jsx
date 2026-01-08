@@ -445,7 +445,7 @@ function App() {
               {activeTab === 'habits' && <HabitsModule onUpdate={fetchAppData} user={user} />}
               {activeTab === 'goals' && <GoalsModule onUpdate={fetchAppData} user={user} />}
               {activeTab === 'relationships' && <SocialModule onUpdate={fetchAppData} user={user} />}
-              {activeTab === 'profile' && <ProfileModule user={user} totalEvents={totalEvents} habits={habits} goals={goals} />}
+              {activeTab === 'profile' && <ProfileModule user={user} totalEvents={totalEvents} habits={habits} goals={goals} onUpdate={fetchAppData} />}
               {activeTab === 'settings' && <SettingsModule />}
             </motion.div>
           </AnimatePresence>

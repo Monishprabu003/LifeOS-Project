@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
     User,
     Mail,
@@ -8,11 +9,55 @@ import {
     Star,
     Zap,
     CheckCircle2,
-    Rocket
+    Rocket,
+    Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { userAPI } from '../api';
 
-export function ProfileModule({ user, totalEvents = 0, habits = [], goals = [] }) {
+export function ProfileModule({ user, totalEvents = 0, habits = [], goals = [], onUpdate }) {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        bio: ''
+    });
+    const [isSaving, setIsSaving] = useState(false);
+    const [message, setMessage] = useState({ type: '', text: '' });
+
+    useEffect(() => {
+        if (user) {
+            const [first, ...rest] = (user.name || '').split(' ');
+            setFormData({
+                firstName: first || '',
+                lastName: rest.join(' ') || '',
+                email: user.email || '',
+                bio: user.bio || ''
+            });
+        }
+    }, [user]);
+
+    const handleSave = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        setMessage({ type: '', text: '' });
+
+        try {
+            await userAPI.updateProfile({
+                name: `${formData.firstName} ${formData.lastName}`.trim(),
+                bio: formData.bio,
+                email: formData.email // Note: Usually email change involves more security, but following current schema
+            });
+            setMessage({ type: 'success', text: 'Profile updated successfully!' });
+            if (onUpdate) await onUpdate();
+        } catch (error) {
+            setMessage({ type: 'error', text: error.response?.data?.message || 'Failed to update profile' });
+        } finally {
+            setIsSaving(false);
+            setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+        }
+    };
+
     // Real Data Calculations
     const baseXP = (totalEvents * 100) + (Math.round(user?.lifeScore || 0) * 10);
     const xp = baseXP;
@@ -253,13 +298,14 @@ export function ProfileModule({ user, totalEvents = 0, habits = [], goals = [] }
                     <div className="bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] p-8 border border-slate-100 dark:border-[#222436] shadow-sm">
                         <h3 className="text-xl font-bold text-[#0f172a] dark:text-white mb-8">Edit Profile</h3>
 
-                        <form className="space-y-6">
+                        <form onSubmit={handleSave} className="space-y-6">
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">First Name</label>
                                     <input
                                         type="text"
-                                        defaultValue={user?.name?.split(' ')[0] || 'John'}
+                                        value={formData.firstName}
+                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                         className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-sm font-bold text-[#0f172a] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#10b981]/20 transition-all"
                                     />
                                 </div>
@@ -267,7 +313,8 @@ export function ProfileModule({ user, totalEvents = 0, habits = [], goals = [] }
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Last Name</label>
                                     <input
                                         type="text"
-                                        defaultValue={user?.name?.split(' ')[1] || 'Doe'}
+                                        value={formData.lastName}
+                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                         className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-sm font-bold text-[#0f172a] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#10b981]/20 transition-all"
                                     />
                                 </div>
@@ -277,7 +324,8 @@ export function ProfileModule({ user, totalEvents = 0, habits = [], goals = [] }
                                 <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email</label>
                                 <input
                                     type="email"
-                                    defaultValue={user?.email || 'john.doe@example.com'}
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-sm font-bold text-[#0f172a] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#10b981]/20 transition-all"
                                 />
                             </div>
@@ -287,16 +335,33 @@ export function ProfileModule({ user, totalEvents = 0, habits = [], goals = [] }
                                 <textarea
                                     placeholder="Tell us about yourself..."
                                     rows={4}
+                                    value={formData.bio}
+                                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                                     className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-sm font-medium text-[#0f172a] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#10b981]/20 transition-all resize-none"
                                 />
                             </div>
 
+                            {message.text && (
+                                <div className={`p-4 rounded-2xl text-sm font-bold ${message.type === 'success' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10' : 'bg-red-50 text-red-600 dark:bg-red-500/10'}`}>
+                                    {message.text}
+                                </div>
+                            )}
+
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="bg-[#10b981] hover:bg-[#0da271] text-white px-8 py-3.5 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-green-100 dark:shadow-none"
+                                type="submit"
+                                disabled={isSaving}
+                                className="w-full bg-[#10b981] hover:bg-[#0da271] disabled:opacity-50 text-white px-8 py-3.5 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-green-100 dark:shadow-none flex items-center justify-center space-x-2"
                             >
-                                Save Changes
+                                {isSaving ? (
+                                    <>
+                                        <Loader2 size={18} className="animate-spin" />
+                                        <span>Saving...</span>
+                                    </>
+                                ) : (
+                                    <span>Save Changes</span>
+                                )}
                             </motion.button>
                         </form>
                     </div>

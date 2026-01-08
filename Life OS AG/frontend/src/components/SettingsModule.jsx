@@ -6,9 +6,11 @@ import {
     Trash2,
     Download,
     ChevronRight,
-    Shield
+    Shield,
+    Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { userAPI } from '../api';
 
 export function SettingsModule() {
     const [notifications, setNotifications] = useState({
@@ -19,11 +21,38 @@ export function SettingsModule() {
 
     const [passwords, setPasswords] = useState({
         current: '',
-        new: ''
+        newPassword: ''
     });
+    const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+    const [passwordMessage, setPasswordMessage] = useState({ type: '', text: '' });
 
     const toggleNotification = (key) => {
         setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
+    };
+
+    const handlePasswordUpdate = async (e) => {
+        e.preventDefault();
+        if (!passwords.current || !passwords.newPassword) {
+            setPasswordMessage({ type: 'error', text: 'Please fill in both fields' });
+            return;
+        }
+
+        setIsUpdatingPassword(true);
+        setPasswordMessage({ type: '', text: '' });
+
+        try {
+            await userAPI.changePassword({
+                currentPassword: passwords.current,
+                newPassword: passwords.newPassword
+            });
+            setPasswordMessage({ type: 'success', text: 'Password updated successfully!' });
+            setPasswords({ current: '', newPassword: '' });
+        } catch (error) {
+            setPasswordMessage({ type: 'error', text: error.response?.data?.message || 'Failed to update password' });
+        } finally {
+            setIsUpdatingPassword(false);
+            setTimeout(() => setPasswordMessage({ type: '', text: '' }), 5000);
+        }
     };
 
     return (
@@ -79,14 +108,15 @@ export function SettingsModule() {
                         <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Security</h3>
                     </div>
 
-                    <div className="space-y-6 max-w-2xl">
+                    <form onSubmit={handlePasswordUpdate} className="space-y-6 max-w-2xl">
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-[#0f172a] dark:text-white">Current Password</label>
                             <input
                                 type="password"
-                                value="••••••••"
-                                readOnly
-                                className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-sm text-slate-400 focus:outline-none"
+                                placeholder="••••••••"
+                                value={passwords.current}
+                                onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
+                                className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                             />
                         </div>
                         <div className="space-y-2">
@@ -94,13 +124,33 @@ export function SettingsModule() {
                             <input
                                 type="password"
                                 placeholder="••••••••"
+                                value={passwords.newPassword}
+                                onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
                                 className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                             />
                         </div>
-                        <button className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0f172a] dark:text-white px-8 py-3 rounded-2xl text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm">
-                            Update Password
+
+                        {passwordMessage.text && (
+                            <div className={`p-4 rounded-2xl text-sm font-bold ${passwordMessage.type === 'success' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10' : 'bg-red-50 text-red-600 dark:bg-red-500/10'}`}>
+                                {passwordMessage.text}
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={isUpdatingPassword}
+                            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0f172a] dark:text-white px-8 py-3 rounded-2xl text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm flex items-center space-x-2 disabled:opacity-50"
+                        >
+                            {isUpdatingPassword ? (
+                                <>
+                                    <Loader2 size={18} className="animate-spin" />
+                                    <span>Updating...</span>
+                                </>
+                            ) : (
+                                <span>Update Password</span>
+                            )}
                         </button>
-                    </div>
+                    </form>
                 </div>
 
                 {/* Danger Zone */}
