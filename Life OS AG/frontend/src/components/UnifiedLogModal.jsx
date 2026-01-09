@@ -188,7 +188,7 @@ export function UnifiedLogModal({ isOpen, onClose, onSuccess }) {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-[9px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === tab.id
-                                    ? 'bg-white dark:bg-slate-800 shadow-md text-[#0f172a] dark:text-white'
+                                    ? 'bg-white dark:bg-slate-800 shadow-md dark:shadow-none text-[#0f172a] dark:text-white'
                                     : 'text-slate-400 hover:text-slate-600'
                                     }`}
                             >

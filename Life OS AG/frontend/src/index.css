@@ -40,13 +40,13 @@
     --accent: 244, 114, 182;
     --text-main: 241, 245, 249;
     --text-muted: 148, 163, 184;
-    --border: 30, 41, 59;
+    --border: transparent;
 
     /* Dark Enhanced Glass Tokens */
     --glass-background: 15, 23, 42;
     --glass-opacity: 0.75;
     --glass-border: 255, 255, 255;
-    --glass-border-opacity: 0.1;
+    --glass-border-opacity: 0;
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
@@ -101,6 +101,7 @@
     background: rgba(var(--glass-background), var(--glass-opacity));
     backdrop-filter: blur(var(--glass-blur));
     border: 1px solid rgba(var(--glass-border), var(--glass-border-opacity));
+    @apply dark:border-transparent;
     box-shadow: var(--glass-shadow);
     @apply transition-all duration-500;
   }
@@ -109,6 +110,7 @@
     background: rgba(var(--glass-background), var(--glass-opacity));
     backdrop-filter: blur(var(--glass-blur));
     border: 1px solid rgba(var(--glass-border), var(--glass-border-opacity));
+    @apply dark:border-transparent;
     box-shadow: var(--glass-shadow);
     @apply rounded-[2.5rem] transition-all duration-500;
   }
@@ -118,7 +120,7 @@
   }
 
   .nav-active {
-    @apply bg-primary/15 text-primary shadow-lg glass border-primary/30;
+    @apply bg-primary/15 text-primary dark:text-white shadow-lg glass border-primary/30 dark:border-transparent;
   }
 
   .nav-hover {
