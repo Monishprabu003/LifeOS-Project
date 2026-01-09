@@ -61,3 +61,32 @@ export const getTasks = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const deleteTask = async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id);
+        if (!task || task.userId.toString() !== req.user._id.toString()) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        const goalId = task.goalId;
+        await Task.findByIdAndDelete(req.params.id);
+
+        // If part of a goal, update goal tasks array and progress
+        if (goalId) {
+            await Goal.findByIdAndUpdate(goalId, { $pull: { tasks: req.params.id } });
+            const goal = await Goal.findById(goalId).populate('tasks');
+            if (goal) {
+                const total = goal.tasks.length;
+                const completed = goal.tasks.filter((t) => t.status === 'done').length;
+                goal.progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+                await goal.save();
+                await Kernel.updateLifeScores(req.user._id);
+            }
+        }
+
+        res.json({ message: 'Task deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

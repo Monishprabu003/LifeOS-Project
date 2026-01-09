@@ -1,4 +1,5 @@
 import Goal from '../models/Goal.js';
+import Task from '../models/Task.js';
 import { Kernel } from '../services/Kernel.js';
 
 export const createGoal = async (req, res) => {
@@ -62,6 +63,9 @@ export const deleteGoal = async (req, res) => {
         if (!goal || goal.userId.toString() !== req.user._id.toString()) {
             return res.status(404).json({ message: 'Goal not found' });
         }
+
+        // Delete all tasks associated with this goal
+        await Task.deleteMany({ goalId: req.params.id });
 
         await Goal.findByIdAndDelete(req.params.id);
 

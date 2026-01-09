@@ -115,6 +115,18 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
         }
     };
 
+    const handleDeleteTask = async (id, e) => {
+        e.stopPropagation();
+        if (!confirm('Delete this task?')) return;
+        try {
+            await tasksAPI.deleteTask(id);
+            fetchEvents();
+            if (onUpdate) onUpdate();
+        } catch (err) {
+            console.error('Failed to delete task', err);
+        }
+    };
+
     const handleDeleteAllLogs = async () => {
         const confirm1 = confirm('⚠️ CRITICAL ACTION: This will permanently delete ALL logs, module data, and habits across the entire system. Are you absolutely sure?');
         if (!confirm1) return;
@@ -165,17 +177,39 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
                 performance: Math.min(100, Math.max(0, (counts[day] || 0) * 20))
             }));
         } else {
-            // Weekly logic (group by week start)
+            // Real Weekly logic: Group events into the last 4 weeks
             const weeks = [...Array(4)].map((_, i) => {
-                const d = new Date();
-                d.setDate(d.getDate() - (21 - (i * 7)));
-                return `Week ${i + 1}`;
+                const start = new Date();
+                start.setDate(start.getDate() - (27 - (i * 7))); // 4 weeks ago
+                return {
+                    label: `Week ${i + 1}`,
+                    start: new Date(start.setHours(0, 0, 0, 0)),
+                    end: new Date(new Date(start).setDate(start.getDate() + 6))
+                };
             });
 
-            return weeks.map(w => ({
-                name: w,
-                performance: Math.floor(Math.random() * 80) // Simulated weekly data starting from 0 baseline
-            }));
+            return weeks.map((w, i) => {
+                const weekEvents = events.filter(e => {
+                    const d = new Date(e.timestamp);
+                    return d >= w.start && d <= w.end;
+                });
+
+                // Labels: 3w ago, 2w ago, Last Week, Current
+                const labels = ['3w ago', '2w ago', 'Last Week', 'Current'];
+
+                // Calculate average impact for the week
+                const totalImpact = weekEvents.reduce((acc, e) =>
+                    acc + (e.impact === 'positive' ? 20 : e.impact === 'negative' ? -20 : 0), 0
+                );
+
+                // Cap at 100, normalize for the 7-day period
+                const perf = Math.min(100, Math.max(0, weekEvents.length > 0 ? totalImpact / 7 : 0));
+
+                return {
+                    name: labels[i],
+                    performance: Math.round(perf)
+                };
+            });
         }
     };
 
@@ -443,8 +477,17 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
                                             {task.title}
                                         </span>
                                     </div>
-                                    <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${task.status === 'done' ? 'bg-[#10b981] border-[#10b981] shadow-lg shadow-green-200 dark:shadow-none' : 'border-slate-200 dark:border-slate-700 group-hover:border-blue-500/50'}`}>
-                                        {task.status === 'done' && <CheckCircle2 size={16} className="text-white" />}
+                                    <div className="flex items-center space-x-2">
+                                        <button
+                                            onClick={(e) => handleDeleteTask(task._id, e)}
+                                            className="w-8 h-8 rounded-xl text-red-500 hover:bg-rose-50 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center"
+                                            title="Delete Task"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                        <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${task.status === 'done' ? 'bg-[#10b981] border-[#10b981] shadow-lg shadow-green-200 dark:shadow-none' : 'border-slate-200 dark:border-slate-700 group-hover:border-blue-500/50'}`}>
+                                            {task.status === 'done' && <CheckCircle2 size={16} className="text-white" />}
+                                        </div>
                                     </div>
                                 </motion.div>
                             ))}

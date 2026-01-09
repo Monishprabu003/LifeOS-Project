@@ -64,6 +64,7 @@ export const tasksAPI = {
     getTasks: () => api.get('/tasks'),
     createTask: (data) => api.post('/tasks', data),
     toggleTask: (id) => api.post(`/tasks/${id}/toggle`),
+    deleteTask: (id) => api.delete(`/tasks/${id}`),
 };
 
 export const userAPI = {

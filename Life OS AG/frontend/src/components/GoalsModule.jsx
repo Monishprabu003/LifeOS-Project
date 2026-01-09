@@ -150,6 +150,17 @@ export function GoalsModule({ onUpdate, user }) {
         }
     };
 
+    const handleDeleteTask = async (taskId) => {
+        if (!confirm('Delete this milestone?')) return;
+        try {
+            await tasksAPI.deleteTask(taskId);
+            fetchGoals();
+            if (onUpdate) onUpdate();
+        } catch (err) {
+            console.error('Failed to delete task', err);
+        }
+    };
+
     const calculateProgress = (goal) => {
         if (!goal.tasks || goal.tasks.length === 0) return goal.progress || 0;
         const completed = goal.tasks.filter(t => t.status === 'done').length;
@@ -306,8 +317,17 @@ export function GoalsModule({ onUpdate, user }) {
                                                     {task.title}
                                                 </span>
                                             </div>
-                                            <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${task.status === 'done' ? 'bg-violet-500 border-violet-500 text-white shadow-lg' : 'border-slate-200 dark:border-slate-700 group-hover:border-violet-400'}`}>
-                                                {task.status === 'done' && <CheckCircle2 size={16} />}
+                                            <div className="flex items-center space-x-2">
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); handleDeleteTask(task._id); }}
+                                                    className="w-8 h-8 rounded-xl text-red-500 hover:bg-rose-50 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center"
+                                                    title="Delete Milestone"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                                <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${task.status === 'done' ? 'bg-violet-500 border-violet-500 text-white shadow-lg' : 'border-slate-200 dark:border-slate-700 group-hover:border-violet-400'}`}>
+                                                    {task.status === 'done' && <CheckCircle2 size={16} />}
+                                                </div>
                                             </div>
                                         </motion.div>
                                     ))}
