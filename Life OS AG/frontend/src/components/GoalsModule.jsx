@@ -152,7 +152,7 @@ export function GoalsModule({ onUpdate, user }) {
 
     const calculateProgress = (goal) => {
         if (!goal.tasks || goal.tasks.length === 0) return goal.progress || 0;
-        const completed = goal.tasks.filter(t => t.status === 'completed').length;
+        const completed = goal.tasks.filter(t => t.status === 'done').length;
         return Math.round((completed / goal.tasks.length) * 100);
     };
 
@@ -301,13 +301,13 @@ export function GoalsModule({ onUpdate, user }) {
                                             className="flex items-center justify-between p-5 glass rounded-2xl group interactive-hover cursor-pointer border-transparent"
                                         >
                                             <div className="flex items-center space-x-4">
-                                                <div className={`w-3 h-3 rounded-full ${task.status === 'completed' ? 'bg-[#10b981] shadow-[0_0_12px_rgba(16,185,129,0.5)]' : 'bg-slate-300'}`} />
-                                                <span className={`text-sm font-bold transition-all ${task.status === 'completed' ? 'text-slate-400 line-through opacity-50' : 'text-[#0f172a] dark:text-white'}`}>
+                                                <div className={`w-3 h-3 rounded-full ${task.status === 'done' ? 'bg-[#10b981] shadow-[0_0_12px_rgba(16,185,129,0.5)]' : 'bg-slate-300'}`} />
+                                                <span className={`text-sm font-bold transition-all ${task.status === 'done' ? 'text-slate-400 line-through opacity-50' : 'text-[#0f172a] dark:text-white'}`}>
                                                     {task.title}
                                                 </span>
                                             </div>
-                                            <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${task.status === 'completed' ? 'bg-violet-500 border-violet-500 text-white shadow-lg' : 'border-slate-200 dark:border-slate-700 group-hover:border-violet-400'}`}>
-                                                {task.status === 'completed' && <CheckCircle2 size={16} />}
+                                            <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${task.status === 'done' ? 'bg-violet-500 border-violet-500 text-white shadow-lg' : 'border-slate-200 dark:border-slate-700 group-hover:border-violet-400'}`}>
+                                                {task.status === 'done' && <CheckCircle2 size={16} />}
                                             </div>
                                         </motion.div>
                                     ))}
