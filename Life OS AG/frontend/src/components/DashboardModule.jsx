@@ -218,7 +218,7 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
 
             {/* Top Row: Unified Score & Weekly Performance */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-4 bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/50 dark:border-[#222436] flex flex-col items-center justify-center transition-colors duration-300">
+                <div className="lg:col-span-4 glass-card p-10 flex flex-col items-center justify-center">
                     <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Unified Life Score</h3>
                     <CircularProgress value={user?.lifeScore || 0} color="#10b981" size={180} strokeWidth={14} />
                     <div className="mt-8 text-center">
@@ -230,7 +230,7 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
                     </div>
                 </div>
 
-                <div className="lg:col-span-8 bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/50 dark:border-[#222436] min-h-[400px] transition-colors duration-300">
+                <div className="lg:col-span-8 glass-card p-10 min-h-[400px]">
                     <div className="flex items-center justify-between mb-8">
                         <div>
                             <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">{trendPeriod === 'daily' ? 'Daily' : 'Weekly'} Performance</h3>
@@ -377,9 +377,9 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
                         return (
                             <motion.div
                                 key={module.name}
-                                whileHover={{ y: -4, scale: 1.02 }}
+                                whileHover={{ y: -8, scale: 1.02 }}
                                 onClick={() => setActiveTab && setActiveTab(module.tab)}
-                                className={`relative overflow-hidden bg-white dark:bg-[#1a1c2e] border border-slate-200/50 dark:border-white/5 rounded-[1.5rem] p-6 flex flex-col justify-between h-[160px] cursor-pointer shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-xl transition-all duration-300 group`}
+                                className={`relative overflow-hidden glass rounded-[2rem] p-6 flex flex-col justify-between h-[160px] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 group overflow-hidden`}
                             >
                                 {/* Background Gradient */}
                                 <div className={`absolute inset-0 bg-gradient-to-br ${module.gradient} ${module.darkGradient} opacity-50`} />
@@ -414,7 +414,7 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
                 {/* Today's Tasks */}
-                <div className="lg:col-span-12 bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/50 dark:border-[#222436] transition-colors duration-300">
+                <div className="lg:col-span-12 glass-card p-10">
                     <div className="flex items-center justify-between mb-8">
                         <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Today's Tasks</h3>
                         <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{pendingTasks.length} pending</span>
@@ -450,7 +450,7 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
                 </div>
 
                 {/* Recent Activity */}
-                <div className="lg:col-span-12 bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/50 dark:border-[#222436] transition-colors duration-300">
+                <div className="lg:col-span-12 glass-card p-10">
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center space-x-4">
                             <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Recent Activity</h3>

@@ -141,12 +141,12 @@ export function HealthModule({ onUpdate, user }) {
 
             {/* Top Stat Cards */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                <div className="md:col-span-1 bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/50 dark:border-slate-800 flex flex-col items-center">
+                <div className="md:col-span-1 glass-card p-8 flex flex-col items-center">
                     <h3 className="text-sm font-bold text-[#0f172a] dark:text-white mb-8 self-start">Daily Health Score</h3>
                     <CircularProgress value={dailyScore} color="#10b981" size={120} label={latestLog ? "Based on today's metrics" : "Log data to see score"} />
                 </div>
 
-                <div className="bg-[#ecfdf5] dark:bg-[#10b981]/10 rounded-[2.5rem] p-8 relative group cursor-pointer hover:scale-[1.02] transition-transform shadow-[0_8px_30px_rgb(0,0,0,0.02)] border border-emerald-100/50 dark:border-none">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem]">
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sleep</p>
@@ -157,7 +157,7 @@ export function HealthModule({ onUpdate, user }) {
                     </div>
                 </div>
 
-                <div className="bg-[#ecfdf5] dark:bg-[#10b981]/10 rounded-[2.5rem] p-8 relative group cursor-pointer hover:scale-[1.02] transition-transform">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem]">
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Water</p>
@@ -168,7 +168,7 @@ export function HealthModule({ onUpdate, user }) {
                     </div>
                 </div>
 
-                <div className="bg-[#ecfdf5] dark:bg-[#10b981]/10 rounded-[2.5rem] p-8 relative group cursor-pointer hover:scale-[1.02] transition-transform">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem]">
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Mood</p>
@@ -179,7 +179,7 @@ export function HealthModule({ onUpdate, user }) {
                     </div>
                 </div>
 
-                <div className="bg-[#ecfdf5] dark:bg-[#10b981]/10 rounded-[2.5rem] p-8 relative group cursor-pointer hover:scale-[1.02] transition-transform">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem]">
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Stress</p>
@@ -193,7 +193,7 @@ export function HealthModule({ onUpdate, user }) {
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/50 dark:border-slate-800">
+                <div className="glass-card p-10">
                     <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Sleep Tracking</h3>
                     <div className="h-[280px] w-full">
                         {loading ? (
@@ -232,7 +232,7 @@ export function HealthModule({ onUpdate, user }) {
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/50 dark:border-slate-800">
+                <div className="glass-card p-10">
                     <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Mood & Stress Trends</h3>
                     <div className="h-[280px] w-full">
                         {loading ? (
@@ -273,7 +273,7 @@ export function HealthModule({ onUpdate, user }) {
             </div>
 
             {/* Recent Logs Section */}
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/50 dark:border-slate-800">
+            <div className="glass-card p-10">
                 <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Recent Logs</h3>
                 {logs.length > 0 ? (
                     <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 scrollbar-thin">
@@ -315,7 +315,7 @@ export function HealthModule({ onUpdate, user }) {
             </div>
 
             {/* Health Habits Section (Locked to Real Habits later) */}
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
+            <div className="glass-card p-10">
                 <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Health Habit Progress</h3>
                 <div className="py-12 text-center border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[2rem]">
                     <Zap size={40} className="mx-auto mb-4 text-slate-200" />

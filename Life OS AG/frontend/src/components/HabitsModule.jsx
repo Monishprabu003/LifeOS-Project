@@ -141,7 +141,7 @@ export function HabitsModule({ onUpdate, user }) {
             {/* Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                 {/* Today's Progress */}
-                <div className="bg-[#fffbeb] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-orange-50 dark:border-slate-800 shadow-sm flex flex-col items-center justify-center text-center">
+                <div className="md:col-span-1 glass-card p-8 flex flex-col items-center justify-center text-center">
                     <h3 className="text-sm font-bold text-[#0f172a] dark:text-white mb-6">Today's Progress</h3>
                     <div className="relative w-32 h-32 flex items-center justify-center">
                         <svg className="w-full h-full transform -rotate-90">
@@ -173,7 +173,7 @@ export function HabitsModule({ onUpdate, user }) {
                 </div>
 
                 {/* Active Habits */}
-                <div className="bg-[#fffbeb] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-orange-50 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/30 dark:bg-orange-500/5">
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Active Habits</p>
                         <Layout size={20} className="text-[#f59e0b]" />
@@ -182,7 +182,7 @@ export function HabitsModule({ onUpdate, user }) {
                 </div>
 
                 {/* Completed Today */}
-                <div className="bg-[#fffbeb] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-orange-50 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/30 dark:bg-orange-500/5">
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Completed Today</p>
                         <Target size={20} className="text-[#f59e0b]" />
@@ -191,7 +191,7 @@ export function HabitsModule({ onUpdate, user }) {
                 </div>
 
                 {/* Longest Streak */}
-                <div className="bg-[#fffbeb] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-orange-50 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/30 dark:bg-orange-500/5">
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Longest Streak</p>
                         <Flame size={20} className="text-[#f59e0b]" />
@@ -202,7 +202,7 @@ export function HabitsModule({ onUpdate, user }) {
                 </div>
 
                 {/* Weekly Score */}
-                <div className="bg-[#fffbeb] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-orange-50 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/30 dark:bg-orange-500/5">
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Weekly Score</p>
                         <TrendingUp size={20} className="text-[#f59e0b]" />
@@ -217,7 +217,7 @@ export function HabitsModule({ onUpdate, user }) {
             </div>
 
             {/* Weekly Overview */}
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
+            <div className="glass-card p-10">
                 <div className="flex justify-between items-center mb-8">
                     <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Weekly Overview</h3>
                     <span className="text-xs font-bold text-slate-400">Past 7 days performance</span>
@@ -299,9 +299,9 @@ export function HabitsModule({ onUpdate, user }) {
                         return (
                             <div
                                 key={habit._id}
-                                className={`p-6 rounded-[1.5rem] border transition-all cursor-pointer relative group ${habit.completedToday
-                                    ? 'bg-[#fffbeb] border-[#f59e0b] shadow-sm'
-                                    : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-slate-700'
+                                className={`p-6 rounded-[2.5rem] border transition-all cursor-pointer relative group glass interactive-hover ${habit.completedToday
+                                    ? 'bg-orange-50/50 border-[#f59e0b] shadow-inner'
+                                    : 'border-slate-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-slate-700'
                                     }`}
                                 onClick={() => !habit.completedToday && completeHabit(habit._id)}
                             >
@@ -364,7 +364,7 @@ export function HabitsModule({ onUpdate, user }) {
             </div>
 
             {/* Recent Activity Section */}
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
+            <div className="glass-card p-10">
                 <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Recent Habit Logs</h3>
                 {recentActivity.length > 0 ? (
                     <div className="space-y-4">

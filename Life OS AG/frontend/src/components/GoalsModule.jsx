@@ -130,7 +130,7 @@ export function GoalsModule({ onUpdate, user }) {
 
             {/* Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-[#f5f3ff] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-purple-50 dark:border-slate-800 shadow-sm flex flex-col items-center justify-center text-center">
+                <div className="glass-card p-8 flex flex-col items-center justify-center text-center">
                     <h3 className="text-sm font-bold text-[#0f172a] dark:text-white mb-6">Purpose Score</h3>
                     <div className="relative w-32 h-32 flex items-center justify-center">
                         <svg className="w-full h-full transform -rotate-90">
@@ -142,7 +142,7 @@ export function GoalsModule({ onUpdate, user }) {
                     <p className="mt-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Based on real goal completion</p>
                 </div>
 
-                <div className="bg-[#f5f3ff] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-purple-50 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-purple-50/30 dark:bg-purple-500/5">
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Active Goals</p>
                         <Flag size={20} className="text-[#8b5cf6]" />
@@ -150,7 +150,7 @@ export function GoalsModule({ onUpdate, user }) {
                     <h4 className="text-5xl font-display font-bold text-[#0f172a] dark:text-white mt-4">{goals.length}</h4>
                 </div>
 
-                <div className="bg-[#f5f3ff] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-purple-50 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-purple-50/30 dark:bg-purple-500/5">
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Achievements</p>
                         <Award size={20} className="text-[#8b5cf6]" />
@@ -160,7 +160,7 @@ export function GoalsModule({ onUpdate, user }) {
                     </h4>
                 </div>
 
-                <div className="bg-[#f5f3ff] dark:bg-slate-900 rounded-[2.5rem] p-8 border border-purple-50 dark:border-slate-800 shadow-sm flex flex-col justify-between text-left">
+                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-purple-50/30 dark:bg-purple-500/5">
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Total Tasks</p>
                         <BookOpen size={20} className="text-[#8b5cf6]" />
@@ -174,11 +174,11 @@ export function GoalsModule({ onUpdate, user }) {
             </div>
 
             {/* Goals List Section */}
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
+            <div className="glass-card p-10">
                 <h3 className="text-xl font-bold text-[#0f172a] dark:text-white mb-10 pl-2">Your Goals</h3>
                 <div className="space-y-6">
                     {goals.map(goal => (
-                        <div key={goal._id} className="p-8 border border-slate-100 dark:border-slate-800 rounded-[2rem] bg-white dark:bg-slate-900 shadow-sm border-b-2">
+                        <div key={goal._id} className="p-8 border border-slate-100 dark:border-slate-800 rounded-[2rem] glass interactive-hover shadow-sm border-b-2">
                             <div className="flex justify-between items-start mb-4">
                                 <div>
                                     <h4 className="text-xl font-bold text-[#0f172a] dark:text-white">{goal.title}</h4>

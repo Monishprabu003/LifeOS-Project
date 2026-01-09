@@ -172,7 +172,7 @@ export function SocialModule({ onUpdate, user }) {
 
             {/* Top Stat Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col items-start border-rose-50 dark:border-rose-900/10">
+                <div className="lg:col-span-3 glass-card p-10 flex flex-col items-start border-rose-50 dark:border-rose-900/10">
                     <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-10">Relationship Wellness</h3>
                     <div className="w-full flex justify-center">
                         <CircularProgress value={socialScore} label={connections.length > 0 ? "Building meaningful connections" : "No connections logged"} />
@@ -180,7 +180,7 @@ export function SocialModule({ onUpdate, user }) {
                 </div>
 
                 <div className="lg:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-[#fff1f2] dark:bg-rose-500/10 rounded-[2.5rem] p-10 flex flex-col justify-between">
+                    <div className="glass p-10 flex flex-col justify-between interactive-hover rounded-[2.5rem] bg-rose-50/30 dark:bg-rose-500/5">
                         <div className="flex justify-between items-start">
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Connections</p>
                             <Users size={20} className="text-[#f43f5e]" />
@@ -190,7 +190,7 @@ export function SocialModule({ onUpdate, user }) {
                         </div>
                     </div>
 
-                    <div className="bg-[#fff1f2] dark:bg-rose-500/10 rounded-[2.5rem] p-10 flex flex-col justify-between">
+                    <div className="glass p-10 flex flex-col justify-between interactive-hover rounded-[2.5rem] bg-rose-50/30 dark:bg-rose-500/5">
                         <div className="flex justify-between items-start">
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Interactions This Week</p>
                             <MessageSquare size={20} className="text-[#f43f5e]" />
@@ -203,7 +203,7 @@ export function SocialModule({ onUpdate, user }) {
                         </div>
                     </div>
 
-                    <div className="bg-[#fff1f2] dark:bg-rose-500/10 rounded-[2.5rem] p-10 flex flex-col justify-between">
+                    <div className="glass p-10 flex flex-col justify-between interactive-hover rounded-[2.5rem] bg-rose-50/30 dark:bg-rose-500/5">
                         <div className="flex justify-between items-start">
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Gratitude Entries</p>
                             <Heart size={20} className="text-[#f43f5e]" />
@@ -219,7 +219,7 @@ export function SocialModule({ onUpdate, user }) {
             {/* Main Content Sections */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Your Connections List */}
-                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
+                <div className="glass-card p-10">
                     <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Your Connections</h3>
                     {loading ? (
                         <div className="text-center py-12 text-slate-400">Loading...</div>
@@ -272,7 +272,7 @@ export function SocialModule({ onUpdate, user }) {
                 </div>
 
                 {/* Connection Tasks */}
-                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm">
+                <div className="glass-card p-10">
                     <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Connection Tasks</h3>
                     {tasks.length > 0 ? (
                         <div className="space-y-4">
@@ -298,7 +298,7 @@ export function SocialModule({ onUpdate, user }) {
             </div>
 
             {/* Gratitude Journal Section */}
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-sm border-rose-50 dark:border-rose-900/10">
+            <div className="glass-card p-10 border-rose-50 dark:border-rose-900/10">
                 <div className="flex items-center space-x-3 mb-8">
                     <Heart size={24} className="text-[#f43f5e]" />
                     <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Gratitude Journal</h3>

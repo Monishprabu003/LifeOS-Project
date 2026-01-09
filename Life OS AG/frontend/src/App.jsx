@@ -255,7 +255,7 @@ function App() {
       <motion.aside
         initial={false}
         animate={{ width: isSidebarCollapsed ? 96 : 288 }}
-        className="bg-white dark:bg-[#1a1c2e] border-r border-slate-100 dark:border-[#222436] flex flex-col shadow-sm z-50 overflow-hidden transition-colors duration-300"
+        className="glass border-r border-slate-100 dark:border-[#222436] flex flex-col shadow-sm z-50 overflow-hidden transition-colors duration-300"
       >
         <div className="p-8 flex items-center justify-between">
           <div className="flex items-center space-x-3 overflow-hidden">
@@ -296,9 +296,9 @@ function App() {
                   <button
                     key={module.id}
                     onClick={() => setActiveTab(module.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 group ${activeTab === module.id
-                      ? 'bg-[#ecfdf5] dark:bg-[#222436] text-[#10b981]'
-                      : 'hover:bg-slate-50 dark:hover:bg-[#222436]/50 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-300 group ${activeTab === module.id
+                      ? 'nav-active'
+                      : 'nav-hover text-slate-500 dark:text-slate-400'
                       }`}
                   >
                     <Icon size={20} className={activeTab === module.id ? 'text-[#10b981]' : ''} />
@@ -323,9 +323,9 @@ function App() {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 group ${activeTab === item.id
-                      ? 'bg-[#ecfdf5] dark:bg-[#222436] text-[#10b981]'
-                      : 'hover:bg-slate-50 dark:hover:bg-[#222436]/50 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-300 group ${activeTab === item.id
+                      ? 'nav-active'
+                      : 'nav-hover text-slate-500 dark:text-slate-400'
                       }`}
                   >
                     <Icon size={20} className={activeTab === item.id ? 'text-[#10b981]' : ''} />
@@ -365,14 +365,15 @@ function App() {
       {/* Main Content */}
       <main className="flex-1 relative overflow-y-auto custom-scrollbar">
         {/* Background Decorative Elements - Visible in Light Mode */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50 dark:opacity-20 z-0">
-          <div className="blob w-96 h-96 bg-blue-400 top-[-10%] right-[-5%] transition-colors duration-1000" />
-          <div className="blob w-[30rem] h-[30rem] bg-emerald-300 bottom-[-10%] left-[-5%] animation-delay-2000 transition-colors duration-1000" />
-          <div className="blob w-80 h-80 bg-violet-400 top-[40%] left-[20%] animation-delay-4000 transition-colors duration-1000" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.35] dark:opacity-20 z-0 bg-[#f8fafc] dark:bg-transparent">
+          <div className="blob w-[45rem] h-[45rem] bg-indigo-200/50 -top-20 -right-20 animate-blob" />
+          <div className="blob w-[40rem] h-[40rem] bg-sky-200/50 -bottom-20 -left-20 animate-blob animation-delay-2000" />
+          <div className="blob w-[35rem] h-[35rem] bg-rose-100/50 top-[20%] left-[15%] animate-blob animation-delay-4000" />
+          <div className="blob w-[30rem] h-[30rem] bg-emerald-100/50 bottom-[20%] right-[10%] animate-blob animation-delay-2000" />
         </div>
 
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-background/80 dark:bg-[#0f111a]/80 backdrop-blur-md px-10 py-6 flex items-center justify-between transition-colors duration-300">
+        <header className="sticky top-0 z-40 glass px-10 py-6 flex items-center justify-between transition-colors duration-300 rounded-b-3xl mx-4 mt-2">
           <div className="relative z-10">
             <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mb-1">Welcome back,</p>
             <h2 className="text-xl font-bold text-[#0f172a] dark:text-white">{user?.name || 'John Doe'}</h2>
@@ -414,7 +415,7 @@ function App() {
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setIsLogModalOpen(true)}
-                className="flex items-center space-x-2 bg-[#10b981] hover:bg-[#0da271] text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-green-100 dark:shadow-none"
+                className="interactive-hover flex items-center space-x-2 bg-[#10b981] hover:bg-[#0da271] text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-green-100 dark:shadow-none"
               >
                 <Plus size={18} />
                 <span>Log Event</span>

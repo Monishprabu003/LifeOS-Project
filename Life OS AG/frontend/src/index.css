@@ -4,26 +4,31 @@
 
 @layer base {
   :root {
-    --background: 241, 245, 249;
-    /* Sophisticated light grey */
+    --background: 248, 250, 252;
     --surface: 255, 255, 255;
-    --primary: 79, 70, 229;
-    /* Deep indigo */
+    --primary: 99, 102, 241;
     --secondary: 14, 165, 233;
     --health: 16, 185, 129;
     --wealth: 245, 158, 11;
-    --habits: 124, 58, 237;
-    --goals: 37, 99, 235;
-    --relationships: 225, 29, 72;
+    --habits: 139, 92, 246;
+    --goals: 59, 130, 246;
+    --relationships: 244, 63, 94;
     --accent: 219, 39, 119;
     --text-main: 15, 23, 42;
-    --text-muted: 71, 85, 105;
+    --text-muted: 100, 116, 139;
     --border: 226, 232, 240;
+
+    /* Glassmorphism Tokens */
+    --glass-background: 255, 255, 255;
+    --glass-opacity: 0.7;
+    --glass-blur: 16px;
+    --glass-border: 255, 255, 255;
+    --glass-border-opacity: 0.5;
   }
 
   .dark {
-    --background: 3, 7, 18;
-    --surface: 17, 24, 39;
+    --background: 2, 6, 23;
+    --surface: 15, 23, 42;
     --primary: 99, 102, 241;
     --secondary: 14, 165, 233;
     --health: 16, 185, 129;
@@ -65,7 +70,15 @@
   }
 
   .animate-blob {
-    animation: blob 7s infinite;
+    animation: blob 12s infinite ease-in-out;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
   }
 
   /* Force high contrast for chart text in dark mode */

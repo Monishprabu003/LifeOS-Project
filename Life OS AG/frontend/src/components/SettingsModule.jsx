@@ -70,7 +70,7 @@ export function SettingsModule() {
 
             <div className="space-y-8">
                 {/* Notifications Section */}
-                <div className="bg-white dark:bg-[#1a1c2e] rounded-[2rem] p-8 border border-slate-100 dark:border-[#222436] shadow-sm">
+                <div className="glass-card p-8 shadow-sm">
                     <div className="flex items-center space-x-3 mb-8">
                         <Bell className="text-slate-700 dark:text-slate-300" size={20} />
                         <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Notifications</h3>
@@ -102,7 +102,7 @@ export function SettingsModule() {
                 </div>
 
                 {/* Security Section */}
-                <div className="bg-white dark:bg-[#1a1c2e] rounded-[2rem] p-8 border border-slate-100 dark:border-[#222436] shadow-sm">
+                <div className="glass-card p-8 shadow-sm">
                     <div className="flex items-center space-x-3 mb-8">
                         <Lock className="text-slate-700 dark:text-slate-300" size={20} />
                         <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">Security</h3>
@@ -154,7 +154,7 @@ export function SettingsModule() {
                 </div>
 
                 {/* Danger Zone */}
-                <div className="bg-white dark:bg-[#1a1c2e] rounded-[2rem] p-8 border border-red-100 dark:border-red-900/20 shadow-sm">
+                <div className="glass-card p-8 border-red-100 dark:border-red-900/20 shadow-sm">
                     <div className="flex items-center space-x-3 mb-8">
                         <h3 className="text-lg font-bold text-red-500 tracking-tight">Danger Zone</h3>
                     </div>
