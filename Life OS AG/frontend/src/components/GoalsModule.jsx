@@ -130,35 +130,38 @@ export function GoalsModule({ onUpdate, user }) {
 
             {/* Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="glass-card p-8 flex flex-col items-center justify-center text-center">
-                    <h3 className="text-sm font-bold text-[#0f172a] dark:text-white mb-6">Purpose Score</h3>
-                    <div className="relative w-32 h-32 flex items-center justify-center">
-                        <svg className="w-full h-full transform -rotate-90">
-                            <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-purple-50 dark:text-slate-800" />
-                            <circle cx="64" cy="64" r="58" stroke="#8b5cf6" strokeWidth="8" fill="transparent" strokeDasharray={364.4} strokeDashoffset={364.4 - (364.4 * averageProgress) / 100} strokeLinecap="round" className="transition-all duration-1000 ease-out" />
-                        </svg>
-                        <span className="absolute text-4xl font-display font-bold text-[#0f172a] dark:text-white">{averageProgress}</span>
-                    </div>
-                    <p className="mt-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Based on real goal completion</p>
-                </div>
+                <motion.div
+                    whileHover={{ y: -5, scale: 1.01 }}
+                    className="md:col-span-1 glass-card p-10 flex flex-col items-center justify-center text-center transition-all duration-500"
+                >
+                    <h3 className="text-sm font-bold text-[#0f172a] dark:text-white mb-8">Purpose Score</h3>
+                    <CircularProgress value={goalScore} color="#8b5cf6" size={150} strokeWidth={12} />
+                    <p className="mt-8 text-xs font-bold text-slate-400 uppercase tracking-widest">Vision Alignment</p>
+                </motion.div>
 
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-purple-50/30 dark:bg-purple-500/5">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-violet-50/20 dark:bg-violet-500/5 transition-all duration-500"
+                >
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Active Goals</p>
-                        <Flag size={20} className="text-[#8b5cf6]" />
+                        <Target size={20} className="text-violet-500 opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <h4 className="text-5xl font-display font-bold text-[#0f172a] dark:text-white mt-4">{goals.length}</h4>
-                </div>
+                </motion.div>
 
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-purple-50/30 dark:bg-purple-500/5">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-violet-50/20 dark:bg-violet-500/5 transition-all duration-500"
+                >
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Achievements</p>
-                        <Award size={20} className="text-[#8b5cf6]" />
+                        <Trophy size={20} className="text-violet-500 opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <h4 className="text-5xl font-display font-bold text-[#0f172a] dark:text-white mt-4">
-                        {goals.filter(g => g.progress === 100).length}
+                        {goals.filter(g => calculateProgress(g) === 100).length}
                     </h4>
-                </div>
+                </motion.div>
 
                 <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-purple-50/30 dark:bg-purple-500/5">
                     <div className="flex justify-between items-start">
@@ -177,41 +180,77 @@ export function GoalsModule({ onUpdate, user }) {
             <div className="glass-card p-10">
                 <h3 className="text-xl font-bold text-[#0f172a] dark:text-white mb-10 pl-2">Your Goals</h3>
                 <div className="space-y-6">
-                    {goals.map(goal => (
-                        <div key={goal._id} className="p-8 border border-slate-100 dark:border-slate-800 rounded-[2rem] glass interactive-hover shadow-sm border-b-2">
-                            <div className="flex justify-between items-start mb-4">
-                                <div>
-                                    <h4 className="text-xl font-bold text-[#0f172a] dark:text-white">{goal.title}</h4>
-                                    <div className="flex items-center space-x-3 mt-2">
-                                        <span className="bg-[#f5f3ff] text-[#8b5cf6] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">{goal.category}</span>
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Due {goal.deadline ? new Date(goal.deadline).toLocaleDateString() : 'No deadline'}</span>
+                    {goals.map((goal) => (
+                        <motion.div
+                            key={goal._id}
+                            whileHover={{ y: -10, scale: 1.01 }}
+                            className="p-10 glass rounded-[3rem] group relative interactive-hover border-transparent"
+                        >
+                            <div className="flex justify-between items-start mb-8">
+                                <div className="space-y-4">
+                                    <div className="flex items-center space-x-4">
+                                        <div className="w-12 h-12 rounded-2xl bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center text-violet-500 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                                            <Target size={24} />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xl font-bold text-[#0f172a] dark:text-white">{goal.title}</h4>
+                                            <div className="flex items-center space-x-3 mt-1">
+                                                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{goal.category}</span>
+                                                <span className="text-slate-200 dark:text-slate-700 font-bold text-[10px]">•</span>
+                                                <span className="text-[10px] font-bold text-violet-500 uppercase tracking-widest">{goal.deadline ? new Date(goal.deadline).toLocaleDateString() : 'No Deadline'}</span>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-2xl">{goal.description}</p>
                                 </div>
-                                <div className="flex items-center space-x-4">
-                                    <span className="text-2xl font-display font-bold text-[#8b5cf6]">{goal.progress}%</span>
+                                <div className="flex items-center space-x-3">
                                     <button
-                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteGoal(goal._id); }}
-                                        className="p-2 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer relative z-20"
+                                        onClick={() => handleDeleteGoal(goal._id)}
+                                        className="p-3 bg-white/80 dark:bg-slate-900/80 text-red-500 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-500 rounded-2xl transition-all duration-300 shadow-sm border border-slate-100 dark:border-slate-800"
                                         title="Delete Goal"
                                     >
-                                        <Trash2 size={18} />
+                                        <Trash2 size={20} />
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="w-full h-2.5 bg-purple-50 dark:bg-slate-800 rounded-full overflow-hidden mb-6">
-                                <motion.div initial={{ width: 0 }} animate={{ width: `${goal.progress}%` }} className="h-full bg-[#10b981] rounded-full" />
+                            {/* Progress Section */}
+                            <div className="mb-10 p-8 bg-slate-50/50 dark:bg-[#0f111a]/50 rounded-[2rem] border border-slate-100 dark:border-slate-800 backdrop-blur-sm">
+                                <div className="flex justify-between items-end mb-4 px-1">
+                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Goal completion momentum</span>
+                                    <span className="text-xs font-bold text-violet-500">{calculateProgress(goal)}%</span>
+                                </div>
+                                <div className="w-full h-3 bg-white dark:bg-slate-800 rounded-full overflow-hidden">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${calculateProgress(goal)}%` }}
+                                        transition={{ duration: 1, ease: "easeOut" }}
+                                        className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_12px_rgba(139,92,246,0.5)]"
+                                    />
+                                </div>
                             </div>
 
                             <div className="space-y-3 pl-1">
-                                {(goal.tasks || []).map((task) => (
-                                    <div key={task._id} className="flex items-center justify-between group">
-                                        <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleToggleTask(task._id)}>
-                                            {task.status === 'done' ? <CheckCircle2 size={18} className="text-[#8b5cf6]" /> : <Circle size={18} className="text-slate-300" />}
-                                            <span className={`text-sm font-medium ${task.status === 'done' ? 'text-slate-400 line-through' : 'text-slate-600 dark:text-slate-300'}`}>{task.title}</span>
-                                        </div>
-                                    </div>
-                                ))}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {goal.tasks?.map((task, idx) => (
+                                        <motion.div
+                                            key={idx}
+                                            whileHover={{ x: 5 }}
+                                            onClick={() => handleToggleTask(goal._id, idx)}
+                                            className="flex items-center justify-between p-5 glass rounded-2xl group interactive-hover cursor-pointer border-transparent"
+                                        >
+                                            <div className="flex items-center space-x-4">
+                                                <div className={`w-3 h-3 rounded-full ${task.status === 'completed' ? 'bg-[#10b981] shadow-[0_0_12px_rgba(16,185,129,0.5)]' : 'bg-slate-300'}`} />
+                                                <span className={`text-sm font-bold transition-all ${task.status === 'completed' ? 'text-slate-400 line-through opacity-50' : 'text-[#0f172a] dark:text-white'}`}>
+                                                    {task.title}
+                                                </span>
+                                            </div>
+                                            <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${task.status === 'completed' ? 'bg-violet-500 border-violet-500 text-white shadow-lg' : 'border-slate-200 dark:border-slate-700 group-hover:border-violet-400'}`}>
+                                                {task.status === 'completed' && <CheckCircle2 size={16} />}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
 
                                 <div className="flex items-center space-x-3 mt-4 pt-2 border-t border-slate-50 dark:border-slate-800/50">
                                     <input
@@ -227,7 +266,7 @@ export function GoalsModule({ onUpdate, user }) {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>
@@ -244,6 +283,12 @@ export function GoalsModule({ onUpdate, user }) {
                                 onChange={e => setTitle(e.target.value)}
                                 className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm outline-none text-[#0f172a] dark:text-slate-200"
                                 required
+                            />
+                            <textarea
+                                placeholder="Goal Description (optional)"
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                                className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm outline-none text-[#0f172a] dark:text-slate-200 resize-none h-24"
                             />
                             <div className="grid grid-cols-2 gap-4">
                                 <select

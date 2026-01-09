@@ -141,7 +141,10 @@ export function HabitsModule({ onUpdate, user }) {
             {/* Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                 {/* Today's Progress */}
-                <div className="md:col-span-1 glass-card p-8 flex flex-col items-center justify-center text-center">
+                <motion.div
+                    whileHover={{ y: -5, scale: 1.01 }}
+                    className="md:col-span-1 glass-card p-8 flex flex-col items-center justify-center text-center transition-all duration-500"
+                >
                     <h3 className="text-sm font-bold text-[#0f172a] dark:text-white mb-6">Today's Progress</h3>
                     <div className="relative w-32 h-32 flex items-center justify-center">
                         <svg className="w-full h-full transform -rotate-90">
@@ -170,42 +173,54 @@ export function HabitsModule({ onUpdate, user }) {
                         <span className="absolute text-4xl font-display font-bold text-[#0f172a] dark:text-white">{progressPercent}</span>
                     </div>
                     <p className="mt-6 text-xs font-bold text-slate-400 uppercase tracking-wider">{completedCount}/{totalCount} habits completed</p>
-                </div>
+                </motion.div>
 
                 {/* Active Habits */}
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/30 dark:bg-orange-500/5">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/20 dark:bg-orange-500/5 transition-all duration-500"
+                >
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Active Habits</p>
-                        <Layout size={20} className="text-[#f59e0b]" />
+                        <Layout size={20} className="text-[#f59e0b] opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <h4 className="text-5xl font-display font-bold text-[#0f172a] dark:text-white mt-4">{totalCount}</h4>
-                </div>
+                </motion.div>
 
                 {/* Completed Today */}
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/30 dark:bg-orange-500/5">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/20 dark:bg-orange-500/5 transition-all duration-500"
+                >
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Completed Today</p>
-                        <Target size={20} className="text-[#f59e0b]" />
+                        <Target size={20} className="text-[#f59e0b] opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <h4 className="text-5xl font-display font-bold text-[#0f172a] dark:text-white mt-4">{completedCount}</h4>
-                </div>
+                </motion.div>
 
                 {/* Longest Streak */}
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/30 dark:bg-orange-500/5">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/20 dark:bg-orange-500/5 transition-all duration-500"
+                >
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Longest Streak</p>
-                        <Flame size={20} className="text-[#f59e0b]" />
+                        <Flame size={20} className="text-[#f59e0b] opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <div className="mt-4">
                         <h4 className="text-3xl font-display font-bold text-[#0f172a] dark:text-white tracking-tight">{longestStreak} days</h4>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Weekly Score */}
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/30 dark:bg-orange-500/5">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-orange-50/20 dark:bg-orange-500/5 transition-all duration-500"
+                >
                     <div className="flex justify-between items-start">
                         <p className="text-sm font-bold text-slate-500 uppercase tracking-tight">Weekly Score</p>
-                        <TrendingUp size={20} className="text-[#f59e0b]" />
+                        <TrendingUp size={20} className="text-[#f59e0b] opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <div className="mt-4">
                         <h4 className="text-4xl font-display font-bold text-[#0f172a] dark:text-white">
@@ -213,7 +228,7 @@ export function HabitsModule({ onUpdate, user }) {
                         </h4>
                         <p className="text-[10px] font-bold text-slate-400 mt-2">Active session accuracy</p>
                     </div>
-                </div>
+                </motion.div>
             </div>
 
             {/* Weekly Overview */}
@@ -293,21 +308,22 @@ export function HabitsModule({ onUpdate, user }) {
                 <h3 className="text-xl font-bold text-[#0f172a] dark:text-white mb-8">Your Habits</h3>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {habits.map(habit => {
-                        const totalGoal = 30; // Mocked goal
+                        const totalGoal = 30;
                         const progress = (habit.streak / totalGoal) * 100;
 
                         return (
-                            <div
+                            <motion.div
                                 key={habit._id}
-                                className={`p-6 rounded-[2.5rem] border transition-all cursor-pointer relative group glass interactive-hover ${habit.completedToday
-                                    ? 'bg-orange-50/50 border-[#f59e0b] shadow-inner'
+                                whileHover={{ y: -8, scale: 1.02 }}
+                                className={`p-8 rounded-[2.5rem] border transition-all duration-500 cursor-pointer relative group glass interactive-hover ${habit.completedToday
+                                    ? 'bg-orange-50/40 border-[#f59e0b] shadow-inner'
                                     : 'border-slate-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-slate-700'
                                     }`}
                                 onClick={() => !habit.completedToday && completeHabit(habit._id)}
                             >
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="flex items-center space-x-3">
-                                        <span className="text-2xl">
+                                <div className="flex justify-between items-start mb-6">
+                                    <div className="flex items-center space-x-4">
+                                        <span className="text-3xl">
                                             {habit.name.toLowerCase().includes('meditation') ? '🧘' :
                                                 habit.name.toLowerCase().includes('read') ? '📚' :
                                                     habit.name.toLowerCase().includes('water') ? '💧' :
@@ -315,49 +331,48 @@ export function HabitsModule({ onUpdate, user }) {
                                                             habit.name.toLowerCase().includes('expense') ? '💰' : '✨'}
                                         </span>
                                         <div>
-                                            <h4 className="font-bold text-[#0f172a] dark:text-white">{habit.name}</h4>
+                                            <h4 className="font-bold text-[#0f172a] dark:text-white text-lg">{habit.name}</h4>
                                             <div className="flex items-center space-x-2 mt-1">
                                                 <div className="flex items-center space-x-1 text-slate-400">
                                                     <Flame size={14} className="text-[#f59e0b]" />
                                                     <span className="text-xs font-bold">{habit.streak} day streak</span>
                                                 </div>
-                                                <div className={`w-2 h-2 rounded-full ${habit.completedToday ? 'bg-[#10b981]' : 'bg-slate-300'
-                                                    }`} />
+                                                <div className={`w-2 h-2 rounded-full ${habit.completedToday ? 'bg-[#10b981]' : 'bg-slate-300'}`} />
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center space-x-2">
+                                    <div className="flex items-center space-x-3">
                                         <button
-                                            onClick={(e) => handleDeleteHabit(habit._id, e)}
-                                            className="p-2 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-700"
+                                            onClick={(e) => { e.stopPropagation(); handleDeleteHabit(habit._id, e); }}
+                                            className="p-2.5 bg-white/80 dark:bg-slate-900/80 text-red-500 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-500 rounded-xl transition-all duration-300 shadow-sm border border-slate-100 dark:border-slate-800"
                                             title="Delete Habit"
                                         >
                                             <Trash2 size={18} />
                                         </button>
-                                        <div className={`w-7 h-7 rounded-lg border-2 flex items-center justify-center transition-all ${habit.completedToday
-                                            ? 'bg-[#f59e0b] border-[#f59e0b] text-white shadow-sm'
-                                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 group-hover:border-orange-200'
+                                        <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${habit.completedToday
+                                            ? 'bg-[#f59e0b] border-[#f59e0b] text-white shadow-lg shadow-orange-200 dark:shadow-none'
+                                            : 'border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 group-hover:border-orange-400'
                                             }`}>
-                                            {habit.completedToday && <CheckCircle2 size={16} strokeWidth={3} />}
+                                            {habit.completedToday && <CheckCircle2 size={20} strokeWidth={3} />}
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <div className="flex justify-between items-end">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Progress to goal</span>
-                                        <span className="text-[10px] font-bold text-slate-500 pr-1">{habit.streak}/{totalGoal} days</span>
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-end px-1">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Progress to goal</span>
+                                        <span className="text-[10px] font-bold text-slate-500">{habit.streak}/{totalGoal} days</span>
                                     </div>
-                                    <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                    <div className="w-full h-3 bg-slate-100/50 dark:bg-slate-800/50 rounded-full overflow-hidden backdrop-blur-sm">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{ width: `${Math.min(progress, 100)}%` }}
-                                            className="h-full bg-[#10b981] rounded-full shadow-sm"
+                                            className="h-full bg-gradient-to-r from-[#10b981] to-[#34d399] rounded-full shadow-sm"
                                         />
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         );
                     })}
                 </div>
@@ -369,9 +384,13 @@ export function HabitsModule({ onUpdate, user }) {
                 {recentActivity.length > 0 ? (
                     <div className="space-y-4">
                         {recentActivity.map((activity) => (
-                            <div key={activity._id} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl group hover:bg-slate-100 transition-colors">
+                            <motion.div
+                                key={activity._id}
+                                whileHover={{ x: 5 }}
+                                className="flex items-center justify-between p-6 glass rounded-2xl group interactive-hover"
+                            >
                                 <div className="flex items-center space-x-6">
-                                    <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#f59e0b] shadow-sm">
+                                    <div className="w-12 h-12 rounded-2xl bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm flex items-center justify-center text-[#f59e0b] group-hover:text-orange-600 shadow-sm transition-colors duration-300">
                                         <Flame size={24} />
                                     </div>
                                     <div>
@@ -385,12 +404,12 @@ export function HabitsModule({ onUpdate, user }) {
                                 </div>
                                 <button
                                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteActivity(activity._id); }}
-                                    className="p-2.5 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-700 cursor-pointer relative z-20"
+                                    className="p-2.5 bg-white/80 dark:bg-slate-900/80 text-red-500 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-500 rounded-xl transition-all duration-300 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer relative z-20"
                                     title="Delete Activity Log"
                                 >
                                     <Trash2 size={18} />
                                 </button>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 ) : (

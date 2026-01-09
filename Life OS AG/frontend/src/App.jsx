@@ -292,20 +292,30 @@ function App() {
             <div className="space-y-1">
               {modules.map((module) => {
                 const Icon = module.icon;
+                const isActive = activeTab === module.id;
                 return (
-                  <button
+                  <motion.button
                     key={module.id}
+                    whileHover={{ x: isSidebarCollapsed ? 0 : 4, scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setActiveTab(module.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-300 group ${activeTab === module.id
-                      ? 'nav-active'
-                      : 'nav-hover text-slate-500 dark:text-slate-400'
+                    className={`w-full flex items-center space-x-4 px-5 py-4 rounded-[1.5rem] transition-all duration-300 relative group ${isActive
+                      ? 'nav-active shadow-lg shadow-indigo-100 dark:shadow-none'
+                      : 'nav-hover text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400'
                       }`}
                   >
-                    <Icon size={20} className={activeTab === module.id ? 'text-[#10b981]' : ''} />
+                    <Icon size={22} className={`${isActive ? 'scale-110' : 'group-hover:scale-110 transition-transform duration-300'} relative z-10`} />
                     {!isSidebarCollapsed && (
-                      <span className="font-bold text-sm whitespace-nowrap">{module.name}</span>
+                      <span className="font-bold text-sm tracking-tight relative z-10">{module.name}</span>
                     )}
-                  </button>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute inset-0 bg-white dark:bg-[#1a1c2e] rounded-[1.5rem] -z-0"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </motion.button>
                 )
               })}
             </div>
@@ -319,20 +329,30 @@ function App() {
             <div className="space-y-1">
               {accountItems.map((item) => {
                 const Icon = item.icon;
+                const isActive = activeTab === item.id;
                 return (
-                  <button
+                  <motion.button
                     key={item.id}
+                    whileHover={{ x: isSidebarCollapsed ? 0 : 4, scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setActiveTab(item.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-300 group ${activeTab === item.id
-                      ? 'nav-active'
-                      : 'nav-hover text-slate-500 dark:text-slate-400'
+                    className={`w-full flex items-center space-x-4 px-5 py-4 rounded-[1.5rem] transition-all duration-300 relative group ${isActive
+                      ? 'nav-active shadow-lg shadow-indigo-100 dark:shadow-none'
+                      : 'nav-hover text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400'
                       }`}
                   >
-                    <Icon size={20} className={activeTab === item.id ? 'text-[#10b981]' : ''} />
+                    <Icon size={22} className={`${isActive ? 'scale-110' : 'group-hover:scale-110 transition-transform duration-300'} relative z-10`} />
                     {!isSidebarCollapsed && (
-                      <span className="font-bold text-sm whitespace-nowrap">{item.name}</span>
+                      <span className="font-bold text-sm tracking-tight relative z-10">{item.name}</span>
                     )}
-                  </button>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeAccountNav"
+                        className="absolute inset-0 bg-white dark:bg-[#1a1c2e] rounded-[1.5rem] -z-0"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </motion.button>
                 )
               })}
             </div>
@@ -424,7 +444,9 @@ function App() {
 
             <div className="h-8 w-[1px] bg-slate-200 dark:bg-slate-700" />
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => setIsNotificationOpen(true)}
               className="relative p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
             >
@@ -432,7 +454,7 @@ function App() {
               {notifications.length > 0 && (
                 <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white dark:border-[#0f111a] rounded-full" />
               )}
-            </button>
+            </motion.button>
           </div>
         </header>
 

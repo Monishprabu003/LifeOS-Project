@@ -18,12 +18,13 @@
     --text-muted: 100, 116, 139;
     --border: 226, 232, 240;
 
-    /* Glassmorphism Tokens */
+    /* Enhanced Glassmorphism Tokens */
     --glass-background: 255, 255, 255;
-    --glass-opacity: 0.7;
-    --glass-blur: 16px;
+    --glass-opacity: 0.6;
+    --glass-blur: 24px;
     --glass-border: 255, 255, 255;
-    --glass-border-opacity: 0.5;
+    --glass-border-opacity: 0.8;
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   }
 
   .dark {
@@ -39,7 +40,14 @@
     --accent: 244, 114, 182;
     --text-main: 241, 245, 249;
     --text-muted: 148, 163, 184;
-    --border: 222, 226, 231;
+    --border: 30, 41, 59;
+
+    /* Dark Enhanced Glass Tokens */
+    --glass-background: 15, 23, 42;
+    --glass-opacity: 0.75;
+    --glass-border: 255, 255, 255;
+    --glass-border-opacity: 0.1;
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
 
@@ -90,7 +98,31 @@
 
 @layer components {
   .glass {
-    @apply bg-surface/50 backdrop-blur-md border border-border/50 shadow-xl transition-all duration-300;
+    background: rgba(var(--glass-background), var(--glass-opacity));
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(var(--glass-border), var(--glass-border-opacity));
+    box-shadow: var(--glass-shadow);
+    @apply transition-all duration-500;
+  }
+
+  .glass-card {
+    background: rgba(var(--glass-background), var(--glass-opacity));
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(var(--glass-border), var(--glass-border-opacity));
+    box-shadow: var(--glass-shadow);
+    @apply rounded-[2.5rem] transition-all duration-500;
+  }
+
+  .interactive-hover {
+    @apply transition-all duration-500 hover:translate-y-[-8px] hover:shadow-[0_20px_40px_rgba(0, 0, 0, 0.1)] hover:bg-white/80 dark:hover:bg-slate-800/90 active:scale-[0.97];
+  }
+
+  .nav-active {
+    @apply bg-primary/15 text-primary shadow-lg glass border-primary/30;
+  }
+
+  .nav-hover {
+    @apply hover:bg-white/40 dark:hover:bg-white/5 hover:translate-x-2 transition-all duration-300;
   }
 
   .card-hover {

@@ -141,54 +141,65 @@ export function HealthModule({ onUpdate, user }) {
 
             {/* Top Stat Cards */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                <div className="md:col-span-1 glass-card p-8 flex flex-col items-center">
+                <motion.div
+                    whileHover={{ y: -5, scale: 1.01 }}
+                    className="md:col-span-1 glass-card p-8 flex flex-col items-center transition-all duration-500"
+                >
                     <h3 className="text-sm font-bold text-[#0f172a] dark:text-white mb-8 self-start">Daily Health Score</h3>
                     <CircularProgress value={dailyScore} color="#10b981" size={120} label={latestLog ? "Based on today's metrics" : "Log data to see score"} />
-                </div>
+                </motion.div>
 
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem]">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-emerald-50/20 dark:bg-emerald-500/5"
+                >
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sleep</p>
-                            <h4 className="text-2xl font-display font-bold mt-2 text-[#0f172a] dark:text-white">{latestLog?.sleepHours || '--'} hrs</h4>
-                            <p className="text-[10px] font-bold text-slate-400 mt-2">Target: 8 hrs</p>
+                            <h4 className="text-2xl font-display font-bold text-[#0f172a] dark:text-white mt-2">{latestLog?.sleepHours || 0}h</h4>
                         </div>
-                        <Moon size={22} className="text-[#10b981]" />
+                        <Activity size={24} className="text-[#10b981] opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem]">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-blue-50/20 dark:bg-blue-500/5"
+                >
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Water</p>
-                            <h4 className="text-2xl font-display font-bold mt-2 text-[#0f172a] dark:text-white">{latestLog?.waterIntake || '0.0'} L</h4>
-                            <p className="text-[10px] font-bold text-slate-400 mt-2">Target: 2.5 L</p>
+                            <h4 className="text-2xl font-display font-bold text-[#0f172a] dark:text-white mt-2">{latestLog?.waterIntake || 0}L</h4>
                         </div>
-                        <Droplets size={22} className="text-[#10b981] opacity-70" />
+                        <Activity size={24} className="text-blue-500 opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem]">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-purple-50/20 dark:bg-purple-500/5"
+                >
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Mood</p>
-                            <h4 className="text-2xl font-display font-bold mt-2 text-[#0f172a] dark:text-white">{latestLog?.mood ? `${latestLog.mood}/10` : '--/10'}</h4>
-                            <p className="text-[10px] font-bold text-slate-400 mt-2">Track daily</p>
+                            <h4 className="text-2xl font-display font-bold text-[#0f172a] dark:text-white mt-2">{latestLog?.mood || 0}/10</h4>
                         </div>
-                        <Smile size={22} className="text-[#10b981] opacity-70" />
+                        <Activity size={24} className="text-purple-500 opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem]">
+                <motion.div
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="glass p-8 relative group cursor-pointer interactive-hover rounded-[2.5rem] bg-red-50/20 dark:bg-red-500/5"
+                >
                     <div className="flex justify-between items-start">
                         <div>
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Stress</p>
-                            <h4 className="text-2xl font-display font-bold mt-2 text-[#0f172a] dark:text-white">{latestLog?.stress ? `${latestLog.stress}/10` : '--/10'}</h4>
-                            <p className="text-[10px] font-bold text-slate-400 mt-2">Keep it low</p>
+                            <h4 className="text-2xl font-display font-bold text-[#0f172a] dark:text-white mt-2">{latestLog?.stress || 0}/10</h4>
                         </div>
-                        <Activity size={22} className="text-[#10b981] opacity-70" />
+                        <Activity size={24} className="text-red-500 opacity-60 group-hover:opacity-100 transition-opacity" />
                     </div>
-                </div>
+                </motion.div>
             </div>
 
             {/* Charts Section */}
@@ -278,32 +289,39 @@ export function HealthModule({ onUpdate, user }) {
                 {logs.length > 0 ? (
                     <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 scrollbar-thin">
                         {logs.map((log) => (
-                            <div key={log._id} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl group hover:bg-slate-100 transition-colors">
-                                <div className="flex items-center space-x-6">
-                                    <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#10b981] shadow-sm">
-                                        <Activity size={24} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-[#0f172a] dark:text-white">
-                                            {new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}
-                                        </h4>
-                                        <div className="flex items-center space-x-3 mt-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                            <span>Sleep: {log.sleepHours}h</span>
-                                            <span>•</span>
-                                            <span>Water: {log.waterIntake}L</span>
-                                            <span>•</span>
-                                            <span>Mood: {log.mood}/10</span>
+                            <motion.div
+                                key={log._id}
+                                whileHover={{ x: 5 }}
+                                className="p-6 glass rounded-2xl group relative interactive-hover"
+                            >
+                                <div className="flex justify-between items-start">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 flex-1">
+                                        <div>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sleep</p>
+                                            <p className="text-sm font-bold text-[#0f172a] dark:text-white mt-1">{log.sleepHours}h</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Water</p>
+                                            <p className="text-sm font-bold text-[#0f172a] dark:text-white mt-1">{log.waterIntake}L</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mood/Stress</p>
+                                            <p className="text-sm font-bold text-[#0f172a] dark:text-white mt-1">{log.mood}/{log.stress}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Logged At</p>
+                                            <p className="text-sm font-bold text-[#0f172a] dark:text-white mt-1">{new Date(log.timestamp).toLocaleTimeString()}</p>
                                         </div>
                                     </div>
+                                    <button
+                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteLog(log._id); }}
+                                        className="p-2.5 bg-white/80 dark:bg-slate-900/80 text-red-500 hover:bg-red-500 hover:text-white dark:hover:bg-red-500 rounded-xl transition-all duration-300 shadow-sm border border-slate-100 dark:border-slate-800"
+                                        title="Delete Log"
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteLog(log._id); }}
-                                    className="p-2.5 bg-white dark:bg-slate-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-700 cursor-pointer relative z-20"
-                                    title="Delete Log"
-                                >
-                                    <Trash2 size={18} />
-                                </button>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 ) : (
