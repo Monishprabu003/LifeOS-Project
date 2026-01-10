@@ -258,7 +258,7 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <motion.div
                     whileHover={{ y: -8, scale: 1.01 }}
-                    className="lg:col-span-4 glass-card p-10 flex flex-col items-center justify-center transition-all duration-500 bg-white/40 dark:bg-[#0f111a]/40"
+                    className="lg:col-span-4 glass-card p-10 flex flex-col items-center justify-center transition-all duration-500 bg-white/40 dark:bg-surface/40"
                 >
                     <h3 className="text-xl font-display font-bold text-[#0f172a] dark:text-white mb-8">Unified Life Score</h3>
                     <div className="relative p-6 rounded-full bg-white/20 dark:bg-slate-800/20 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 shadow-inner">
@@ -275,7 +275,7 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
 
                 <motion.div
                     whileHover={{ y: -5 }}
-                    className="lg:col-span-8 glass-card p-10 min-h-[400px] bg-white/40 dark:bg-[#0f111a]/40 transition-all duration-500"
+                    className="lg:col-span-8 glass-card p-10 min-h-[400px] bg-white/40 dark:bg-surface/40 transition-all duration-500"
                 >
                     <div className="flex items-center justify-between mb-8">
                         <div>
@@ -424,7 +424,7 @@ export function DashboardModule({ user, setActiveTab, onUpdate }) {
                                 whileHover={{ y: -12, scale: 1.05 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => setActiveTab && setActiveTab(module.tab)}
-                                className={`relative group cursor-pointer glass p-8 rounded-[2.5rem] h-[180px] transition-all duration-500 ${module.shadow}`}
+                                className={`relative group cursor-pointer glass p-8 rounded-[2.5rem] h-[180px] transition-all duration-500 border border-black ${module.shadow}`}
                             >
                                 <div className={`absolute inset-0 bg-gradient-to-br ${module.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2.5rem]`} />
 
