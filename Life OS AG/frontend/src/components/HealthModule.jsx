@@ -24,43 +24,40 @@ import {
 import { HealthLogModal } from './HealthLogModal';
 import { healthAPI } from '../api';
 
-const CircularProgress = ({ value, color, size = 120, strokeWidth = 10, label }) => {
+const CircularProgress = ({ value, color, size = 100, strokeWidth = 8 }) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
     const offset = circumference - (value / 100) * circumference;
 
     return (
-        <div className="relative flex flex-col items-center justify-center" style={{ width: size, height: size + 40 }}>
-            <div className="relative" style={{ width: size, height: size }}>
-                <svg width={size} height={size} className="transform -rotate-90">
-                    <circle
-                        cx={size / 2}
-                        cy={size / 2}
-                        r={radius}
-                        stroke="currentColor"
-                        strokeWidth={strokeWidth}
-                        fill="transparent"
-                        className="text-slate-100 dark:text-slate-800"
-                    />
-                    <motion.circle
-                        cx={size / 2}
-                        cy={size / 2}
-                        r={radius}
-                        stroke={color}
-                        strokeWidth={strokeWidth}
-                        fill="transparent"
-                        strokeDasharray={circumference}
-                        initial={{ strokeDashoffset: circumference }}
-                        animate={{ strokeDashoffset: offset }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
-                        strokeLinecap="round"
-                    />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white">{value}</span>
-                </div>
+        <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+            <svg width={size} height={size} className="transform -rotate-90">
+                <circle
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    stroke="currentColor"
+                    strokeWidth={strokeWidth}
+                    fill="transparent"
+                    className="text-slate-100 dark:text-white/10"
+                />
+                <motion.circle
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    stroke={color}
+                    strokeWidth={strokeWidth}
+                    fill="transparent"
+                    strokeDasharray={circumference}
+                    initial={{ strokeDashoffset: circumference }}
+                    animate={{ strokeDashoffset: offset }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                    strokeLinecap="round"
+                />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-xl font-display font-bold text-[#0f172a] dark:text-white">{Math.round(value)}</span>
             </div>
-            {label && <p className="mt-4 text-[10px] font-bold text-slate-400 text-center uppercase tracking-wider">{label}</p>}
         </div>
     );
 };
@@ -122,8 +119,8 @@ export function HealthModule({ onUpdate, user, isDarkMode }) {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
-                    <div className="w-16 h-16 rounded-2xl bg-[#10b981] flex items-center justify-center text-white shadow-lg shadow-green-100 dark:shadow-none">
-                        <Heart size={32} />
+                    <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center border border-emerald-500/20">
+                        <Heart size={28} />
                     </div>
                     <div>
                         <h1 className="text-4xl font-display font-bold text-[#0f172a] dark:text-white leading-tight">Health & Wellbeing</h1>
@@ -132,7 +129,7 @@ export function HealthModule({ onUpdate, user, isDarkMode }) {
                 </div>
                 <button
                     onClick={() => setIsLogModalOpen(true)}
-                    className="bg-[#10b981] hover:bg-[#0da271] text-white px-8 py-4 rounded-2xl font-bold flex items-center space-x-3 transition-all shadow-lg shadow-green-100 dark:shadow-none active:scale-95"
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3.5 rounded-xl font-bold flex items-center space-x-3 transition-all active:scale-95 shadow-lg shadow-emerald-500/20"
                 >
                     <Plus size={20} />
                     <span>Log Today's Health</span>
@@ -140,120 +137,69 @@ export function HealthModule({ onUpdate, user, isDarkMode }) {
             </div>
 
             {/* Top Stat Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-                <motion.div
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                >
-                    <div className="p-4 rounded-2xl bg-emerald-500/10 text-emerald-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                        <Activity size={26} />
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                <div className="glass-card p-8 border-none flex flex-col items-center justify-center">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 w-full">Daily Health Score</h3>
+                    <div className="relative">
+                        <CircularProgress value={dailyScore} color="#10b981" />
                     </div>
-                    <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                        {latestLog?.sleepHours || 0}
-                    </span>
-                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                        Sleep (h)
-                    </span>
-                </motion.div>
+                    <p className="mt-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Based on today's metrics</p>
+                </div>
 
-                <motion.div
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                >
-                    <div className="p-4 rounded-2xl bg-blue-500/10 text-blue-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                        <Droplets size={26} />
+                {[
+                    { label: 'Sleep', value: `${latestLog?.sleepHours || 0} hrs`, icon: Moon, trend: '+8% vs last week', color: 'bg-emerald-900/40' },
+                    { label: 'Water', value: `${latestLog?.waterIntake || 0} L`, icon: Droplets, trend: '+12% vs last week', color: 'bg-emerald-900/40' },
+                    { label: 'Mood', value: `${latestLog?.mood || 0}/10`, icon: Smile, trend: '+5% vs last week', color: 'bg-emerald-900/40' },
+                    { label: 'Stress', value: `${latestLog?.stress || 0}/10`, icon: Zap, trend: '15% vs last week', color: 'bg-emerald-900/40' },
+                ].map((stat) => (
+                    <div key={stat.label} className={`glass-card p-8 border-none flex flex-col justify-between dark:bg-emerald-950/20`}>
+                        <div className="flex justify-between items-start">
+                            <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">{stat.label}</span>
+                            <stat.icon size={20} className="text-white/40" />
+                        </div>
+                        <div className="mt-8">
+                            <p className="text-2xl font-display font-bold text-[#0f172a] dark:text-white leading-none">{stat.value}</p>
+                            <p className="text-[10px] font-bold text-emerald-400 mt-2 uppercase tracking-widest">{stat.trend}</p>
+                        </div>
                     </div>
-                    <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                        {latestLog?.waterIntake || 0}
-                    </span>
-                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                        Water (L)
-                    </span>
-                </motion.div>
-
-                <motion.div
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                >
-                    <div className="p-4 rounded-2xl bg-purple-500/10 text-purple-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                        <Smile size={26} />
-                    </div>
-                    <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                        {latestLog?.mood || 0}
-                    </span>
-                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                        Mood / 10
-                    </span>
-                </motion.div>
-
-                <motion.div
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                >
-                    <div className="p-4 rounded-2xl bg-rose-500/10 text-rose-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                        <Zap size={26} />
-                    </div>
-                    <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                        {latestLog?.stress || 0}
-                    </span>
-                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                        Stress / 10
-                    </span>
-                </motion.div>
-
-                <motion.div
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                >
-                    <div className="p-4 rounded-2xl bg-emerald-500/10 text-emerald-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                        <Heart size={26} />
-                    </div>
-                    <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                        {dailyScore}
-                    </span>
-                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                        Core Score
-                    </span>
-                </motion.div>
+                ))}
             </div>
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="glass-card p-10 border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-500">
-                    <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Sleep Tracking</h3>
+                <div className="glass-card p-10 border-none">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-10 w-full">Sleep Tracking</h3>
                     <div className="h-[280px] w-full">
                         {loading ? (
                             <div className="h-full flex items-center justify-center text-slate-300">Loading...</div>
                         ) : sleepData.length > 0 ? (
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={sleepData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.1)" />
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.05)" />
                                     <XAxis
                                         dataKey="name"
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
+                                        tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }}
                                         dy={10}
                                     />
                                     <YAxis
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
+                                        tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }}
                                         domain={[0, 12]}
                                         ticks={[0, 3, 6, 9, 12]}
                                     />
                                     <Tooltip
-                                        cursor={{ fill: isDarkMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(148, 163, 184, 0.05)' }}
+                                        cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
                                         contentStyle={{
-                                            borderRadius: '24px',
-                                            border: isDarkMode ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)',
-                                            backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255,255,255,0.8)',
-                                            backdropFilter: 'blur(12px)',
-                                            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-                                            color: isDarkMode ? '#fff' : '#0f172a'
+                                            borderRadius: '16px',
+                                            border: 'none',
+                                            backgroundColor: '#0f172a',
+                                            color: '#fff'
                                         }}
                                     />
-                                    <Bar dataKey="hours" fill="#10b981" radius={[12, 12, 4, 4]} barSize={40} />
+                                    <Bar dataKey="hours" fill="#10b981" radius={[8, 8, 4, 4]} barSize={40} />
                                 </BarChart>
                             </ResponsiveContainer>
                         ) : (
@@ -265,41 +211,39 @@ export function HealthModule({ onUpdate, user, isDarkMode }) {
                     </div>
                 </div>
 
-                <div className="glass-card p-10 border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-500">
-                    <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Mood & Stress Trends</h3>
+                <div className="glass-card p-10 border-none">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-10 w-full">Mood & Stress Trends</h3>
                     <div className="h-[280px] w-full">
                         {loading ? (
                             <div className="h-full flex items-center justify-center text-slate-300">Loading...</div>
                         ) : trendData.length > 0 ? (
                             <ResponsiveContainer width="100%" height="100%">
                                 <LineChart data={trendData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.1)" />
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.05)" />
                                     <XAxis
                                         dataKey="name"
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
+                                        tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }}
                                         dy={10}
                                     />
                                     <YAxis
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
+                                        tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }}
                                         domain={[0, 10]}
                                         ticks={[0, 2, 4, 6, 8, 10]}
                                     />
                                     <Tooltip
                                         contentStyle={{
-                                            borderRadius: '24px',
-                                            border: isDarkMode ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)',
-                                            backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255,255,255,0.8)',
-                                            backdropFilter: 'blur(12px)',
-                                            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-                                            color: isDarkMode ? '#fff' : '#0f172a'
+                                            borderRadius: '16px',
+                                            border: 'none',
+                                            backgroundColor: '#0f172a',
+                                            color: '#fff'
                                         }}
                                     />
-                                    <Line type="monotoneX" dataKey="mood" stroke="#10b981" strokeWidth={4} dot={{ r: 5, fill: '#10b981', strokeWidth: 3, stroke: '#fff' }} />
-                                    <Line type="monotoneX" dataKey="stress" stroke="#f43f5e" strokeWidth={4} dot={{ r: 5, fill: '#f43f5e', strokeWidth: 3, stroke: '#fff' }} />
+                                    <Line type="monotone" dataKey="mood" stroke="#10b981" strokeWidth={4} dot={{ r: 4, fill: '#10b981', stroke: 'none' }} />
+                                    <Line type="monotone" dataKey="stress" stroke="#f43f5e" strokeWidth={4} dot={{ r: 4, fill: '#f43f5e', stroke: 'none' }} />
                                 </LineChart>
                             </ResponsiveContainer>
                         ) : (
@@ -361,12 +305,30 @@ export function HealthModule({ onUpdate, user, isDarkMode }) {
                 )}
             </div>
 
-            {/* Health Habits Section (Locked to Real Habits later) */}
-            <div className="glass-card p-10">
-                <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Health Habit Progress</h3>
-                <div className="py-12 text-center border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[2rem]">
-                    <Zap size={40} className="mx-auto mb-4 text-slate-200" />
-                    <p className="text-slate-400 font-medium text-sm">Create health-focused rituals in the Habits module<br />to track your streaks here.</p>
+            {/* Health Habits Section */}
+            <div className="glass-card p-10 border-none">
+                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-8 w-full">Health Habits</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {[
+                        { name: 'Morning Meditation', streak: '12 day streak 🔥', done: true },
+                        { name: '30 Min Workout', streak: '8 day streak 🔥', done: false },
+                        { name: '10K Steps', streak: '5 day streak 🔥', done: false }
+                    ].map((habit) => (
+                        <div key={habit.name} className={`p-6 rounded-2xl border ${habit.done ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-slate-100/50 dark:bg-white/[0.03] border-transparent'} flex items-center justify-between transition-all cursor-pointer`}>
+                            <div className="flex items-center gap-4">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${habit.done ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-white/5 text-slate-500'}`}>
+                                    <Zap size={18} />
+                                </div>
+                                <div>
+                                    <p className={`text-sm font-bold ${habit.done ? 'text-[#0f172a] dark:text-white' : 'text-slate-500'}`}>{habit.name}</p>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{habit.streak}</p>
+                                </div>
+                            </div>
+                            <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center ${habit.done ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 dark:border-white/10'}`}>
+                                {habit.done && <Plus size={14} className="text-white rotate-45" />}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
 

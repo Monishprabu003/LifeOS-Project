@@ -18,7 +18,8 @@ import {
   PanelLeftOpen,
   Bell,
   Sun,
-  Moon
+  Moon,
+  Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { authAPI, habitsAPI, goalsAPI, kernelAPI } from './api';
@@ -32,6 +33,7 @@ import { DashboardModule } from './components/DashboardModule';
 import { ProfileModule } from './components/ProfileModule';
 import { SettingsModule } from './components/SettingsModule';
 import { NotificationPanel } from './components/NotificationPanel';
+import { AIInsightsModule } from './components/AIInsightsModule';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -249,7 +251,8 @@ function App() {
     { id: 'wealth', name: 'Wealth', icon: Wallet, color: 'text-wealth' },
     { id: 'relationships', name: 'Relationships', icon: Users, color: 'text-relationships' },
     { id: 'habits', name: 'Habits', icon: Zap, color: 'text-habits' },
-    { id: 'goals', name: 'Purpose', icon: Compass, color: 'text-goals' }
+    { id: 'goals', name: 'Purpose', icon: Compass, color: 'text-goals' },
+    { id: 'ai-insights', name: 'AI Insights', icon: Sparkles, color: 'text-indigo-500' }
   ];
 
   const accountItems = [
@@ -461,6 +464,7 @@ function App() {
               {activeTab === 'wealth' && <WealthModule onUpdate={fetchAppData} user={user} isDarkMode={isDarkMode} />}
               {activeTab === 'habits' && <HabitsModule onUpdate={fetchAppData} user={user} isDarkMode={isDarkMode} />}
               {activeTab === 'goals' && <GoalsModule onUpdate={fetchAppData} user={user} isDarkMode={isDarkMode} />}
+              {activeTab === 'ai-insights' && <AIInsightsModule user={user} isDarkMode={isDarkMode} />}
               {activeTab === 'relationships' && <SocialModule onUpdate={fetchAppData} user={user} isDarkMode={isDarkMode} />}
               {activeTab === 'profile' && <ProfileModule user={user} totalEvents={totalEvents} habits={habits} goals={goals} onUpdate={fetchAppData} isDarkMode={isDarkMode} />}
               {activeTab === 'settings' && <SettingsModule isDarkMode={isDarkMode} />}

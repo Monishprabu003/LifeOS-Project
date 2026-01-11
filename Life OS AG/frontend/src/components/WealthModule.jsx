@@ -26,46 +26,36 @@ import { financeAPI } from '../api';
 const CircularProgress = ({ value, label }) => {
     return (
         <div className="flex flex-col items-center">
-            <div className="relative w-40 h-40 flex items-center justify-center">
+            <div className="relative w-32 h-32 flex items-center justify-center">
                 <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 100 100">
-                    {/* Background Glow Well */}
                     <circle
                         cx="50"
                         cy="50"
-                        r="48"
-                        fill="currentColor"
-                        className="text-white/20 dark:text-slate-800/20"
-                    />
-                    {/* Track */}
-                    <circle
-                        cx="50"
-                        cy="50"
-                        r="40"
+                        r="45"
                         stroke="currentColor"
-                        strokeWidth="8"
+                        strokeWidth="5"
                         fill="transparent"
-                        className="text-slate-100 dark:text-slate-800"
+                        className="text-slate-100 dark:text-white/10"
                     />
-                    {/* Blue Progress Arc */}
                     <motion.circle
                         cx="50"
                         cy="50"
-                        r="40"
+                        r="45"
                         stroke="#3b82f6"
                         strokeWidth="8"
                         fill="transparent"
-                        strokeDasharray="251.3"
-                        initial={{ strokeDashoffset: 251.3 }}
-                        animate={{ strokeDashoffset: 251.3 - (251.3 * value) / 100 }}
+                        strokeDasharray="283"
+                        initial={{ strokeDashoffset: 283 }}
+                        animate={{ strokeDashoffset: 283 - (283 * value) / 100 }}
                         transition={{ duration: 1.5, ease: "easeOut" }}
                         strokeLinecap="round"
                     />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-4xl font-display font-bold text-[#0f172a] dark:text-white leading-none tracking-tight">{value}</span>
+                    <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">100</span>
                 </div>
             </div>
-            {label && <p className="mt-8 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center max-w-[200px] leading-relaxed">{label}</p>}
+            {label && <p className="mt-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{label}</p>}
         </div>
     );
 };
@@ -127,8 +117,8 @@ export function WealthModule({ onUpdate, user, isDarkMode }) {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
-                    <div className={`w-16 h-16 rounded-2xl bg-[#3b82f6] flex items-center justify-center text-white shadow-lg ${isDarkMode ? 'shadow-none' : 'shadow-blue-100'}`}>
-                        <Wallet size={32} />
+                    <div className="w-14 h-14 rounded-2xl bg-blue-500/15 text-blue-500 flex items-center justify-center border border-blue-500/20">
+                        <Wallet size={28} />
                     </div>
                     <div>
                         <h1 className="text-4xl font-display font-bold text-[#0f172a] dark:text-white leading-tight">Wealth & Finances</h1>
@@ -137,7 +127,7 @@ export function WealthModule({ onUpdate, user, isDarkMode }) {
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-[#3b82f6] hover:bg-[#2563eb] text-white px-8 py-4 rounded-2xl font-bold flex items-center space-x-3 transition-all shadow-lg shadow-blue-100 dark:shadow-none"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3.5 rounded-xl font-bold flex items-center space-x-3 transition-all active:scale-95 shadow-lg shadow-blue-500/20"
                 >
                     <Plus size={20} />
                     <span>Add Transaction</span>
@@ -146,90 +136,66 @@ export function WealthModule({ onUpdate, user, isDarkMode }) {
 
             {/* Top Stat Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <motion.div
-                    whileHover={{ y: -5, scale: 1.01 }}
-                    className="lg:col-span-3 glass-card p-10 flex flex-col items-center justify-center text-center transition-all duration-500 border-blue-50 dark:border-blue-900/10"
-                >
-                    <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-10">Financial Health</h3>
-                    <CircularProgress value={savingsRate} label={`${savingsRate}% savings rate`} />
-                </motion.div>
+                <div className="lg:col-span-3 glass-card p-10 flex flex-col items-center justify-center border-none">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-8 w-full">Financial Health</h3>
+                    <CircularProgress value={100} label={`${savingsRate}% savings rate`} />
+                </div>
 
                 <div className="lg:col-span-9 grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <motion.div
-                        whileHover={{ y: -8, scale: 1.02 }}
-                        className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                    >
-                        <div className="p-4 rounded-2xl bg-blue-500/10 text-blue-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                            <TrendingUp size={26} />
+                    {[
+                        { label: 'Monthly Income', value: `$${totalIncome.toLocaleString()}`, icon: TrendingUp, trend: '+10% vs last week' },
+                        { label: 'Monthly Expenses', value: `$${totalExpense.toLocaleString()}`, icon: CreditCard, trend: '5% vs last week' },
+                        { label: 'Savings', value: `$${savings.toLocaleString()}`, icon: PiggyBank, trend: '+15% vs last week' },
+                        { label: 'Savings Rate', value: `${savingsRate}%`, icon: IndianRupee, trend: '+8% vs last week' },
+                    ].map((stat) => (
+                        <div key={stat.label} className="glass-card p-8 border-none flex flex-col justify-between dark:bg-blue-950/20">
+                            <div className="flex justify-between items-start">
+                                <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest leading-tight w-2/3">{stat.label}</span>
+                                <stat.icon size={20} className="text-white/40" />
+                            </div>
+                            <div className="mt-8">
+                                <p className="text-2xl font-display font-bold text-[#0f172a] dark:text-white leading-none">{stat.value}</p>
+                                <p className={`text-[10px] font-bold mt-2 uppercase tracking-widest ${stat.label.includes('Expenses') ? 'text-rose-400' : 'text-emerald-400'}`}>
+                                    {stat.trend}
+                                </p>
+                            </div>
                         </div>
-                        <span className="text-2xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                            ₹{totalIncome.toLocaleString()}
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                            Income
-                        </span>
-                    </motion.div>
-
-                    <motion.div
-                        whileHover={{ y: -8, scale: 1.02 }}
-                        className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                    >
-                        <div className="p-4 rounded-2xl bg-rose-500/10 text-rose-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                            <CreditCard size={26} />
-                        </div>
-                        <span className="text-2xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                            ₹{totalExpense.toLocaleString()}
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                            Expenses
-                        </span>
-                    </motion.div>
-
-                    <motion.div
-                        whileHover={{ y: -8, scale: 1.02 }}
-                        className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                    >
-                        <div className="p-4 rounded-2xl bg-emerald-500/10 text-emerald-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                            <PiggyBank size={26} />
-                        </div>
-                        <span className="text-2xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                            ₹{savings.toLocaleString()}
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                            Savings
-                        </span>
-                    </motion.div>
-
-                    <motion.div
-                        whileHover={{ y: -8, scale: 1.02 }}
-                        className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                    >
-                        <div className="p-4 rounded-2xl bg-amber-500/10 text-amber-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                            <IndianRupee size={26} />
-                        </div>
-                        <span className="text-2xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                            {savingsRate}%
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                            Rate
-                        </span>
-                    </motion.div>
+                    ))}
                 </div>
+            </div>
+
+            {/* Monthly Budget Card */}
+            <div className="glass-card p-10 border-none">
+                <div className="flex items-center justify-between mb-8">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Monthly Budget</h3>
+                    <p className="text-xs font-bold text-slate-400">$3,250 / $4,000</p>
+                </div>
+                <div className="relative">
+                    <div className="h-2 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: '81%' }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className="h-full bg-emerald-500"
+                        />
+                    </div>
+                </div>
+                <p className="text-[10px] font-bold text-slate-400 mt-4 uppercase tracking-widest">81% of budget used - $750 remaining</p>
             </div>
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div className="lg:col-span-5 glass-card p-10 border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-500">
-                    <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Expense Breakdown</h3>
+                <div className="lg:col-span-5 glass-card p-10 border-none">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-8">Expense Breakdown</h3>
                     <div className="h-[300px] w-full relative">
                         {expenseBreakdownData.length > 0 ? (
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
                                         data={expenseBreakdownData}
-                                        innerRadius={80}
-                                        outerRadius={110}
-                                        paddingAngle={5}
+                                        innerRadius={70}
+                                        outerRadius={100}
+                                        paddingAngle={4}
                                         dataKey="value"
                                     >
                                         {expenseBreakdownData.map((entry, index) => (
@@ -237,20 +203,7 @@ export function WealthModule({ onUpdate, user, isDarkMode }) {
                                         ))}
                                     </Pie>
                                     <Tooltip
-                                        contentStyle={{
-                                            borderRadius: '16px',
-                                            border: 'none',
-                                            boxShadow: isDarkMode ? 'none' : '0 10px 25px rgba(0,0,0,0.05)',
-                                            backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255,255,255,0.8)',
-                                            backdropFilter: 'blur(8px)',
-                                            color: isDarkMode ? '#fff' : '#0f172a'
-                                        }}
-                                    />
-                                    <Legend
-                                        verticalAlign="bottom"
-                                        align="center"
-                                        iconType="circle"
-                                        formatter={(value) => <span className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">{value}</span>}
+                                        contentStyle={{ backgroundColor: '#0f172a', borderRadius: '16px', border: 'none', color: '#fff' }}
                                     />
                                 </PieChart>
                             </ResponsiveContainer>
@@ -263,50 +216,29 @@ export function WealthModule({ onUpdate, user, isDarkMode }) {
                     </div>
                 </div>
 
-                <div className="lg:col-span-7 glass-card p-10 border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-500">
-                    <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Recent Transactions</h3>
-                    {loading ? (
-                        <div className="text-center py-12 text-slate-400">Loading...</div>
-                    ) : transactions.length > 0 ? (
-                        <div className="space-y-4 max-h-[300px] overflow-y-auto pr-4 custom-scrollbar">
-                            {transactions.map((tx) => (
-                                <motion.div
-                                    key={tx._id}
-                                    whileHover={{ x: 5 }}
-                                    className="flex items-center justify-between p-5 glass rounded-2xl group interactive-hover"
-                                >
-                                    <div className="flex items-center space-x-6">
-                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm transition-colors duration-300 ${tx.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-[#10b981]' : 'bg-blue-50 dark:bg-blue-500/10 text-[#3b82f6]'}`}>
-                                            {tx.type === 'income' ? <ArrowUpRight size={24} /> : <ArrowDownLeft size={24} />}
-                                        </div>
-                                        <div>
-                                            <h4 className="text-sm font-bold text-[#0f172a] dark:text-white">{tx.description}</h4>
-                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{tx.category} • {new Date(tx.date).toLocaleDateString()}</p>
-                                        </div>
+                <div className="lg:col-span-7 glass-card p-10 border-none">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-8">Recent Transactions</h3>
+                    <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                        {transactions.map((tx) => (
+                            <div key={tx._id} className="flex items-center justify-between p-4 bg-slate-100/50 dark:bg-white/[0.03] rounded-2xl group transition-all hover:bg-slate-200/50 dark:hover:bg-white/[0.05]">
+                                <div className="flex items-center gap-4">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${tx.type === 'income' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-blue-500/10 text-blue-500'}`}>
+                                        <ArrowUpRight size={18} className={tx.type === 'income' ? '' : 'rotate-90'} />
                                     </div>
-                                    <div className="flex items-center space-x-4">
-                                        <div className="text-right">
-                                            <h4 className={`text-sm font-bold font-display ${tx.type === 'income' ? 'text-[#10b981]' : 'text-[#0f172a] dark:text-white'}`}>
-                                                {tx.type === 'income' ? '+' : '-'}₹{tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                                            </h4>
-                                        </div>
-                                        <button
-                                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteTransaction(tx._id); }}
-                                            className="p-2.5 bg-white/80 dark:bg-slate-900/80 text-red-500 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-500 rounded-xl transition-all duration-300 shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer relative z-20"
-                                            title="Delete Transaction"
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
+                                    <div>
+                                        <p className="text-sm font-bold text-[#0f172a] dark:text-white">{tx.description}</p>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{tx.category}</p>
                                     </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="py-20 text-center border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[2rem] opacity-40">
-                            <Search size={40} className="mx-auto mb-4 text-slate-200" />
-                            <p className="text-slate-400 font-medium text-sm">No transactions yet. Start logging to track your wealth.</p>
-                        </div>
-                    )}
+                                </div>
+                                <div className="text-right">
+                                    <p className={`text-sm font-bold ${tx.type === 'income' ? 'text-emerald-500' : 'text-[#0f172a] dark:text-white'}`}>
+                                        {tx.type === 'income' ? '+' : '-'}${tx.amount.toLocaleString()}
+                                    </p>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Today</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 

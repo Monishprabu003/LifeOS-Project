@@ -23,49 +23,39 @@ import {
 import { kernelAPI, tasksAPI } from '../api';
 
 
-const CircularProgress = ({ value, color, showLabel = true }) => {
+const CircularProgress = ({ value, color, showLabel = true, size = 180 }) => {
     return (
-        <div className="relative w-44 h-44 flex items-center justify-center">
+        <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
             <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 100 100">
-                {/* Visual Depth Well */}
                 <circle
                     cx="50"
                     cy="50"
-                    r="48"
-                    fill="currentColor"
-                    className="text-white/20 dark:text-slate-800/20"
-                />
-                {/* Main Track */}
-                <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
+                    r="46"
                     stroke="currentColor"
-                    strokeWidth="8"
+                    strokeWidth="4"
                     fill="transparent"
-                    className="text-slate-100 dark:text-slate-800/50"
+                    className="text-slate-100 dark:text-slate-800/40"
                 />
-                {/* Dynamic Progress Arc */}
                 <motion.circle
                     cx="50"
                     cy="50"
-                    r="40"
+                    r="46"
                     stroke={color}
                     strokeWidth="8"
                     fill="transparent"
-                    strokeDasharray="251.3"
-                    initial={{ strokeDashoffset: 251.3 }}
-                    animate={{ strokeDashoffset: 251.3 - (251.3 * value) / 100 }}
+                    strokeDasharray="289"
+                    initial={{ strokeDashoffset: 289 }}
+                    animate={{ strokeDashoffset: 289 - (289 * value) / 100 }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
                     strokeLinecap="round"
+                    className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]"
                 />
             </svg>
             {showLabel && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-4xl font-display font-bold text-slate-800 dark:text-white leading-none">
-                        {Number.isInteger(value) ? value : Number(value).toFixed(1)}
+                    <span className="text-5xl font-display font-bold text-slate-800 dark:text-white leading-none">
+                        {Math.round(value)}
                     </span>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Score</span>
                 </div>
             )}
         </div>
@@ -242,187 +232,147 @@ export function DashboardModule({ user, setActiveTab, onUpdate, isDarkMode }) {
     const trend = calculateTrend();
 
     return (
-        <div className="space-y-8 pb-12">
+        <div className="space-y-10 pb-16">
             {/* Page Header */}
             <div className="flex items-end justify-between">
                 <div>
-                    <h2 className="text-4xl font-display font-bold text-[#0f172a] dark:text-white">Life Dashboard</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium">Your unified life performance overview</p>
+                    <h1 className="text-4xl font-display font-bold text-[#0f172a] dark:text-white leading-tight">Life Dashboard</h1>
+                    <p className="text-slate-500 font-medium mt-1">Your unified life performance overview</p>
                 </div>
-                <div className="flex items-center space-x-2 text-slate-400 dark:text-slate-500 font-semibold text-sm">
-                    <span>{today}</span>
+                <div className="text-right">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Current Session</p>
+                    <p className="text-lg font-bold text-[#0f172a] dark:text-white">{today}</p>
                 </div>
             </div>
 
-            {/* Top Row: Unified Score & Weekly Performance */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <motion.div
-                    whileHover={{ y: -8, scale: 1.01 }}
-                    className="lg:col-span-4 glass-card p-10 flex flex-col items-center justify-center transition-all duration-500 bg-white/40 dark:bg-slate-800/20"
-                >
-                    <h3 className="text-xl font-display font-bold text-[#0f172a] dark:text-white mb-8">Unified Life Score</h3>
-                    <div className="relative p-6 rounded-full bg-white/20 dark:bg-slate-800/20 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 shadow-inner">
-                        <CircularProgress value={user?.lifeScore || 0} color="#10b981" />
-                    </div>
-                    <div className="mt-8 text-center">
-                        <p className="text-slate-500 dark:text-slate-400 text-sm font-semibold tracking-tight">Your overall life performance</p>
-                        <div className={`flex items-center justify-center space-x-1 mt-3 font-bold text-sm ${trend.status === 'positive' ? 'text-green-500' : trend.status === 'negative' ? 'text-rose-500' : 'text-slate-400'}`}>
-                            {trend.status !== 'neutral' && <TrendingUp size={16} className={trend.status === 'negative' ? 'rotate-180' : ''} />}
-                            <span className="uppercase tracking-widest text-[10px]">{trend.label}</span>
+            {/* Dashboard Hero Card */}
+            <div className="glass-card p-1 pb-1 overflow-hidden relative border-none shadow-2xl shadow-blue-900/10">
+                <div className="grid grid-cols-1 lg:grid-cols-12">
+                    {/* Gauge Section */}
+                    <div className="lg:col-span-4 p-10 flex flex-col items-center justify-center border-r border-slate-100 dark:border-white/[0.05]">
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mb-10 w-full text-left ml-4">Life Performance Index</h3>
+                        <div className="relative">
+                            <CircularProgress value={user?.lifeScore || 0} color="#10b981" />
+                            {trend.status === 'positive' && (
+                                <div className="absolute top-0 -right-4 bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full text-[10px] font-black backdrop-blur-md border border-emerald-500/20 flex items-center gap-1">
+                                    <TrendingUp size={10} /> +{trend.value}%
+                                </div>
+                            )}
+                        </div>
+                        <div className="mt-10 text-center">
+                            <h4 className="text-2xl font-display font-bold text-[#0f172a] dark:text-white mb-2">You're doing great!</h4>
+                            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{today}</p>
                         </div>
                     </div>
-                </motion.div>
 
-                <motion.div
-                    whileHover={{ y: -5 }}
-                    className="lg:col-span-8 glass-card p-10 min-h-[400px] bg-white/40 dark:bg-slate-800/20 transition-all duration-500"
-                >
-                    <div className="flex items-center justify-between mb-8">
-                        <div>
-                            <h3 className="text-lg font-bold text-[#0f172a] dark:text-white">{trendPeriod === 'daily' ? 'Daily' : 'Weekly'} Performance</h3>
-                            <p className="text-xs font-bold text-slate-400 dark:text-slate-500 mt-1 uppercase tracking-widest">Efficiency Trends</p>
+                    {/* Chart Section */}
+                    <div className="lg:col-span-8 p-10 flex flex-col">
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 ml-4">7-Day Trend</h3>
+                            <div className="flex bg-slate-100/50 dark:bg-white/[0.03] p-1 rounded-xl border border-slate-200/50 dark:border-white/[0.05]">
+                                <button onClick={() => setTrendPeriod('daily')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${trendPeriod === 'daily' ? 'bg-white dark:bg-white/10 text-blue-600 dark:text-white shadow-sm' : 'text-slate-400'}`}>DAILY</button>
+                                <button onClick={() => setTrendPeriod('weekly')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${trendPeriod === 'weekly' ? 'bg-white dark:bg-white/10 text-blue-600 dark:text-white shadow-sm' : 'text-slate-400'}`}>WEEKLY</button>
+                            </div>
                         </div>
-                        <div className="flex bg-slate-50/50 dark:bg-[#0f111a]/50 p-1.5 rounded-2xl border border-slate-200/60 dark:border-[#222436] backdrop-blur-sm">
-                            <button
-                                onClick={() => setTrendPeriod('daily')}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${trendPeriod === 'daily' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-md border border-slate-200/50 dark:border-slate-600' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
-                            >
-                                Daily
-                            </button>
-                            <button
-                                onClick={() => setTrendPeriod('weekly')}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${trendPeriod === 'weekly' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-md border border-slate-200/50 dark:border-slate-600' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
-                            >
-                                Weekly
-                            </button>
-                        </div>
-                    </div>
-                    <div className="h-[280px] w-full mt-4">
-                        {events.length > 0 ? (
+                        <div className="h-[240px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <AreaChart data={trendData}>
                                     <defs>
-                                        <linearGradient id="colorPerf" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2} />
-                                            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                                        <linearGradient id="colorWave" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor="#10b981" stopOpacity={0.15} />
+                                            <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.1)" />
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.05)" />
                                     <XAxis
                                         dataKey="name"
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fill: 'rgba(148, 163, 184, 0.8)', fontSize: 10, fontWeight: 700 }}
+                                        tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }}
                                         dy={10}
                                     />
-                                    <YAxis
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: isDarkMode ? '#64748b' : '#94a3b8', fontSize: 10, fontWeight: 700 }}
-                                        domain={[0, 100]}
-                                    />
                                     <Tooltip
-                                        contentStyle={{
-                                            borderRadius: '24px',
-                                            border: isDarkMode ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)',
-                                            backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255,255,255,0.8)',
-                                            backdropFilter: 'blur(12px)',
-                                            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-                                            fontSize: '12px',
-                                            fontWeight: 'bold',
-                                            color: isDarkMode ? '#fff' : '#0f172a'
-                                        }}
-                                        itemStyle={{ color: '#3b82f6' }}
+                                        contentStyle={{ backgroundColor: '#0f172a', borderRadius: '16px', border: 'none', color: '#fff' }}
                                     />
                                     <Area
-                                        type="monotoneX"
+                                        type="monotone"
                                         dataKey="performance"
-                                        stroke="#3b82f6"
-                                        strokeWidth={5}
-                                        fillOpacity={1}
-                                        fill="url(#colorPerf)"
-                                        dot={{ r: 5, fill: '#3b82f6', strokeWidth: 3, stroke: '#fff' }}
-                                        activeDot={{ r: 8, strokeWidth: 0 }}
-                                        animationDuration={2000}
+                                        stroke="#10b981"
+                                        strokeWidth={4}
+                                        fill="url(#colorWave)"
+                                        dot={false}
                                     />
                                 </AreaChart>
                             </ResponsiveContainer>
-                        ) : (
-                            <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
-                                <Activity size={48} className="mx-auto mb-4 text-slate-300" />
-                                <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Collect data to see metrics</p>
-                            </div>
-                        )}
+                        </div>
                     </div>
-                </motion.div>
+                </div>
+            </div>
+
+            {/* Quick Stats Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {[
+                    { label: 'Sleep', value: '7.5h', icon: '🌙', trend: '+8%' },
+                    { label: 'Water', value: '2.1L', icon: '💧', trend: '+12%' },
+                    { label: 'Mood', value: '8/10', icon: '😊', trend: '+5%' },
+                    { label: 'Streak', value: '12d', icon: '🔥', trend: '+20%' }
+                ].map((stat) => (
+                    <motion.div
+                        key={stat.label}
+                        whileHover={{ y: -5 }}
+                        className="glass-card p-6 border-none flex flex-col justify-between"
+                    >
+                        <div className="flex justify-between items-start mb-4">
+                            <span className="text-xl">{stat.icon}</span>
+                            <span className="text-[10px] font-black text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full">{stat.trend}</span>
+                        </div>
+                        <div>
+                            <p className="text-2xl font-display font-bold text-[#0f172a] dark:text-white leading-none">{stat.value}</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">{stat.label}</p>
+                        </div>
+                    </motion.div>
+                ))}
             </div>
 
             {/* Middle Row: Module Scores */}
             <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-display font-bold text-[#0f172a] dark:text-white">Your Modules</h3>
-                </div>
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
-                    {[
-                        {
-                            name: 'Health',
-                            score: user?.healthScore || 0,
-                            color: 'text-emerald-500',
-                            bg: 'bg-emerald-500/10',
-                            icon: Heart,
-                            tab: 'health'
-                        },
-                        {
-                            name: 'Wealth',
-                            score: user?.wealthScore || 0,
-                            color: 'text-blue-500',
-                            bg: 'bg-blue-500/10',
-                            icon: Wallet,
-                            tab: 'wealth'
-                        },
-                        {
-                            name: 'Social',
-                            score: user?.relationshipScore || 0,
-                            color: 'text-rose-500',
-                            bg: 'bg-rose-500/10',
-                            icon: Users,
-                            tab: 'relationships'
-                        },
-                        {
-                            name: 'Habits',
-                            score: user?.habitScore || 0,
-                            color: 'text-amber-500',
-                            bg: 'bg-amber-500/10',
-                            icon: CheckSquare,
-                            tab: 'habits'
-                        },
-                        {
-                            name: 'Purpose',
-                            score: user?.goalScore || 0,
-                            color: 'text-violet-500',
-                            bg: 'bg-violet-500/10',
-                            icon: Target,
-                            tab: 'goals'
-                        },
-                    ].map((module) => (
-                        <motion.div
-                            key={module.name}
-                            whileHover={{ y: -8, scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => setActiveTab && setActiveTab(module.tab)}
-                            className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                        >
-                            <div className={`p-4 rounded-2xl ${module.bg} ${module.color} mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500`}>
-                                <module.icon size={26} />
-                            </div>
-                            <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                                {Math.round(module.score)}
-                            </span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                                {module.name}
-                            </span>
-                        </motion.div>
-                    ))}
+                {/* Your Modules Grid */}
+                <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-xl font-display font-bold text-[#0f172a] dark:text-white">Your Modules</h3>
+                        <button className="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors tracking-widest uppercase">View all ↗</button>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+                        {[
+                            { name: 'Health', score: user?.healthScore || 0, color: '#10b981', icon: Heart, tab: 'health' },
+                            { name: 'Wealth', score: user?.wealthScore || 0, color: '#3b82f6', icon: Wallet, tab: 'wealth' },
+                            { name: 'Relationships', score: user?.relationshipScore || 0, color: '#f43f5e', icon: Users, tab: 'relationships' },
+                            { name: 'Habits', score: user?.habitScore || 0, color: '#f59e0b', icon: CheckSquare, tab: 'habits' },
+                            { name: 'Purpose', score: user?.goalScore || 0, color: '#8b5cf6', icon: Target, tab: 'goals' },
+                        ].map((module) => (
+                            <motion.div
+                                key={module.name}
+                                whileHover={{ y: -8 }}
+                                onClick={() => setActiveTab && setActiveTab(module.tab)}
+                                className="glass-card p-8 border-none group cursor-pointer relative overflow-hidden"
+                            >
+                                {/* Accent Bar */}
+                                <div className="absolute right-4 bottom-4 w-1.5 h-10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500" style={{ backgroundColor: module.color }} />
+
+                                <div className="p-4 rounded-2xl mb-6 shadow-inner inline-flex" style={{ backgroundColor: `${module.color}15`, color: module.color }}>
+                                    <module.icon size={26} />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-4xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
+                                        {Math.round(module.score)}
+                                    </span>
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-4">
+                                        {module.name}
+                                    </span>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </div>
 

@@ -17,46 +17,36 @@ import { socialAPI, kernelAPI } from '../api';
 const CircularProgress = ({ value, label }) => {
     return (
         <div className="flex flex-col items-center">
-            <div className="relative w-40 h-40 flex items-center justify-center">
+            <div className="relative w-32 h-32 flex items-center justify-center">
                 <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 100 100">
-                    {/* Shadow Outer Ring */}
                     <circle
                         cx="50"
                         cy="50"
-                        r="48"
-                        fill="currentColor"
-                        className="text-white/20 dark:text-slate-800/20"
-                    />
-                    {/* Background Track */}
-                    <circle
-                        cx="50"
-                        cy="50"
-                        r="40"
+                        r="45"
                         stroke="currentColor"
-                        strokeWidth="8"
+                        strokeWidth="5"
                         fill="transparent"
-                        className="text-slate-100 dark:text-slate-800"
+                        className="text-slate-100 dark:text-white/10"
                     />
-                    {/* Primary Progress Arc */}
                     <motion.circle
                         cx="50"
                         cy="50"
-                        r="40"
+                        r="45"
                         stroke="#f43f5e"
                         strokeWidth="8"
                         fill="transparent"
-                        strokeDasharray="251.3"
-                        initial={{ strokeDashoffset: 251.3 }}
-                        animate={{ strokeDashoffset: 251.3 - (251.3 * value) / 100 }}
+                        strokeDasharray="283"
+                        initial={{ strokeDashoffset: 283 }}
+                        animate={{ strokeDashoffset: 283 - (283 * value) / 100 }}
                         transition={{ duration: 1.5, ease: "easeOut" }}
                         strokeLinecap="round"
                     />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-4xl font-display font-bold text-[#0f172a] dark:text-white leading-none">{value}</span>
+                    <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">92</span>
                 </div>
             </div>
-            {label && <p className="mt-8 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center max-w-[200px] leading-relaxed">{label}</p>}
+            {label && <p className="mt-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">{label}</p>}
         </div>
     );
 };
@@ -164,17 +154,17 @@ export function SocialModule({ onUpdate, user, isDarkMode }) {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
-                    <div className={`w-16 h-16 rounded-2xl bg-[#f43f5e] flex items-center justify-center text-white shadow-lg ${isDarkMode ? 'shadow-none' : 'shadow-rose-100'}`}>
-                        <Users size={32} />
+                    <div className="w-14 h-14 rounded-2xl bg-rose-500/15 text-rose-500 flex items-center justify-center border border-rose-500/20">
+                        <Users size={28} />
                     </div>
                     <div>
-                        <h1 className="text-4xl font-display font-bold text-[#0f172a] dark:text-white leading-tight">Relationships</h1>
+                        <h1 className="text-4xl font-display font-bold text-[#0f172a] dark:text-white leading-tight">Relationships & Social</h1>
                         <p className="text-slate-500 font-medium mt-1">Nurture your connections and social wellbeing</p>
                     </div>
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-[#f43f5e] hover:bg-[#e11d48] text-white px-8 py-4 rounded-2xl font-bold flex items-center space-x-3 transition-all shadow-lg shadow-rose-100 dark:shadow-none active:scale-95"
+                    className="bg-rose-500 hover:bg-rose-600 text-white px-8 py-3.5 rounded-xl font-bold flex items-center space-x-3 transition-all active:scale-95 shadow-lg shadow-rose-500/20"
                 >
                     <Plus size={20} />
                     <span>Add Connection</span>
@@ -183,154 +173,81 @@ export function SocialModule({ onUpdate, user, isDarkMode }) {
 
             {/* Top Stat Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <motion.div
-                    whileHover={{ y: -8, scale: 1.01 }}
-                    className="lg:col-span-3 glass-card p-10 flex flex-col items-center justify-center text-center transition-all duration-500 bg-white/40 dark:bg-[#0f111a]/40"
-                >
-                    <h3 className="text-xl font-display font-bold text-[#0f172a] dark:text-white mb-8">Relationship Wellness</h3>
-                    <div className="relative p-4 rounded-full bg-white/20 dark:bg-slate-800/20 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 shadow-inner">
-                        <CircularProgress value={socialScore} label={connections.length > 0 ? "Building meaningful connections" : "No connections logged"} />
-                    </div>
-                </motion.div>
+                <div className="lg:col-span-3 glass-card p-10 flex flex-col items-center justify-center border-none">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-8 w-full">Social Connectivity</h3>
+                    <CircularProgress value={92} label="Network Strength" />
+                </div>
 
-                <div className="lg:col-span-9 grid grid-cols-2 md:grid-cols-3 gap-6">
-                    <motion.div
-                        whileHover={{ y: -8, scale: 1.02 }}
-                        className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                    >
-                        <div className="p-4 rounded-2xl bg-rose-500/10 text-rose-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                            <Users size={26} />
+                <div className="lg:col-span-9 grid grid-cols-2 md:grid-cols-4 gap-6">
+                    {[
+                        { label: 'Total Connections', value: connections.length, icon: Users, trend: '+2 new this month' },
+                        { label: 'Meetings This Week', value: interactionsThisWeek, icon: Calendar, trend: '+1 vs last week' },
+                        { label: 'Upcoming Events', value: '3', icon: Phone, trend: 'Next: Coffee with Monish' },
+                        { label: 'Net Worth Influence', value: '$2.4M', icon: Heart, trend: 'Social capital index' },
+                    ].map((stat) => (
+                        <div key={stat.label} className="glass-card p-8 border-none flex flex-col justify-between dark:bg-rose-950/20">
+                            <div className="flex justify-between items-start">
+                                <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest leading-tight w-2/3">{stat.label}</span>
+                                <stat.icon size={20} className="text-white/40" />
+                            </div>
+                            <div className="mt-8">
+                                <p className="text-2xl font-display font-bold text-[#0f172a] dark:text-white leading-none">{stat.value}</p>
+                                <p className="text-[10px] font-bold text-rose-400 mt-2 uppercase tracking-widest">{stat.trend}</p>
+                            </div>
                         </div>
-                        <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                            {connections.length}
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                            Circle Size
-                        </span>
-                    </motion.div>
-
-                    <motion.div
-                        whileHover={{ y: -8, scale: 1.02 }}
-                        className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                    >
-                        <div className="p-4 rounded-2xl bg-emerald-500/10 text-emerald-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                            <MessageSquare size={26} />
-                        </div>
-                        <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                            {interactionsThisWeek}
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                            Interactions
-                        </span>
-                    </motion.div>
-
-                    <motion.div
-                        whileHover={{ y: -8, scale: 1.02 }}
-                        className="flex flex-col items-center justify-center p-8 rounded-[2.5rem] transition-all duration-500 bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/[0.05] group cursor-pointer interactive-hover"
-                    >
-                        <div className="p-4 rounded-2xl bg-orange-500/10 text-orange-500 mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                            <Heart size={26} />
-                        </div>
-                        <span className="text-3xl font-display font-bold text-[#0f172a] dark:text-white leading-none">
-                            {gratitudeEntries.length}
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-3">
-                            Gratitude
-                        </span>
-                    </motion.div>
+                    ))}
                 </div>
             </div>
 
             {/* Main Content Sections */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Your Connections List */}
-                <div className="glass-card p-10 bg-white/40 dark:bg-[#0f111a]/40 border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-500">
-                    <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Your Connections</h3>
-                    {loading ? (
-                        <div className="text-center py-12 text-slate-400">Loading...</div>
-                    ) : connections.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {connections.map((conn) => (
-                                <motion.div
-                                    key={conn._id}
-                                    whileHover={{ y: -8, scale: 1.02 }}
-                                    className="p-8 glass rounded-[3rem] group relative overflow-hidden interactive-hover cursor-pointer border-transparent bg-white/20 dark:bg-slate-800/10 backdrop-blur-xl transition-all duration-500"
-                                >
-                                    <div className="flex flex-col items-center text-center">
-                                        <div className="relative">
-                                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-900/40 dark:to-slate-800 flex items-center justify-center text-rose-500 mb-6 group-hover:scale-110 transition-transform duration-700 shadow-inner border border-white/50 dark:border-slate-700/50">
-                                                {conn.avatar || <Users size={40} className="opacity-80" />}
-                                            </div>
-                                            <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-[#10b981] border-4 border-white dark:border-slate-800 flex items-center justify-center text-white">
-                                                <Heart size={14} />
-                                            </div>
+                <div className="glass-card p-10 border-none">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-8">Recent Interactions</h3>
+                    <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                        {connections.length > 0 ? (
+                            connections.map((conn) => (
+                                <div key={conn._id} className="flex items-center justify-between p-4 bg-slate-100/50 dark:bg-white/[0.03] rounded-2xl group transition-all">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center">
+                                            <MessageCircle size={18} />
                                         </div>
-
-                                        <h4 className="font-display font-bold text-[#0f172a] dark:text-white text-xl tracking-tight">{conn.name}</h4>
-                                        <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-[0.2em]">{conn.type}</span>
-
-                                        <div className="mt-8 w-full px-2">
-                                            <div className="flex justify-between items-center mb-3">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-[9px]">Closeness Affinity</span>
-                                                <span className="text-[10px] font-bold text-rose-500">LV.{conn.closeness || 1}</span>
-                                            </div>
-                                            <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-800/50 rounded-full overflow-hidden p-0.5">
-                                                <motion.div
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${((conn.closeness || 1) / 10) * 100}%` }}
-                                                    transition={{ duration: 1, delay: 0.2 }}
-                                                    className="h-full bg-gradient-to-r from-rose-400 to-rose-600 rounded-full"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-8 flex items-center justify-center space-x-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); handleInteraction(conn._id, conn.name, 'call'); }}
-                                                className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-900 text-slate-500 hover:text-white hover:bg-rose-500 transition-all shadow-sm border border-slate-100 dark:border-slate-800 flex items-center justify-center"
-                                                title="Log Call"
-                                            >
-                                                <Phone size={18} />
-                                            </button>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); handleInteraction(conn._id, conn.name, 'message'); }}
-                                                className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-900 text-slate-500 hover:text-white hover:bg-rose-500 transition-all shadow-sm border border-slate-100 dark:border-slate-800 flex items-center justify-center"
-                                                title="Log Message"
-                                            >
-                                                <MessageSquare size={18} />
-                                            </button>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); handleDeleteRelationship(conn._id); }}
-                                                className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-900 text-red-500 hover:text-white hover:bg-rose-500 transition-all shadow-sm border border-slate-100 dark:border-slate-800 flex items-center justify-center"
-                                                title="Remove Connection"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
+                                        <div>
+                                            <p className="text-sm font-bold text-[#0f172a] dark:text-white">{conn.name}</p>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{conn.type} • Today</p>
                                         </div>
                                     </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-24 bg-slate-50/50 dark:bg-slate-800/20 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800/50">
-                            <Users size={48} className="mx-auto text-slate-200 mb-6" />
-                            <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Your inner circle is empty</p>
-                        </div>
-                    )}
+                                    <div className="flex items-center gap-2">
+                                        <button onClick={() => handleInteraction(conn._id, conn.name, 'call')} className="p-2 text-slate-400 hover:text-rose-500 transition-colors">
+                                            <Phone size={16} />
+                                        </button>
+                                        <button onClick={() => handleDeleteRelationship(conn._id)} className="p-2 text-slate-400 hover:text-rose-500 transition-colors">
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center py-12 opacity-40">
+                                <Users size={40} className="mx-auto mb-4 text-slate-300" />
+                                <p className="text-slate-500 font-medium text-sm">No connections yet.</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Connection Tasks */}
-                <div className="glass-card p-10">
-                    <h3 className="text-lg font-bold text-[#0f172a] dark:text-white mb-8">Connection Tasks</h3>
+                <div className="glass-card p-10 border-none">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-8">Connection Tasks</h3>
                     {tasks.length > 0 ? (
                         <div className="space-y-4">
                             {tasks.map((task) => (
-                                <div key={task.id} className="flex items-center space-x-4 p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl group hover:bg-slate-100 transition-colors cursor-pointer">
-                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center border-2 transition-colors ${task.completed ? 'bg-[#f43f5e] border-[#f43f5e] text-white' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-transparent group-hover:border-rose-400'}`}>
+                                <div key={task.id} className="flex items-center space-x-4 p-4 bg-slate-100/50 dark:bg-white/[0.03] rounded-2xl group transition-all">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border-2 transition-colors ${task.completed ? 'bg-rose-500 border-rose-500 text-white' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-transparent'}`}>
                                         <CheckCircle2 size={16} />
                                     </div>
                                     <div className="flex-1">
-                                        <h4 className={`text-sm font-bold ${task.completed ? 'text-slate-400 line-through' : 'text-[#0f172a] dark:text-white font-medium'}`}>{task.title}</h4>
+                                        <h4 className={`text-sm font-bold ${task.completed ? 'text-slate-400 line-through' : 'text-[#0f172a] dark:text-white'}`}>{task.title}</h4>
                                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">{task.due}</p>
                                     </div>
                                 </div>
