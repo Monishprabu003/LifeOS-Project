@@ -134,27 +134,6 @@ export function DashboardModule({ user, setActiveTab, isDarkMode }) {
                 </div>
             </div>
 
-            {/* Quick Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                {[
-                    { label: 'Sleep', value: '7.5h', icon: '🌙', trend: '+8%' },
-                    { label: 'Water', value: '2.1L', icon: '💧', trend: '+12%' },
-                    { label: 'Mood', value: '8/10', icon: '😊', trend: '+5%' },
-                    { label: 'Streak', value: '12d', icon: '⚡', trend: '+20%' }
-                ].map((stat) => (
-                    <div key={stat.label} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-[2rem] p-8 transition-all hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none group cursor-pointer active:scale-95">
-                        <div className="flex justify-between items-start mb-6">
-                            <span className="text-2xl opacity-80 transition-transform group-hover:scale-125 duration-300">{stat.icon}</span>
-                            <span className="text-[10px] font-black text-emerald-500 bg-emerald-50 px-2.5 py-1 rounded-full">{stat.trend}</span>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-[#0f172a] dark:text-white leading-none tracking-tight">{stat.value}</p>
-                            <p className="text-xs font-bold text-slate-400 mt-2">{stat.label}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
             {/* Modules Section */}
             <div className="space-y-8">
                 <div className="flex items-center justify-between px-2">
