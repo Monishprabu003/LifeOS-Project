@@ -18,7 +18,8 @@ import {
   PanelLeftOpen,
   Bell,
   Sun,
-  Moon
+  Moon,
+  Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { authAPI, habitsAPI, goalsAPI, kernelAPI } from './api';
@@ -124,7 +125,7 @@ function App() {
 
   if (!token) {
     return (
-      <div className={`h-screen w-full flex flex-col items-center justify-center p-6 transition-colors duration-300 ${isDarkMode ? 'bg-[#0a0b14] text-white' : 'bg-[#f8fafc] text-[#1e293b]'}`}>
+      <div className={`h-screen w-full flex flex-col items-center justify-center p-6 transition-colors duration-300 ${isDarkMode ? 'bg-[#0a0b14] text-white' : 'bg-white text-[#1e293b]'}`}>
         {/* Dark Mode Toggle for Login Page */}
         <div className="absolute top-10 right-10">
           <button
@@ -249,7 +250,8 @@ function App() {
     { id: 'wealth', name: 'Wealth', icon: Wallet, color: 'text-wealth' },
     { id: 'relationships', name: 'Relationships', icon: Users, color: 'text-relationships' },
     { id: 'habits', name: 'Habits', icon: Zap, color: 'text-habits' },
-    { id: 'goals', name: 'Purpose', icon: Compass, color: 'text-goals' }
+    { id: 'goals', name: 'Purpose', icon: Compass, color: 'text-goals' },
+    { id: 'ai-insights', name: 'AI Insights', icon: Sparkles, color: 'text-indigo-500' }
   ];
 
   const accountItems = [
@@ -370,7 +372,7 @@ function App() {
       </motion.aside>
 
       {/* Main Content */}
-      <main className="flex-1 relative overflow-y-auto custom-scrollbar bg-[#fcfdfe] dark:bg-slate-950">
+      <main className="flex-1 relative overflow-y-auto custom-scrollbar bg-white dark:bg-[#0a0b14]">
 
         {/* Header */}
         <header className="z-40 px-10 py-8 flex items-center justify-between mx-4">
@@ -379,7 +381,17 @@ function App() {
             <h2 className="text-2xl font-bold text-[#0f172a] dark:text-white tracking-tight">{user?.name || 'John Doe'}</h2>
           </div>
 
-          <div className="flex items-center space-x-6 relative z-10">
+          <div className="flex items-center space-x-4 relative z-10">
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 12 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2.5 text-slate-400 hover:text-slate-600 transition-colors bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm"
+              title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDarkMode ? <Sun size={20} spellCheck={false} /> : <Moon size={20} />}
+            </motion.button>
+
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

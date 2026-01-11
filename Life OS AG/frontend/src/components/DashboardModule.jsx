@@ -31,10 +31,10 @@ const CircularProgress = ({ value, color, size = 180 }) => {
                     cx="50"
                     cy="50"
                     r="44"
-                    stroke="#e2e8f0"
+                    stroke="#f1f5f9"
                     strokeWidth="3"
                     fill="transparent"
-                    className="dark:stroke-slate-800"
+                    className="dark:stroke-slate-800/50"
                 />
                 <motion.circle
                     cx="50"
@@ -78,20 +78,20 @@ export function DashboardModule({ user, setActiveTab, isDarkMode }) {
     return (
         <div className="space-y-12">
             {/* Main Hero Card */}
-            <div className="bg-[#f1f5f9] dark:bg-slate-900/40 rounded-[2.5rem] p-12 relative overflow-hidden">
+            <div className="bg-[#f8fafc] dark:bg-slate-900/40 rounded-[3rem] p-12 relative overflow-hidden border border-slate-50 dark:border-transparent">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     {/* Gauge Section */}
                     <div className="lg:col-span-4 flex flex-col items-center text-center">
-                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#64748b] mb-12 self-start opacity-70">Life Performance Index</h3>
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#94a3b8] mb-12 self-start opacity-70">Life Performance Index</h3>
                         <div className="relative">
                             <CircularProgress value={78} color="#10b981" />
-                            <div className="absolute top-2 -right-8 bg-[#dcfce7] dark:bg-emerald-500/10 text-[#059669] px-3 py-1.5 rounded-full text-[10px] font-black flex items-center gap-1 shadow-sm border border-emerald-500/10 transition-all hover:scale-110">
+                            <div className="absolute top-2 -right-10 bg-[#e3fff2] dark:bg-emerald-500/10 text-[#059669] px-3.5 py-1.5 rounded-full text-[10px] font-black flex items-center gap-1 shadow-sm border border-emerald-100 transition-all hover:scale-110">
                                 <TrendingUp size={12} strokeWidth={3} /> +5%
                             </div>
                         </div>
                         <div className="mt-12 text-left w-full">
                             <h4 className="text-3xl font-bold text-[#0f172a] dark:text-white mb-2 tracking-tight">You're doing great!</h4>
-                            <p className="text-sm font-semibold text-[#64748b] opacity-80">{today}</p>
+                            <p className="text-sm font-semibold text-[#64748b]">{today}</p>
                         </div>
                     </div>
 
@@ -134,6 +134,27 @@ export function DashboardModule({ user, setActiveTab, isDarkMode }) {
                 </div>
             </div>
 
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {[
+                    { label: 'Sleep', value: '7.5h', icon: '🌙', trend: '+8%' },
+                    { label: 'Water', value: '2.1L', icon: '💧', trend: '+12%' },
+                    { label: 'Mood', value: '8/10', icon: '😊', trend: '+5%' },
+                    { label: 'Streak', value: '12d', icon: '⚡', trend: '+20%' }
+                ].map((stat) => (
+                    <div key={stat.label} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-[2.5rem] p-8 transition-all hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none group cursor-pointer active:scale-95 shadow-sm">
+                        <div className="flex justify-between items-start mb-6">
+                            <span className="text-2xl opacity-80 transition-transform group-hover:scale-125 duration-300">{stat.icon}</span>
+                            <span className="text-[10px] font-black text-[#10b981] bg-[#f0fdf4] px-2.5 py-1 rounded-full">{stat.trend}</span>
+                        </div>
+                        <div>
+                            <p className="text-3xl font-bold text-[#0f172a] dark:text-white leading-none tracking-tight">{stat.value}</p>
+                            <p className="text-xs font-bold text-slate-400 mt-2">{stat.label}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
             {/* Modules Section */}
             <div className="space-y-8">
                 <div className="flex items-center justify-between px-2">
@@ -154,17 +175,17 @@ export function DashboardModule({ user, setActiveTab, isDarkMode }) {
                         <div
                             key={mod.name}
                             onClick={() => setActiveTab && setActiveTab(mod.tab)}
-                            className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-[2rem] p-8 relative overflow-hidden group cursor-pointer hover:shadow-lg transition-all"
+                            className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-[2rem] p-8 relative overflow-hidden group cursor-pointer hover:shadow-xl hover:shadow-slate-200/40 transition-all active:scale-95 shadow-sm"
                         >
                             {/* Color Accent Bar */}
                             <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-12 rounded-l-full" style={{ backgroundColor: mod.color }} />
 
                             <div className="p-4 rounded-2xl mb-8 inline-flex transition-colors group-hover:bg-slate-50 dark:group-hover:bg-white/5" style={{ backgroundColor: `${mod.color}10`, color: mod.color }}>
-                                <mod.icon size={26} />
+                                <mod.icon size={26} strokeWidth={2.5} />
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-4xl font-bold text-[#0f172a] dark:text-white tracking-tight leading-none">{mod.score}</span>
-                                <span className="text-xs font-bold text-slate-400 mt-4">{mod.name}</span>
+                                <span className="text-[10px] font-black text-slate-400 mt-4 uppercase tracking-[0.2em] opacity-80">{mod.name}</span>
                             </div>
                         </div>
                     ))}

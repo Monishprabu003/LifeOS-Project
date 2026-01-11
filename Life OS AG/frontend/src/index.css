@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 248, 250, 252;
+    --background: 255, 255, 255;
     --surface: 255, 255, 255;
     --primary: 99, 102, 241;
     --secondary: 14, 165, 233;
@@ -112,7 +112,7 @@
   }
 
   .interactive-hover {
-    @apply transition-all duration-500 hover:translate-y-[-8px] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] hover:bg-white/80 dark:hover:bg-white/[0.05] active:scale-[0.97];
+    @apply transition-all duration-500 hover:translate-y-[-8px] hover:shadow-[0_30px_60px_-15px_rgba(0, 0, 0, 0.5)] hover:bg-white/80 dark:hover:bg-white/[0.05] active:scale-[0.97];
   }
 
   .nav-active {
